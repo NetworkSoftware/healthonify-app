@@ -1,0 +1,73 @@
+const List<String> wlEnquiryFor = [
+  'Lose Weight',
+  'Lose Fat',
+  'Gain Weight',
+  'Immunity Build',
+  'Diabetes Control',
+  'Fatty Liver',
+  'Heart Health',
+  'PCOS',
+  'High Cholestrol',
+  'Hypothyroidism',
+  'High Blood Pressure',
+  'Others',
+];
+
+const List<String> fitnessEnquiry = [
+  'General Fitness',
+  'Personal Fitness Trainers',
+  'Counselling',
+  'Fat loss',
+  'Muscle gain',
+  'Strength gain',
+  'Cardio',
+  'PCOS Exercise',
+  'PCOD Exercise',
+  'Diabetic Workouts',
+  'Hypertension Workouts',
+  'Online Fitness Workouts',
+  'Zumba',
+  'Yoga',
+  'HIIT',
+];
+const List<String> wlHealthConditions = [
+  'Thyroid',
+  'Acidity',
+  'Cholestrol',
+  'Knee Pain',
+  'Back Pain',
+  'Diabetes (T2)',
+  'Blood Pressure',
+  'Pre Diabetes',
+  'PCOD',
+  'Others',
+  'None',
+];
+const List<String> professions = [
+  'Homemaker',
+  'Self Employed',
+  'Business',
+  'Doctor',
+  'Service',
+  'Retired',
+  'Student',
+  'Unemployed',
+  'Others',
+];
+const List<String> preferredLanguages = [
+  'English',
+  'Hindi',
+  'Marathi',
+  'Kannada',
+  'Telugu',
+  'Tamil',
+  'Malayalam',
+  'Punjabi',
+  'Gujarati',
+  'Bengali',
+  'Urdu',
+];
+const List<String> genderList = [
+  'Male',
+  'Female',
+];

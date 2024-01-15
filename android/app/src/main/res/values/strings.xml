@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="facebook_app_id">407631308198612</string>
+    <string name="facebook_client_token">051c90c4fa8799b16d0971b76aadc7ad</string>
+    <string name="app_name_zoom_local">Healthonify</string>
+</resources>
