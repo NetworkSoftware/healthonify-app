@@ -39,6 +39,10 @@ import 'package:healthonify_mobile/widgets/other/scrollers/adventure_scroller.da
 import 'package:healthonify_mobile/widgets/other/horiz_list_view/home_top_list_buttons.dart';
 import 'package:healthonify_mobile/widgets/other/live_well_list.dart';
 import 'package:healthonify_mobile/widgets/other/navigation_drawer.dart';
+
+import 'package:healthonify_mobile/widgets/other/scrollers/educate_scroll/educate_scroller.dart';
+import 'package:pedometer/pedometer.dart';
+
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
@@ -317,10 +321,15 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 15),
           const FitnessToolsCard(),
           const SizedBox(height: 15),
+          const EducateScroller(
+            cardTitle: 'Educate',
+            imgUrl:
+            'https://images.unsplash.com/photo-1594103057001-d3635a7e6b88?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OTF8fGZlYXR1cmVkfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+            scrollerTitle: 'Educate',
+          ),
           const SizedBox(height: 15),
           const HomeCard(),
           const SizedBox(height: 15),
-
           Padding(
             padding: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
             child: Text(

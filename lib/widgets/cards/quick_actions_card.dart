@@ -98,8 +98,10 @@ class QuickActionCard2 extends StatelessWidget {
     List<Map<String, dynamic>> data = [
       {
         "title": 'Workout Plan',
-        "onClick": () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
+        "onClick": (context) {
+          Navigator.of(
+            context, /*rootnavigator: true*/
+          ).push(MaterialPageRoute(builder: (context) {
             return CurrentWorkoutPlan();
           }));
         },
@@ -107,7 +109,7 @@ class QuickActionCard2 extends StatelessWidget {
       },
       {
         "title": 'Workout Analysis',
-        "onClick": () {
+        "onClick": (context) {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return const WorkoutAnalysisScreen();
           }));
@@ -116,7 +118,7 @@ class QuickActionCard2 extends StatelessWidget {
       },
       {
         "title": 'Weekly Diet Analysis',
-        "onClick": () {
+        "onClick": (context) {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
             return const WeeklyDietAnalysis();
           }));
@@ -125,7 +127,7 @@ class QuickActionCard2 extends StatelessWidget {
       },
       {
         "title": 'Log Weight',
-        "onClick": () {
+        "onClick": (context) {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return const WeightScreen();
           }));
@@ -134,29 +136,16 @@ class QuickActionCard2 extends StatelessWidget {
       },
       {
         "title": 'Measurement',
-        "onClick": () {
+        "onClick": (context) {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return const BodyMeasurementsScreen();
           }));
         },
         "icon": 'assets/icons/measure.png',
       },
-      // {
-      //   "title": 'My Subscription',
-      //   "onClick": () {
-      //     // Navigator.of(context, /*rootnavigator: true*/)
-      //     //     .push(MaterialPageRoute(builder: (context) {
-      //     //   return const AllSubscriptions();
-      //     // }));
-      //     Navigator.of(context).push(MaterialPageRoute(
-      //       builder: (context) => MySubscriptions(),
-      //     ));
-      //   },
-      //   "icon": 'assets/icons/subscription.png',
-      // },
       {
         "title": 'My Diary',
-        "onClick": () {
+        "onClick": (context) {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return const MyDiary();
           }));
@@ -263,7 +252,7 @@ class QuickActionCard3 extends StatelessWidget {
                       return InkWell(
                         borderRadius: BorderRadius.circular(20),
                         onTap: () =>
-                            physioQuickActions[index]["onClick"](context),
+                            physioQuickActions[index]["onClick"],
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Column(
@@ -423,45 +412,50 @@ class QuickActionCardWM extends StatelessWidget {
           ),
           Card(
             elevation: 0,
+            color: orange,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  // childAspectRatio: 2 / 1.8,
-                  mainAxisExtent: 122,
-                ),
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: data[index]["onClick"],
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            data[index]["icon"],
-                            height: 40,
-                            width: 40,
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            data[index]["title"],
-                            style: Theme.of(context).textTheme.labelSmall,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+            child: GridView.builder(
+              padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisExtent: 120,
+                childAspectRatio: 10.0,
+                crossAxisSpacing: 0.1,
               ),
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: data[index]["onClick"],
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black,width: 0.3),
+                      borderRadius: BorderRadius.circular(10),
+                      color: Theme.of(context).drawerTheme.backgroundColor,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          data[index]["icon"],
+                          height: 40,
+                          width: 40,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          data[index]["title"],
+                          style: Theme.of(context).textTheme.labelSmall,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],

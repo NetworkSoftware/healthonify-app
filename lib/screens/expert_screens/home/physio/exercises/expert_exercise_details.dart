@@ -1,14 +1,25 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:healthonify_mobile/constants/placeholder_images.dart';
+import 'package:healthonify_mobile/constants/theme_data.dart';
+import 'package:healthonify_mobile/main.dart';
 import 'package:healthonify_mobile/models/exercise/exercise.dart';
 import 'package:healthonify_mobile/models/workout/workout_model.dart';
+import 'package:healthonify_mobile/screens/client_screens/my_workout/track_workout/timer_card.dart';
 import 'package:healthonify_mobile/widgets/cards/custom_appbar.dart';
 
 import 'package:healthonify_mobile/widgets/experts/exercises/exercise_directions_card.dart';
+import 'package:healthonify_mobile/widgets/experts/exercises/hep/edit_hep_plan.dart';
+import 'package:intl/intl.dart';
 
 class ExerciseDetailsScreen extends StatefulWidget {
   final Exercise exerciseData;
+
   // final List<Set> sets;
   final List<Set> sets;
 
@@ -23,38 +34,202 @@ class ExerciseDetailsScreen extends StatefulWidget {
 }
 
 class _ExerciseDetailsScreenState extends State<ExerciseDetailsScreen> {
-  // void getReps(value) {
-    
+  final Dependencies dependencies = Dependencies();
+  int? milliseconds;
+  Timer? timer;
+  int hundreds = 0;
+
+  TrackExercise? trackExercise;
+  final Map<String, String> data = {
+    "id": "",
+    "name": "",
+    "exerciseStartTime": "",
+    "exerciseEndTime": "",
+    "totalTime": "",
+    "status": "",
+  };
+
+  void setData(String time) {
+    data["exerciseEndTime"] =
+        DateFormat('dd-MM-yyyy hh:mm:ss').format(DateTime.now());
+    data["totalTime"] = time;
+    data["status"] = "Finished";
+    kSharedPreferences.setString("ExerciseData", json.encode(data));
+  }
+
+  @override
+  void initState() {
+    dependencies.timerListeners.add(onTick);
+    super.initState();
+  }
+
+  void onTick(ElapsedTime elapsed) {
+    if (elapsed.hundreds != hundreds) {
+      setState(() {
+        hundreds = elapsed.hundreds!;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-   
-    return Scaffold(
-      appBar: const CustomAppBar(
-        appBarTitle: "",
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: orange,
+          title: Text(
+            '',
+            style: Theme.of(context)
+                .textTheme
+                .headlineMedium!
+                .copyWith(color: whiteColor),
+          ),
+          actions: [
+            dependencies.stopwatch.isRunning
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        RepaintBoundary(
+                          child: SizedBox(
+                            child:
+                                MinutesAndSeconds(dependencies: dependencies),
+                          ),
+                        ),
+                        RepaintBoundary(
+                          child: SizedBox(
+                            child: Hundreds(dependencies: dependencies),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : const SizedBox()
+          ],
+          leading: dependencies.stopwatch.isRunning
+              ? const SizedBox()
+              : IconButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  icon: const Icon(
+                    Icons.chevron_left_rounded,
+                    color: whiteColor,
+                    size: 40,
+                  ),
+                  splashRadius: 20,
+                ),
+          shadowColor: Colors.transparent,
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: orange,
+          icon: dependencies.stopwatch.isRunning
+              ? const Icon(Icons.stop, color: whiteColor)
+              : const Icon(Icons.play_arrow, color: whiteColor),
+          label: Text(
+              dependencies.stopwatch.isRunning
+                  ? 'End Workout'
+                  : 'Start Workout',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(color: whiteColor, fontWeight: FontWeight.bold)),
+          onPressed: () {
+            setState(() {
+              if (dependencies.stopwatch.isRunning) {
+                dependencies.stopwatch.stop();
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Do you wish to end this workout?'),
+                    actions: [
+                      TextButton(
+                        child: const Text('Cancel'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          dependencies.stopwatch.start();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('Yes'),
+                        onPressed: () {
+                          var data = dependencies.stopwatch.elapsedMilliseconds;
+                          int minutes = (data / 60000).ceil();
+                          //saveTime(minutes.toString());
+                          setData(minutes.toString());
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                dependencies.stopwatch.start();
+                timer = Timer.periodic(
+                    Duration(
+                        milliseconds: dependencies
+                            .timerMillisecondsRefreshRate),
+                    callback);
+                data["id"] = widget.exerciseData.id!;
+                data["name"] = widget.exerciseData.name!;
+                data["exerciseStartTime"] =
+                    DateFormat('dd-MM-yyyy hh:mm:ss')
+                        .format(DateTime.now());
+                data["status"] = "InProgress";
+
+                kSharedPreferences.setString(
+                    "ExerciseData", json.encode(data));
+              }
+            });
+          },
+        ),
+        body: ListView(children: [
+          ExDetailsCard(
+            bodypart: widget.exerciseData.bodyPartId == null ||
+                    widget.exerciseData.bodyPartId!.isEmpty
+                ? ""
+                : widget.exerciseData.bodyPartId![0]["name"],
+            bodyCategory: widget.exerciseData.bodyPartGroupId == null ||
+                    widget.exerciseData.bodyPartGroupId!.isEmpty
+                ? ""
+                : widget.exerciseData.bodyPartGroupId![0]["name"],
+            mediaLink: widget.exerciseData.mediaLink,
+            title: widget.exerciseData.name,
+          ),
+          ExContainer(
+            mediaLink: widget.exerciseData.mediaLink,
+          ),
+          if (widget.sets.isNotEmpty) exerciseSetDetails(),
+          dependencies.stopwatch.isRunning ? exerciseAlertCard() : const SizedBox(),
+          ExerciseDirectionsCard(
+            exerciseData: widget.exerciseData,
+          ),
+          const SizedBox(
+            height: 10,
+          )
+        ]),
       ),
-      body: ListView(children: [
-        ExDetailsCard(
-          bodypart: widget.exerciseData.bodyPartId == null ||
-                  widget.exerciseData.bodyPartId!.isEmpty
-              ? ""
-              : widget.exerciseData.bodyPartId![0]["name"],
-          bodyCategory: widget.exerciseData.bodyPartGroupId == null ||
-                  widget.exerciseData.bodyPartGroupId!.isEmpty
-              ? ""
-              : widget.exerciseData.bodyPartGroupId![0]["name"],
-          mediaLink: widget.exerciseData.mediaLink,
-          title: widget.exerciseData.name,
-        ),
-        ExContainer(
-          mediaLink: widget.exerciseData.mediaLink,
-        ),
-        if (widget.sets.isNotEmpty) exerciseSetDetails(),
-        ExerciseDirectionsCard(exerciseData: widget.exerciseData,),
-        const SizedBox(
-          height: 10,
-        )
-      ]),
     );
+  }
+
+  void callback(Timer timer) {
+    if (milliseconds != dependencies.stopwatch.elapsedMilliseconds) {
+      milliseconds = dependencies.stopwatch.elapsedMilliseconds;
+      final int hundreds = (milliseconds! / 10).truncate();
+      final int seconds = (hundreds / 100).truncate();
+      final int minutes = (seconds / 60).truncate();
+      final ElapsedTime elapsedTime = ElapsedTime(
+        hundreds: hundreds,
+        seconds: seconds,
+        minutes: minutes,
+      );
+      for (final listener in dependencies.timerListeners) {
+        listener(elapsedTime);
+      }
+    }
   }
 
   Widget iconBtn(BuildContext context) {
@@ -161,22 +336,22 @@ class _ExerciseDetailsScreenState extends State<ExerciseDetailsScreen> {
       ),
     );
   }
-}
 
-// Widget editBtn(BuildContext context) {
-//   return Padding(
-//     padding: const EdgeInsets.only(right: 8.0, top: 10, bottom: 10),
-//     child: TextButton(
-//       child: Row(
-//         children: const [
-//           Text("Edit"),
-//         ],
-//       ),
-//       style: TextButton.styleFrom(),
-//       onPressed: () {},
-//     ),
-//   );
-// }
+  Widget exerciseAlertCard() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Text(
+            "Note : You can't go back until you finish the workout.",
+            style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.red),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class ExDetailsCard extends StatelessWidget {
   final String? title, bodypart, bodyCategory, mediaLink;
@@ -225,21 +400,6 @@ class ExDetailsCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Row(
-                  //   children: const [
-                  //     Icon(Icons.flash_on),
-                  //     Text("Active ROM"),
-                  //   ],
-                  // ),
-                  // Row(
-                  //   children: const [
-                  //     Icon(Icons.line_axis),
-                  //     SizedBox(
-                  //       width: 5,
-                  //     ),
-                  //     Text("Long Sitting"),
-                  //   ],
-                  // ),
                   Row(
                     children: [
                       const Icon(Icons.subtitles),
@@ -276,24 +436,7 @@ class ExContainer extends StatelessWidget {
           padding: const EdgeInsets.only(left: 15.0, right: 15.0),
           child: Column(
             children: [
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     TextButton.icon(
-              //       icon: const Icon(Icons.check),
-              //       onPressed: () {},
-              //       label: const Text("Correct"),
-              //     ),
-              //     TextButton.icon(
-              //       icon: const Icon(Icons.close),
-              //       onPressed: () {},
-              //       label: const Text("Wrong"),
-              //     ),
-              //   ],
-              // ),
-              const SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
               Container(
                 height: 300,
                 width: double.infinity,
@@ -306,75 +449,8 @@ class ExContainer extends StatelessWidget {
                       fit: BoxFit.cover),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.start,
-              //   children: [
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: const [
-              //         Text("Sets"),
-              //         SizedBox(
-              //           height: 10,
-              //         ),
-              //         // SetCounter(setCount: sets, getValue: getSets),
-              //       ],
-              //     ),
-              //     const SizedBox(
-              //       width: 30,
-              //     ),
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: const [
-              //         Text("Reps"),
-              //         SizedBox(
-              //           height: 10,
-              //         ),
-              //         // RepCounter(repsCount: reps, getRepsValue: getReps),
-              //       ],
-              //     ),
-              //   ],
-              // ),
-              const SizedBox(
-                height: 30,
-              ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.start,
-              //   children: [
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: const [
-              //         Text("Hold(secs)"),
-              //         SizedBox(
-              //           height: 10,
-              //         ),
-              //         HoldCounter(),
-              //       ],
-              //     ),
-              //     const SizedBox(
-              //       width: 30,
-              //     ),
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: const [
-              //         Text("Reset(secs)"),
-              //         SizedBox(
-              //           height: 10,
-              //         ),
-              //         ResetCounter(),
-              //       ],
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(
-              //   height: 20,
-              // ),
-              // const LeftAndRightBtns(),
-              // const SizedBox(
-              //   height: 20,
-              // ),
+              const SizedBox(height: 20),
+              const SizedBox(height: 30),
             ],
           ),
         ),

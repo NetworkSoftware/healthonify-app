@@ -151,7 +151,8 @@ class _CaloriesTrackerCardState extends State<CaloriesTrackerCard> {
                   print("total burnt ${value.calorieData.totalBurntCalories}");
 
                   if(trackerData.calorieProgress != null){
-                    totalConsumedCalories = trackerData.calorieProgress!.totalDietAnalysisData!.totalCalories!;
+                    totalConsumedCalories = trackerData.calorieProgress!.totalDietAnalysisData!.totalCalories!.round();
+                    print("totalConsumedCalories : $totalConsumedCalories");
                   }
 
 

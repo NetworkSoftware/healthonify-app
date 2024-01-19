@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:healthonify_mobile/models/exercise/exercise.dart';
@@ -6,6 +8,8 @@ import 'package:healthonify_mobile/models/workout/set_type_models.dart';
 import 'package:healthonify_mobile/models/workout/workout_model.dart';
 import 'package:healthonify_mobile/screens/expert_screens/home/physio/exercises/expert_exercise_details.dart';
 import 'package:healthonify_mobile/widgets/experts/exercises/hep/hep_edit_widgets/edit_add_sets_bottomsheet.dart';
+
+import '../../../../main.dart';
 
 class EditHepPlan extends StatefulWidget {
   final ExerciseWorkoutModel exData;
@@ -38,63 +42,99 @@ class _EditHepPlanState extends State<EditHepPlan> {
   }
 
   bool checkboxValue = false;
+  List<TrackExercise> trackExerciseList = [];
 
   @override
   Widget build(BuildContext context) {
     Exercise exercise = Exercise(
-      id: widget.exData.exerciseId!["_id"],
-      // bodyPartGroupId: [
-      //   {
-      //     "name": widget.exData.bodyPartId!["name"],
-      //     "id": widget.exData.bodyPartId!["_id"],
-      //   }
-      // ],
-      bodyPartId: [
-        {
-          "name": widget.exData.bodyPartGroupId!["name"],
-          "id": widget.exData.bodyPartGroupId!["_id"],
-        }
-      ],
-      mediaLink: widget.exData.exerciseId!["mediaLink"],
-      name: widget.exData.exerciseId!["name"],
-      weightUnit: "",
-    );
+        id: widget.exData.exerciseId!["_id"],
+        bodyPartGroupId: [
+          {
+            "name": widget.exData.bodyPartGroupId!["name"],
+            "id": widget.exData.bodyPartGroupId!["_id"],
+          }
+        ],
+        bodyPartId: [
+          {
+            "name": widget.exData.bodyPartId!["name"],
+            "id": widget.exData.bodyPartId!["_id"],
+          }
+        ],
+        mediaLink: widget.exData.exerciseId!["mediaLink"],
+        name: widget.exData.exerciseId!["name"],
+        weightUnit: 0);
 
-    return !widget.hasWorkoutStarted
-        ? buildWidget(exercise)
-        : CheckboxListTile(
-            value: checkboxValue,
-            onChanged: (value) {
-              setState(() {
-                checkboxValue = !checkboxValue;
-              });
-              if (checkboxValue) {
-                widget.addEx(data: widget.exData);
-              } else {
-                widget.removeEx(data: widget.exData);
-              }
-            },
-            title: buildWidget(exercise));
-  }
-
-  Widget buildWidget(Exercise exercise) {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(0.0),
       child: Card(
-        elevation: 0,
+        elevation: 1,
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
           onTap: () {
-            // Fluttertoast.showToast(msg: "Ex details screen");
             Navigator.of(context)
                 .push(MaterialPageRoute(
-                    builder: (context) => ExerciseDetailsScreen(
-                          exerciseData: exercise,
-                          sets: widget.exData.sets!,
-                          // sets: widget.exData.sets!.length.toString(),
-                          // reps: widget.exData.sets![0].reps!,
-                        )))
-                .then((value) {});
+                builder: (context) => ExerciseDetailsScreen(
+                  exerciseData: exercise,
+                  sets: widget.exData.sets!,
+                  // sets: widget.exData.sets!.length.toString(),
+                  // reps: widget.exData.sets![0].reps!,
+                )))
+                .then((value) {
+              if (kSharedPreferences.getString("ExerciseData") != null) {
+                String exerciseInfo =
+                kSharedPreferences.getString("ExerciseData")!;
+                final data = jsonDecode(exerciseInfo);
+
+                print("Data : $data");
+
+                TrackExercise trackExercise = TrackExercise(
+                  id: data['id'],
+                  name: data['name'],
+                  exerciseStartTime: data['exerciseStartTime'],
+                  exerciseEndTime: data['exerciseEndTime'],
+                  totalTime: data['totalTime'],
+                  status: data['status'],
+                );
+
+                if (trackExerciseList.isEmpty) {
+                  if (data["status"] == "InProgress") {
+                    trackExerciseList.add(trackExercise);
+                    print("Length1 : ${trackExerciseList.length}");
+                  } else {
+                    trackExerciseList.add(trackExercise);
+                    print("Length2 : ${trackExerciseList.length}");
+                  }
+                } else {
+                  for (int i = 0; i < trackExerciseList.length; i++) {
+                    if (trackExerciseList[i].id == trackExercise.id) {
+                      print(
+                          "Before Replace List Data : ${trackExerciseList[i]}");
+                      final index = trackExerciseList
+                          .indexWhere((ex) => ex.id == trackExercise.id);
+                      trackExerciseList[index] = trackExercise;
+
+                      print("Replace List Data : ${trackExerciseList[index]}");
+                      print("Length3 : ${trackExerciseList.length}");
+                    } else {
+                      trackExerciseList.add(trackExercise);
+                      print("Replace List Data : $trackExercise");
+                      print("Length4 : ${trackExerciseList.length}");
+                    }
+                  }
+                }
+
+                for (int i = 0; i < trackExerciseList.length; i++) {
+                  if (exercise.id == trackExerciseList[i].id) {
+                    widget.exData.sets![0].time = trackExerciseList[i].totalTime;
+                    widget.exData.sets![0].status = trackExerciseList[i].status;
+                    widget.addEx(data: widget.exData);
+
+                    print("ADD EX : ${widget.addEx}");
+                    setState(() {});
+                  }
+                }
+              }
+            });
           },
           child: Column(
             children: [
@@ -116,22 +156,6 @@ class _EditHepPlanState extends State<EditHepPlan> {
                           const SizedBox(
                             height: 10,
                           ),
-                          // const Text("Active ROM"),
-                          // const SizedBox(
-                          //   height: 10,
-                          // ),
-                          // Row(
-                          //   children: const [
-                          //     Icon(Icons.line_axis),
-                          //     SizedBox(
-                          //       width: 5,
-                          //     ),
-                          //     Text("Long Sitting"),
-                          //   ],
-                          // ),
-                          // const SizedBox(
-                          //   height: 10,
-                          // ),
                         ],
                       ),
                     ),
@@ -144,11 +168,11 @@ class _EditHepPlanState extends State<EditHepPlan> {
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
                               image: exercise.mediaLink == null ||
-                                      exercise.mediaLink!.isEmpty
+                                  exercise.mediaLink!.isEmpty
                                   ? const NetworkImage(
-                                      "https://images.theconversation.com/files/460514/original/file-20220429-20-h0umhf.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop")
+                                  "https://images.theconversation.com/files/460514/original/file-20220429-20-h0umhf.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop")
                                   : CachedNetworkImageProvider(
-                                      exercise.mediaLink!) as ImageProvider,
+                                  exercise.mediaLink!) as ImageProvider,
                               fit: BoxFit.cover),
                         ),
                       ),
@@ -168,83 +192,45 @@ class _EditHepPlanState extends State<EditHepPlan> {
                   ],
                 ),
               ),
-              // Container(
-              //   width: double.infinity,
-              //   decoration: BoxDecoration(
-              //     borderRadius: const BorderRadius.only(
-              //       bottomLeft: Radius.circular(10),
-              //       bottomRight: Radius.circular(10),
-              //     ),
-              //     color: Theme.of(context).canvasColor,
-              //   ),
-              //   child: Padding(
-              //     padding:
-              //         const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //       // spaceBetween
-              //       children: [
-              //         Row(
-              //           children: const [
-              //             Icon(Icons.videocam),
-              //             SizedBox(
-              //               width: 10,
-              //             ),
-              //             Text("Ankle"),
-              //           ],
-              //         ),
-              //         // Row(
-              //         //   children: [
-              //         //     const Icon(Icons.home_repair_service),
-              //         //     const SizedBox(
-              //         //       width: 10,
-              //         //     ),
-              //         //     Text(exercise.bodyPartGroupId![0]["name"]),
-              //         //   ],
-              //         // ),
-              //         if (widget.isEdit)
-              //           InkWell(
-              //             onTap: () {
-              //               showAddExerciseDialog(context, widget.exData);
-              //             },
-              //             child: CircleAvatar(
-              //               backgroundColor:
-              //                   Theme.of(context).colorScheme.secondary,
-              //               radius: 15,
-              //               child: const Icon(
-              //                 Icons.edit,
-              //                 size: 20,
-              //                 color: whiteColor,
-              //               ),
-              //             ),
-              //           )
-              //         // InkWell(
-              //         //   onTap: () {
-              //         //     showDialog(
-              //         //         context: context,
-              //         //         builder: (context) => const AddExcDialog());
-              //         //   },
-              //         //   child: CircleAvatar(
-              //         //     backgroundColor:
-              //         //         Theme.of(context).colorScheme.secondary,
-              //         //     radius: 15,
-              //         //     child: const Icon(
-              //         //       Icons.delete,
-              //         //       size: 20,
-              //         //       color: whiteColor,
-              //         //     ),
-              //         //   ),
-              //         // )
-              //       ],
-              //     ),
-              //   ),
-              // )
+              const SizedBox(height: 4),
+              widget.exData.sets![0].status != null ?
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child:  Row(
+                  children: [
+                    Text("Status : ${widget.exData.sets![0].status}"),
+                  ],
+                ),
+              ) : const SizedBox(),
+              const SizedBox(height: 4),
             ],
           ),
         ),
       ),
     );
+
+    // return CheckboxListTile(
+    //     contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+    //     value: checkboxValue,
+    //     onChanged: (value) {
+    //       for (int i = 0; i < trackExerciseList.length; i++) {
+    //         if (exercise.id == trackExerciseList[i].id) {
+    //           widget.exData.sets![0].time = trackExerciseList[i].totalTime;
+    //           setState(() {
+    //             checkboxValue = !checkboxValue;
+    //           });
+    //         }
+    //       }
+    //       if (checkboxValue) {
+    //         widget.addEx(data: widget.exData);
+    //       } else {
+    //         widget.removeEx(data: widget.exData);
+    //       }
+    //     },
+    //     title: buildWidget(exercise));
   }
+
+
 
   void showAddExerciseDialog(
     context,
@@ -453,4 +439,21 @@ class _EditHepPlanState extends State<EditHepPlan> {
       return [Set()];
     }
   }
+}
+
+class TrackExercise {
+  String? id;
+  String? name;
+  String? exerciseStartTime;
+  String? exerciseEndTime;
+  String? totalTime;
+  String? status;
+
+  TrackExercise(
+      {this.id,
+      this.name,
+      this.exerciseEndTime,
+      this.status,
+      this.exerciseStartTime,
+      this.totalTime});
 }

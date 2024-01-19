@@ -58,7 +58,7 @@ class HomeCard extends StatelessWidget {
         }
       },
       {
-        "title": 'Chat With Experts',
+        "title": 'Chat With Us',
         "icon": 'assets/images/expert_chat.png',
         "onClick": () {
           //print("name : ${widget.clientName}");

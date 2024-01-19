@@ -102,7 +102,7 @@ class ExerciseWorkoutModel {
         setTypeId: exerciseData["setTypeId"],
         group: exerciseData["group"],
         bodyPartGroupId: exerciseData["bodyPartGroupId"],
-        //bodyPartId: exerciseData["bodyPartId"],
+        bodyPartId: exerciseData["bodyPartId"],
         setType: exerciseData["setType"],
         note: exerciseData["note"],
         sets: List<Set>.from(exerciseData["sets"].map((x) => Set.fromJson(x))),
@@ -147,6 +147,7 @@ class Set {
   String? speed;
   String? name;
   String? set;
+  String? status;
 
   factory Set.fromJson(Map<String, dynamic> setData) => Set(
         id: setData["_id"],

@@ -204,25 +204,26 @@ class CalorieProgress {
 }
 
 class TotalDietAnalysisData {
-  int? totalCalories;
-  List<DietPercentagesData>? dietPercentagesData;
+  double? totalCalories;
+  //List<DietPercentagesData>? dietPercentagesData;
 
-  TotalDietAnalysisData({this.totalCalories, this.dietPercentagesData});
+  //TotalDietAnalysisData({this.totalCalories, this.dietPercentagesData});
+  TotalDietAnalysisData({this.totalCalories});
 
   TotalDietAnalysisData.fromJson(Map<String, dynamic> json) {
     totalCalories = json['totalCalories'];
-    if (json['dietPercentagesData'] != null) {
-      dietPercentagesData = <DietPercentagesData>[];
-      json['dietPercentagesData'].forEach((v) { dietPercentagesData!.add(DietPercentagesData.fromJson(v)); });
-    }
+    // if (json['dietPercentagesData'] != null) {
+    //   dietPercentagesData = <DietPercentagesData>[];
+    //   json['dietPercentagesData'].forEach((v) { dietPercentagesData!.add(DietPercentagesData.fromJson(v)); });
+    // }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['totalCalories'] = totalCalories;
-    if (dietPercentagesData != null) {
-      data['dietPercentagesData'] = dietPercentagesData!.map((v) => v.toJson()).toList();
-    }
+    // if (dietPercentagesData != null) {
+    //   data['dietPercentagesData'] = dietPercentagesData!.map((v) => v.toJson()).toList();
+    // }
     return data;
   }
 }

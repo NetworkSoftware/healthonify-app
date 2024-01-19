@@ -22,6 +22,7 @@ class User {
   String? mobile;
   String? email;
   String? imageUrl;
+  String? weight;
   List<dynamic>? consultTime;
   List<dynamic>? blockedSlots;
   String? address;
@@ -51,6 +52,7 @@ class User {
       this.isAdminApproved,
       this.roles,
       this.expertise,
+        this.weight,
       this.topLevelExpId,
       this.topLevelExpName,
       this.certificates,

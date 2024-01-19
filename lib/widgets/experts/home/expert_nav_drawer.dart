@@ -7,6 +7,7 @@ import 'package:healthonify_mobile/screens/auth/change_password.dart';
 import 'package:healthonify_mobile/screens/auth/login_screen.dart';
 import 'package:healthonify_mobile/screens/client_screens/community/my_community_posts.dart';
 import 'package:healthonify_mobile/screens/edit_profile_screens.dart/edit_profile.dart';
+import 'package:healthonify_mobile/screens/expert_screens/batches/expert_batches.dart';
 import 'package:healthonify_mobile/screens/expert_screens/earnings/expert_earnings.dart';
 import 'package:healthonify_mobile/screens/expert_screens/expert_availability.dart';
 import 'package:healthonify_mobile/screens/expert_screens/home/diet/my_personal_clients.dart';
@@ -120,18 +121,18 @@ class _ExpertNavigationDrawerState extends State<ExpertNavigationDrawer> {
           }));
         },
       },
-      // {
-      //   'title': 'Batchessss',
-      //   "icon": "assets/icons/batch.png",
-      //   'route': () {
-      //     Navigator.pop(context);
-      //     Navigator.of(
-      //       context, /*rootnavigator: true*/
-      //     ).push(MaterialPageRoute(builder: (context) {
-      //       return const ExpertBatchesScreen();
-      //     }));
-      //   },
-      // },
+      {
+        'title': 'Batches',
+        "icon": "assets/icons/batch.png",
+        'route': () {
+          Navigator.pop(context);
+          Navigator.of(
+            context, /*rootnavigator: true*/
+          ).push(MaterialPageRoute(builder: (context) {
+            return const ExpertBatchesScreen();
+          }));
+        },
+      },
       {
         'title': 'Earnings',
         "icon": "assets/icons/_privacy.png",

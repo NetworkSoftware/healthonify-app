@@ -403,20 +403,8 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                                 getFlowConsultations();
                               }
                             });
-                          } else if (widget.flow == "consultExpert") {
-                            // bool result = await Navigator.push(context,
-                            //     MaterialPageRoute(builder: (context) {
-                            //       return const FitnessRequestAppointment(
-                            //           isFitnessFlow: true);
-                            //     }));
-                            //
-                            // if (result == true) {
-                            //   if (widget.flow == '') {
-                            //     getConsultations();
-                            //   } else {
-                            //     getFlowConsultations();
-                            //   }
-                            // }
+                          } else if (widget.flow == "healer") {
+                            _showBottomSheetLiveWell();
                           } else if (widget.flow == "liveWell") {
                             _showBottomSheetLiveWell();
                           } else if (widget.flow == "ayurveda") {

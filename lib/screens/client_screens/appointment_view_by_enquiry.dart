@@ -205,24 +205,25 @@ class _AppointmentViewByEnquiryState extends State<AppointmentViewByEnquiry> {
                                         //
                                         // ZIMRoomAdvancedConfig advancedConfig =
                                         //     ZIMRoomAdvancedConfig();
-                                        // ZIM
+                                        //
+                                        // // ZIM
                                         //     .getInstance()!
-                                        //     .enterRoom(roomInfo, advancedConfig)
+                                        //     .joinRoom(roomInfo.roomID)
                                         //     .then((value) => {
-                                        //           Navigator.push(context,
-                                        //               MaterialPageRoute(
-                                        //                   builder: (context) {
-                                        //             return ZIMKitMessageListPage(
-                                        //               conversationID: consult
-                                        //                   .expert![0]["_id"],
-                                        //               conversationType:
-                                        //                   ZIMConversationType
-                                        //                       .peer,
-                                        //             );
-                                        //           }))
+                                        //           print(
+                                        //               "Value : ${value.roomInfo}")
                                         //         })
                                         //     .catchError((onError) {
-                                        //   // enter This will be triggered when operation failed.
+                                        //   print("Error : $onError");
+                                        // });
+                                        // ZIM
+                                        //     .getInstance()!
+                                        //     .createRoom(
+                                        //         roomInfo, advancedConfig)
+                                        //     .then((value) {
+                                        //   print("Value : ${value.roomInfo}");
+                                        // }).catchError((onError) {
+                                        //   print("Error : $onError");
                                         // });
                                       },
                                       borderRadius: BorderRadius.circular(10),

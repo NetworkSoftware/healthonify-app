@@ -12,6 +12,7 @@ class TrackWorkout extends StatefulWidget {
   final Schedule schedule;
   final String workoutPlanId;
   final String title;
+
   const TrackWorkout({
     Key? key,
     required this.title,
@@ -76,12 +77,17 @@ class _TrackWorkoutState extends State<TrackWorkout> {
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  if (isWorkoutStarted)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15.0, vertical: 5),
-                      child: TimerCard(saveTime: saveTime),
-                    ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(
+                  //       horizontal: 15.0, vertical: 5),
+                  //   child: TimerCard(saveTime: saveTime),
+                  // ),
+                  // if (isWorkoutStarted)
+                  //   Padding(
+                  //     padding: const EdgeInsets.symmetric(
+                  //         horizontal: 15.0, vertical: 5),
+                  //     child: TimerCard(saveTime: saveTime),
+                  //   ),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -114,12 +120,42 @@ class _TrackWorkoutState extends State<TrackWorkout> {
               ),
               child: TextButton(
                 onPressed: () {
-                  setState(() {
-                    isWorkoutStarted = true;
-                  });
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Do you wish to end this workout?'),
+                      actions: [
+                        TextButton(
+                          child: const Text('Cancel'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: const Text('Yes'),
+                          onPressed: () {
+                            int time = 0;
+                            for (int i = 0; i < selectedExs.length; i++) {
+                              for (int j = 0;
+                                  j < selectedExs[i].sets!.length;
+                                  j++) {
+                                time +=
+                                    int.parse(selectedExs[i].sets![j].time!) ??
+                                        0;
+                              }
+                            }
+
+                            print("Time Spend : $time");
+                            saveTime(time.toString());
+                          },
+                        ),
+                      ],
+                    ),
+                  );
                 },
                 child: Text(
-                  'Start Workout',
+                  'Finish Workout',
                   style: Theme.of(context)
                       .textTheme
                       .labelMedium!

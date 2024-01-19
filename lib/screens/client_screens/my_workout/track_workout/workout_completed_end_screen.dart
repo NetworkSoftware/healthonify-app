@@ -28,7 +28,7 @@ class WorkoutCompletedEndScreen extends StatelessWidget {
 
   Future<void> getResults(BuildContext context) async {
     data = await WorkoutFunc().postWorkoutLog(context,
-        schedule: schedule, workoutId: workoutId, selectedExs: selectedExs);
+        schedule: schedule, workoutId: workoutId, selectedExs: selectedExs,time: time);
     log("log workout data ${json.encode(data)}");
     String userId =
     Provider.of<UserData>(context, listen: false).userData.id!;

@@ -621,115 +621,6 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
               ),
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(4),
-          //   child: Card(
-          //     child: Padding(
-          //       padding: const EdgeInsets.all(10),
-          //       child: Column(
-          //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           Text(
-          //             "Your Appointments",
-          //             style: Theme
-          //                 .of(context)
-          //                 .textTheme
-          //                 .labelLarge,
-          //           ),
-          //           const SizedBox(height: 6),
-          //           Text(
-          //             'Book and view your consultations here',
-          //             style: Theme
-          //                 .of(context)
-          //                 .textTheme
-          //                 .bodySmall,
-          //           ),
-          //           const SizedBox(height: 10),
-          //           Row(
-          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //             children: [
-          //               Container(
-          //                 constraints:
-          //                 const BoxConstraints(minWidth: 70, minHeight: 40),
-          //                 decoration: BoxDecoration(
-          //                   gradient: purpleGradient,
-          //                   borderRadius:
-          //                   const BorderRadius.all(Radius.circular(10.0)),
-          //                 ),
-          //                 child: InkWell(
-          //                   onTap: () {
-          //                     // Navigator.push(context,
-          //                     //     MaterialPageRoute(builder: (context) {
-          //                     //   return const HealthCareAppointmentsScreen();
-          //                     // }));
-          //                     Navigator.of(
-          //                       context, /*rootnavigator: true*/
-          //                     ).push(
-          //                       MaterialPageRoute(
-          //                         builder: (context) =>
-          //                             AllAppointmentsScreen(flow: 'healthCare'),
-          //                       ),
-          //                     );
-          //                   },
-          //                   borderRadius: BorderRadius.circular(10),
-          //                   child: Center(
-          //                     child: Text(
-          //                       'View',
-          //                       style: Theme
-          //                           .of(context)
-          //                           .textTheme
-          //                           .labelMedium!
-          //                           .copyWith(color: whiteColor),
-          //                     ),
-          //                   ),
-          //                 ),
-          //               ),
-          //               Container(
-          //                 constraints:
-          //                 const BoxConstraints(minWidth: 90, minHeight: 40),
-          //                 decoration: BoxDecoration(
-          //                   gradient: purpleGradient,
-          //                   borderRadius:
-          //                   const BorderRadius.all(Radius.circular(10.0)),
-          //                 ),
-          //                 child: InkWell(
-          //                   onTap: () {
-          //                     Navigator.push(context,
-          //                         MaterialPageRoute(builder: (context) {
-          //                           return const DoctorConsultationScreen();
-          //                         }));
-          //                   },
-          //                   borderRadius: BorderRadius.circular(10),
-          //                   child: Padding(
-          //                     padding:
-          //                     const EdgeInsets.symmetric(horizontal: 10.0),
-          //                     child: Row(
-          //                       children: [
-          //                         const Icon(
-          //                           Icons.add,
-          //                           color: Colors.white,
-          //                         ),
-          //                         Text(
-          //                           'Request',
-          //                           style: Theme
-          //                               .of(context)
-          //                               .textTheme
-          //                               .labelMedium!
-          //                               .copyWith(color: whiteColor),
-          //                         ),
-          //                       ],
-          //                     ),
-          //                   ),
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Row(
@@ -765,12 +656,12 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: GridView.builder(
-                padding: const EdgeInsets.only(top: 15.0, bottom: 8),
+                padding: const EdgeInsets.all(4),
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
-                  mainAxisExtent: 126,
+                  mainAxisExtent: 130,
                   mainAxisSpacing: 0.0,
                   crossAxisSpacing: 0.0,
                 ),
@@ -796,7 +687,7 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        //const SizedBox(height: 10),
                         Text(
                           healthCareQuickLinks[index]["title"],
                           style: Theme

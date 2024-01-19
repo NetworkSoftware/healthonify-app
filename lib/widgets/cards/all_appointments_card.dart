@@ -178,25 +178,28 @@ class _AllAppoinmentsCardState extends State<AllAppoinmentsCard> {
                     ),
                   ),
                   const SizedBox(width: 5),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Your Appointments",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .labelLarge!.copyWith(color: Colors.white),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'Book and View your appointments here',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodySmall!.copyWith(color: Colors.white),
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Your Appointments",
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .labelLarge!.copyWith(color: Colors.white),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Book and View your appointments here',
+                          //overflow: TextOverflow.ellipsis,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .bodySmall!.copyWith(color: Colors.white),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

@@ -54,6 +54,7 @@ class _ExpertBatchesScreenState extends State<ExpertBatchesScreen> {
   };
 
   bool noContent = false;
+
   Future<void> getClientList() async {
     topLExp =
         Provider.of<UserData>(context, listen: false).userData.topLevelExpName!;
@@ -110,8 +111,9 @@ class _ExpertBatchesScreenState extends State<ExpertBatchesScreen> {
     }));
   }
 
-  void onSubmit(String sessionName, List<String> users) {
-    meetingAndConsultationId = getRandomString(10);
+  void onSubmit(String sessionName, List<String> users,String batchId) {
+    //meetingAndConsultationId = getRandomString(10);
+    meetingAndConsultationId = batchId;
 
     startLiveSessionMap['expertId'] = expertId;
     if (users.isNotEmpty) {
@@ -262,6 +264,8 @@ class _ExpertBatchesScreenState extends State<ExpertBatchesScreen> {
                                                                     .name!,
                                                                 batches[index]
                                                                     .userIds!,
+                                                                  batches[index]
+                                                                      .id!
                                                               );
                                                             },
                                                       child: const Text(
@@ -288,12 +292,16 @@ class _ExpertBatchesScreenState extends State<ExpertBatchesScreen> {
           color: orange,
         ),
         child: TextButton(
-          onPressed: () {
-            Navigator.of(
+          onPressed: () async {
+            bool result = await Navigator.of(
               context, /*rootnavigator: true*/
             ).push(MaterialPageRoute(builder: (context) {
               return const CreateBatchScreen();
             }));
+
+            if (result == true) {
+              getAllBatches();
+            }
           },
           child: Text(
             'Create Batch',
@@ -308,6 +316,7 @@ class _ExpertBatchesScreenState extends State<ExpertBatchesScreen> {
   }
 
   Map<String, dynamic> joinBatch = {};
+
   void onJoin() {
     joinBatch['isActive'] = true;
     joinBatch['date'] = DateFormat('yyyy-MM-dd').format(DateTime.now());

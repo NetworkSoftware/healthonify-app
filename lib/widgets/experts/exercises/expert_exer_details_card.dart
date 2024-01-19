@@ -15,11 +15,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../../providers/physiotherapy/health_data.dart';
+
 class ExerciseDetailsCard extends StatefulWidget {
   final Exercise exData;
   final bool isSelectEx;
   final bool isImagePresentAndClickable;
   final String userWeight;
+
   const ExerciseDetailsCard(
       {Key? key,
       required this.exData,
@@ -33,6 +36,16 @@ class ExerciseDetailsCard extends StatefulWidget {
 }
 
 class _ExerciseDetailsCardState extends State<ExerciseDetailsCard> {
+  Future<void> getBodyPartGroupsData() async {
+    await Provider.of<HealthData>(context, listen: false).getBodyPartGroups();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getBodyPartGroupsData();
+  }
+
   @override
   Widget build(BuildContext context) {
     // List<Set> sets = [];
@@ -227,33 +240,38 @@ class _ExerciseDetailsCardState extends State<ExerciseDetailsCard> {
       isScrollControlled: true,
       context: context,
       builder: (context) {
-        print("Body : ${exercise.bodyPartId![0]}");
-        return AddSetsBottomsheet(
-          exerciseName: exercise.name,
-          saveData: (Map<String, dynamic> data) {
-            ExerciseWorkoutModel model = ExerciseWorkoutModel(
-              round: data["sequence"],
-              group: data["exGroup"],
-              //bodyPartGroupId: exercise.bodyPartGroupId![0],
-              bodyPartId: exercise.bodyPartId![0],
-              setType: getSetType(data["sets"]),
-              exerciseId: {
-                "name": exercise.name,
-                "mediaLink": exercise.mediaLink,
-                "_id": exercise.id
-              },
-              note: data["setsNote"],
-              sets: setSets(
-                data["sets"],
-              ),
-            );
-            // log(model.sets![0].weight!);
-            Navigator.of(context).pop(
-              model,
-            );
-          },
-        );
-      },
+        return Consumer<HealthData>(
+            builder: (context, value, child) =>
+                AddSetsBottomsheet(
+                  exerciseName: exercise.name,
+                  exerciseBodyPartGroupId: exercise.bodyPartGroupId,
+                  bodyPartList: value.bodyPartGroups,
+                  saveData: (Map<String, dynamic> data) {
+                    ExerciseWorkoutModel model = ExerciseWorkoutModel(
+                      round: data["sequence"],
+                      group: data["exGroup"],
+                      bodyPartGroupId: exercise.bodyPartGroupId != null
+                          ? exercise.bodyPartGroupId![0]
+                          : data["bodyPartGroup"],
+                      bodyPartId: exercise.bodyPartId![0],
+                      setType: getSetType(data["sets"]),
+                      exerciseId: {
+                        "name": exercise.name,
+                        "mediaLink": exercise.mediaLink,
+                        "_id": exercise.id
+                      },
+                      note: data["setsNote"],
+                      sets: setSets(
+                        data["sets"],
+                      ),
+                    );
+                    // log(model.sets![0].weight!);
+                    Navigator.of(context).pop(
+                      model,
+                    );
+                  },
+                ));
+      }
     );
   }
 
@@ -448,6 +466,7 @@ class ShowExCalculatorDialog extends StatefulWidget {
   final double calorieFactor;
   final String currentWeight;
   final String exId;
+
   const ShowExCalculatorDialog(
       {super.key,
       required this.title,
@@ -471,6 +490,7 @@ class _ShowExCalculatorDialogState extends State<ShowExCalculatorDialog> {
     "exerciseId": "",
     "durationInMinutes": "",
   };
+
   Future<void> postEx() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -530,6 +550,8 @@ class _ShowExCalculatorDialogState extends State<ShowExCalculatorDialog> {
                   caloriesBurnt = (mins *
                       widget.calorieFactor *
                       double.parse(widget.currentWeight));
+
+                  print("caloriesBurnt : $caloriesBurnt");
                   data["durationInMinutes"] = value;
                 });
               },

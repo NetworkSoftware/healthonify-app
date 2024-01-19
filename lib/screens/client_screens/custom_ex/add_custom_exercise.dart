@@ -285,7 +285,8 @@ class _AddCustomExerciseState extends State<AddCustomExercise> {
                         },
                       ),
                       Consumer<HealthData>(
-                        builder: (context, value, child) => Column(
+                        builder: (context, value, child) =>
+                            Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(

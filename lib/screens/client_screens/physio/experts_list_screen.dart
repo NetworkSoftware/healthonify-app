@@ -62,7 +62,7 @@ class ExpertsList extends StatelessWidget {
               : Consumer<ExpertsData>(
                   builder: ((context, data, child) => data.expertData.isEmpty
                       ? const Center(
-                          child: Text("No Experts Availiable"),
+                          child: Text("No Experts Available"),
                         )
                       : ListView.builder(
                           itemCount: data.expertData.length,

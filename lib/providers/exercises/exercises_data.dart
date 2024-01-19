@@ -35,7 +35,7 @@ class ExercisesData with ChangeNotifier {
             name: element["name"],
             weightUnit: element["weight"],
             id: element["_id"],
-            calorieFactor: element["calorieFactor"],
+            calorieFactor: double.parse(element["calorieFactor"].toString()),
             description: element["description"]
           ));
           
@@ -45,7 +45,8 @@ class ExercisesData with ChangeNotifier {
       } else {
         throw HttpException(responseMessage["message"]);
       }
-    } catch (e) {
+    } catch (e,trace) {
+      print("Trace : $trace");
       rethrow;
     }
   }
@@ -126,7 +127,7 @@ class ExercisesData with ChangeNotifier {
             bodyPartGroupId: element['bodyPartGroupId'],
             mediaLink: element["mediaLink"],
             name: element["name"],
-            weightUnit: element["weight"].toString(),
+            weightUnit: element["weight"],
             id: element["id"],
           ));
         }

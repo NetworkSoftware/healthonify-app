@@ -82,66 +82,69 @@ class _AdventureScrollerState extends State<AdventureScroller> {
           ? const SizedBox(
               height: 10,
             )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
-                  child: Text(
-                    widget.scrollerTitle,
-                    style: Theme.of(context).textTheme.headlineSmall,
+          : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
+                    child: Text(
+                      widget.scrollerTitle,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 154,
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: adventureData.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: InkWell(
-                                onTap: () async {
-                                  await launchUrl(
-                                    Uri.parse(
-                                      'https://healthonify.com/travelonify/Traveldetails/${adventureData[index].id}',
-                                    ),
-                                  );
-                                },
-                                child: Image.network(
-                                  adventureData[index].imageUrl!,
-                                  height: 110,
-                                  width: 150,
-                                  fit: BoxFit.cover,
+                  SizedBox(
+                    height: 154,
+                    child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: adventureData.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: InkWell(
+                                  onTap: () async {
+                                    await launchUrl(
+                                      Uri.parse(
+                                        'https://healthonify.com/travelonify/Traveldetails/${adventureData[index].id}',
+                                      ),
+                                    );
+                                  },
+                                  child: Image.network(
+                                    adventureData[index].imageUrl!,
+                                    height: 110,
+                                    width: 150,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(left: 2),
-                              width: 150,
-                              child: Text(
-                                adventureData[index].packageName!,
-                                style: Theme.of(context).textTheme.bodySmall,
-                                overflow: TextOverflow.ellipsis,
+                              const SizedBox(
+                                height: 5,
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                              Container(
+                                padding: const EdgeInsets.only(left: 2),
+                                width: 150,
+                                child: Text(
+                                  adventureData[index].packageName!,
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+          ),
     );
   }
 }

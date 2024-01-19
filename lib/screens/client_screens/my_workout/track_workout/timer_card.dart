@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:healthonify_mobile/constants/theme_data.dart';
+
 class ElapsedTime {
   final int? hundreds;
   final int? seconds;
@@ -81,21 +83,6 @@ class TimerCardState extends State<TimerCard> {
                     dependencies.stopwatch.isRunning ? "stop" : "resume",
                     rightButtonPressed),
               ),
-
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(vertical: 10.0),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //     children: <Widget>[
-              //       buildFloatingButton(
-              //           dependencies.stopwatch.isRunning ? "lap" : "reset",
-              //           leftButtonPressed),
-              //       buildFloatingButton(
-              //           dependencies.stopwatch.isRunning ? "stop" : "start",
-              //           rightButtonPressed),
-              //     ],
-              //   ),
-              // ),
             ],
           ),
           Padding(
@@ -246,7 +233,7 @@ class MinutesAndSecondsState extends State<MinutesAndSeconds> {
     if (minutes > 60) {
       minutesStr = "$minutes";
     }
-    return Text('$minutesStr:$secondsStr.', style: dependencies!.textStyle);
+    return Text('$minutesStr:$secondsStr.', style: dependencies!.textStyle.copyWith(color: whiteColor,fontSize: 24));
   }
 }
 
@@ -282,6 +269,6 @@ class HundredsState extends State<Hundreds> {
   Widget build(BuildContext context) {
     String hundredsStr = (hundreds % 100).toString().padLeft(2, '0');
     // log(hundredsStr);
-    return Text(hundredsStr, style: dependencies!.textStyle);
+    return Text(hundredsStr, style: dependencies!.textStyle.copyWith(color: whiteColor,fontSize: 24));
   }
 }
