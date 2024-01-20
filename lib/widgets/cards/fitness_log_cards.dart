@@ -49,12 +49,9 @@ class _TotalWorkoutHoursState extends State<TotalWorkoutHours> {
         .toStringAsFixed(2);
 
     for (var element in weeklyWorkoutsModel.weeklyData!) {
-      // print(DateFormat("EEE").format(date));
       if (element.checkedIn ?? false) {
         totalCheckins++;
       }
-
-      print("checkin : $totalCheckins");
     }
   }
 

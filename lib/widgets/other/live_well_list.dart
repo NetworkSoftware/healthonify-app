@@ -80,9 +80,8 @@ class LiveWellList extends StatelessWidget {
                                           );
                                         }));
                                       },
-                                      child: Image.network(
-                                        liveWellCategories[index]
-                                            .mediaLink!,
+                                      child: Image.asset(
+                                        'assets/images/Picture7.png',
                                         height: 150,
                                         width: 110,
                                         fit: BoxFit.cover,

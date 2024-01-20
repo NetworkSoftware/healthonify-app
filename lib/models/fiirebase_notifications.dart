@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:healthonify_mobile/main.dart';
+import 'package:healthonify_mobile/models/workout/set_type_models.dart';
 import 'package:healthonify_mobile/screens/video_call_1.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:url_launcher/url_launcher.dart';
@@ -16,7 +17,6 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
         'This channel is used for important notifications.', // description
     importance: Importance.high,
     playSound: true);
-
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -73,13 +73,13 @@ class FirebaseNotif {
 
     await _flutterLocalNotificationsPlugin!
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(_channel!);
 
     // set messaging options
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-        alert: true, badge: true, sound: true);
+            alert: true, badge: true, sound: true);
 
     return firebase;
   }
@@ -96,10 +96,10 @@ class FirebaseNotif {
   static Future<String?> getFcmToken() async {
     // assert initialization of this class
     assert(
-    _flutterLocalNotificationsPlugin != null &&
-        _channel != null &&
-        _firebaseMessaging != null,
-    'Make sure you have called init() method');
+        _flutterLocalNotificationsPlugin != null &&
+            _channel != null &&
+            _firebaseMessaging != null,
+        'Make sure you have called init() method');
 
     // subscribe to all topics
     await _firebaseMessaging!.subscribeToTopic('all');
@@ -200,11 +200,15 @@ class FirebaseNotif {
       presentBadge: true,
       presentSound: true,
     );
-     AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails androidNotificationDetails =
         const AndroidNotificationDetails(
-            'repeating channel id', 'repeating channel name',
-            channelDescription: 'repeating description', icon: "mipmap/launcher_icon",sound: RawResourceAndroidNotificationSound('water_drop'),);
-     NotificationDetails notificationDetails =
+      'repeating channel id',
+      'repeating channel name',
+      channelDescription: 'repeating description',
+      icon: "mipmap/launcher_icon",
+      sound: RawResourceAndroidNotificationSound('water_drop'),
+    );
+    NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails, iOS: details);
 
     return notificationDetails;
@@ -229,11 +233,11 @@ class FirebaseNotif {
       id,
       title,
       desc,
-      _scheduleDaily(Time(hour, minute)),
+      _scheduleDaily(Time()),
       notificationDetails,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      androidAllowWhileIdle: true,
+      androidScheduleMode: AndroidScheduleMode.alarmClock,
       matchDateTimeComponents: DateTimeComponents.time,
     );
     log("scheduled");
@@ -247,9 +251,6 @@ class FirebaseNotif {
       now.year,
       now.month,
       now.day,
-      time.hour,
-      time.minute,
-      time.second,
     );
     log("time zone scheduled $scheduledDate");
     if (scheduledDate.isBefore(now)) {

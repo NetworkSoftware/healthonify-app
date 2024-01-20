@@ -65,7 +65,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
       appBar: const CustomAppBar(appBarTitle: "Prescription"),
       body: Column(
         children: [
-          kSharedPreferences.getString("role") != "ROLE_EXPERT"
+          preferences.getString("role") == "ROLE_EXPERT"
               ? const SizedBox()
               : Align(
                   alignment: Alignment.centerRight,
@@ -73,7 +73,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       onTap: () async {
-                        bool result = await Navigator.of(context)
+                        Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
                           return StorePrescriptionScreen(
                             consultationId: widget.consultationId,
@@ -82,10 +82,6 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                             ticketNumber: widget.ticketNumber,
                           );
                         }));
-
-                        if(result == true){
-                          getConsultations();
-                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(

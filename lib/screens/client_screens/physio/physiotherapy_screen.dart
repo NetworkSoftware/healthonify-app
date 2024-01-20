@@ -33,7 +33,9 @@ import '../../../models/user.dart';
 import '../../../providers/user_data.dart';
 
 class PhysiotherapyScreen extends StatefulWidget {
-  PhysiotherapyScreen({Key? key, this.category,this.categoryId, this.topLevelExpertise}) : super(key: key);
+  PhysiotherapyScreen(
+      {Key? key, this.category, this.categoryId, this.topLevelExpertise})
+      : super(key: key);
   int? category;
   String? categoryId;
   List<TopLevelExpertise>? topLevelExpertise;
@@ -73,16 +75,13 @@ class _PhysiotherapyScreenState extends State<PhysiotherapyScreen> {
       if (widget.topLevelExpertise![i].parentExpertiseId != null) {
         if (widget.categoryId ==
             widget.topLevelExpertise![i].parentExpertiseId) {
-          subCategoryData.add(
-              SubCategory(id: widget.topLevelExpertise![i].id!,
-                  name: widget.topLevelExpertise![i].name!,
-                  parentId: widget.topLevelExpertise![i].parentExpertiseId!)
-          );
+          subCategoryData.add(SubCategory(
+              id: widget.topLevelExpertise![i].id!,
+              name: widget.topLevelExpertise![i].name!,
+              parentId: widget.topLevelExpertise![i].parentExpertiseId!));
         }
       }
     }
-
-    print("list1111 : ${subCategoryData.length}");
   }
 
   Future<void> getTopLevelExpertise(BuildContext context) async {
@@ -122,31 +121,25 @@ class _PhysiotherapyScreenState extends State<PhysiotherapyScreen> {
         id = element.id!;
       }
     }
-    return WillPopScope(
-      onWillPop: ()async{
-        Navigator.pop(context,true);
-        return true;
-      },
-      child: Consumer<ExpertiseData>(
-          builder: (context, categoryData, child) {
-            return Scaffold(
-              body: NestedScrollView(
-                headerSliverBuilder: (context, value) {
-                  return [
-                    flexibleAppBar(context,categoryData.topLevelExpertiseData),
-                  ];
-                },
-                body: physioContent(context),
-              ),
-            );
-          }
-      )
-
-
-    );
+    return WillPopScope(onWillPop: () async {
+      Navigator.pop(context, true);
+      return true;
+    }, child: Consumer<ExpertiseData>(builder: (context, categoryData, child) {
+      return Scaffold(
+        body: NestedScrollView(
+          headerSliverBuilder: (context, value) {
+            return [
+              flexibleAppBar(context, categoryData.topLevelExpertiseData),
+            ];
+          },
+          body: physioContent(context),
+        ),
+      );
+    }));
   }
 
-  PreferredSizeWidget flexibleAppBar(context, List<TopLevelExpertise> topLevelExpertise) {
+  PreferredSizeWidget flexibleAppBar(
+      context, List<TopLevelExpertise> topLevelExpertise) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(56),
       child: SliverAppBar(
@@ -156,7 +149,7 @@ class _PhysiotherapyScreenState extends State<PhysiotherapyScreen> {
         backgroundColor: orange,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context,true);
+            Navigator.pop(context, true);
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -169,11 +162,11 @@ class _PhysiotherapyScreenState extends State<PhysiotherapyScreen> {
           child: Padding(
             padding: const EdgeInsets.only(right: 10),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Theme.of(context).drawerTheme.backgroundColor,
-                 // border: Border.all(color: Colors.black,width: 1)
+                borderRadius: BorderRadius.circular(20),
+                color: Theme.of(context).drawerTheme.backgroundColor,
+                // border: Border.all(color: Colors.black,width: 1)
               ),
               child: DropdownButton2(
                 buttonHeight: 20,
@@ -182,7 +175,7 @@ class _PhysiotherapyScreenState extends State<PhysiotherapyScreen> {
                 underline: const SizedBox(),
                 dropdownWidth: 240,
                 offset: const Offset(-30, 20),
-                dropdownDecoration:  BoxDecoration(
+                dropdownDecoration: BoxDecoration(
                     color: Theme.of(context).drawerTheme.backgroundColor,
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 alignment: Alignment.topLeft,
@@ -218,7 +211,12 @@ class _PhysiotherapyScreenState extends State<PhysiotherapyScreen> {
                         ),
                         Text(
                           list.title,
-                          style: Theme.of(context).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.bold,fontSize: 14),),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall!
+                              .copyWith(
+                                  fontWeight: FontWeight.bold, fontSize: 14),
+                        ),
                       ],
                     ),
                   );
@@ -229,61 +227,72 @@ class _PhysiotherapyScreenState extends State<PhysiotherapyScreen> {
                     selectedValue = value as int;
                     String categoryId = "";
                     if (selectedValue == 1) {
-
-                      for(int i =0 ; i< topLevelExpertise.length ; i++){
-                        if(topLevelExpertise[i].name == "Health Care"){
+                      for (int i = 0; i < topLevelExpertise.length; i++) {
+                        if (topLevelExpertise[i].name == "Health Care") {
                           categoryId = topLevelExpertise[i].id!;
                         }
                       }
                       bool result = await Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return HealthCareScreen(category: 1,categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                        return HealthCareScreen(
+                            category: 1,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
                         selectedValue = null;
                       }
                     } else if (selectedValue == 2) {
-                      for(int i =0 ; i< topLevelExpertise.length ; i++){
-                        if(topLevelExpertise[i].name == "Weight Management"){
+                      for (int i = 0; i < topLevelExpertise.length; i++) {
+                        if (topLevelExpertise[i].name == "Weight Management") {
                           categoryId = topLevelExpertise[i].id!;
                         }
                       }
                       bool result = await Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return ManageWeightScreen(category: 2,categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                        return ManageWeightScreen(
+                            category: 2,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
                         selectedValue = null;
                       }
                     } else if (selectedValue == 3) {
-                      for(int i =0 ; i< topLevelExpertise.length ; i++){
-                        if(topLevelExpertise[i].name == "Fitness"){
+                      for (int i = 0; i < topLevelExpertise.length; i++) {
+                        if (topLevelExpertise[i].name == "Fitness") {
                           categoryId = topLevelExpertise[i].id!;
                         }
                       }
                       bool result = await Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return FitnessScreen(category: 3,categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                        return FitnessScreen(
+                            category: 3,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
                         selectedValue = null;
                       }
                     } else if (selectedValue == 4) {
-                      for(int i =0 ; i< topLevelExpertise.length ; i++){
-                        if(topLevelExpertise[i].name == "Physiotherapy"){
+                      for (int i = 0; i < topLevelExpertise.length; i++) {
+                        if (topLevelExpertise[i].name == "Physiotherapy") {
                           categoryId = topLevelExpertise[i].id!;
                         }
                       }
                       bool result = await Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return PhysiotherapyScreen(category: 4,categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                        return PhysiotherapyScreen(
+                            category: 4,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
@@ -300,15 +309,18 @@ class _PhysiotherapyScreenState extends State<PhysiotherapyScreen> {
                         selectedValue = null;
                       }
                     } else if (selectedValue == 6) {
-                      for(int i =0 ; i< topLevelExpertise.length ; i++){
-                        if(topLevelExpertise[i].name == "Live Well"){
+                      for (int i = 0; i < topLevelExpertise.length; i++) {
+                        if (topLevelExpertise[i].name == "Live Well") {
                           categoryId = topLevelExpertise[i].id!;
                         }
                       }
                       bool result = await Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return LiveWellScreen(category: 6,categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                        return LiveWellScreen(
+                            category: 6,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
@@ -332,17 +344,13 @@ class _PhysiotherapyScreenState extends State<PhysiotherapyScreen> {
                       if (result == true) {
                         selectedValue = null;
                       }
-                    }
-
-
-                    else if (selectedValue == 8) {
+                    } else if (selectedValue == 8) {
                       Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return const ShopScreen(
-                        );
+                        return const ShopScreen();
                       }));
-                     // launchUrl(Uri.parse("https://healthonify.com/Shop"));
+                      // launchUrl(Uri.parse("https://healthonify.com/Shop"));
                     }
                   });
                 },
@@ -561,7 +569,8 @@ class _PhysiotherapyScreenState extends State<PhysiotherapyScreen> {
                             },
                             borderRadius: BorderRadius.circular(30),
                             child: Center(
-                              child: experts[index].imageUrl == null || experts[index].imageUrl == ""
+                              child: experts[index].imageUrl == null ||
+                                      experts[index].imageUrl == ""
                                   ? const CircleAvatar(
                                       radius: 30,
                                       backgroundImage: AssetImage(
@@ -575,7 +584,10 @@ class _PhysiotherapyScreenState extends State<PhysiotherapyScreen> {
                                     ),
                             ),
                           ),
-                          Text(experts[index].firstName!,style:  Theme.of(context).textTheme.bodySmall,),
+                          Text(
+                            experts[index].firstName!,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                         ],
                       ),
                     );

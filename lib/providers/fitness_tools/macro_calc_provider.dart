@@ -44,10 +44,9 @@ class MacroCalculatorProvider with ChangeNotifier {
   }
 
   Future<List<MacroCalculator>> calculateMacros(
-      String dropDownId, String calories,String userId) async {
-    log('$dropDownId <---> $calories');
-    String url = '${ApiUrl.wm}/calculate/fitness?tool=macroCalculator&id=$dropDownId&calories=$calories&userId=$userId';
-    print("url : $url");
+      String userId, String calories) async {
+    log('$userId <---> $calories');
+    String url = '${ApiUrl.wm}/calculate/fitness?tool=macroCalculator&id=$userId&calories=$calories';
     final List<MacroCalculator> macroData = [];
 
     try {

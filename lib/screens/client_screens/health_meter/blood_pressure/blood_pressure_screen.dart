@@ -109,7 +109,7 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         appBarTitle: 'Blood Pressure',
-        actionWIdget2: kSharedPreferences.getString("role") != "ROLE_EXPERT"
+        actionWIdget2: preferences.getString("role") != "ROLE_EXPERT"
             ? GestureDetector(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -221,7 +221,8 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
                                 color: Theme.of(context).canvasColor,
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 8,right: 40),
+                                padding:
+                                    const EdgeInsets.only(left: 8, right: 40),
                                 child: BarChart(
                                   BarChartData(
                                     titlesData: FlTitlesData(
@@ -345,11 +346,10 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
                         child: GridView.builder(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisExtent: 50,
-                                crossAxisSpacing: 5,
-                                mainAxisSpacing: 5
-                          ),
+                                  crossAxisCount: 2,
+                                  mainAxisExtent: 50,
+                                  crossAxisSpacing: 5,
+                                  mainAxisSpacing: 5),
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: bpLevels.length,
@@ -359,7 +359,7 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
                                 padding: const EdgeInsets.only(left: 5),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color:  Theme.of(context).canvasColor,
+                                  color: Theme.of(context).canvasColor,
                                 ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -372,8 +372,10 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
                                     Expanded(
                                       child: Text(
                                         bpLevels[index],
-                                        style:
-                                            Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 12),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelSmall!
+                                            .copyWith(fontSize: 12),
                                         // textAlign: TextAlign.center,
                                       ),
                                     ),
@@ -392,7 +394,10 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
                           children: [
                             Text(
                               'Recently',
-                              style: Theme.of(context).textTheme.labelMedium!.copyWith(color: orange),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(color: orange),
                             ),
                             TextButton(
                               onPressed: () {

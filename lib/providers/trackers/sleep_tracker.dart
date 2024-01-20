@@ -17,7 +17,6 @@ class SleepTrackerProvider with ChangeNotifier {
 
   Future<void> postSleepLogs(Map<String, dynamic> data) async {
     String url = '${ApiUrl.wm}storeSleepLog';
-    print("URL : $url");
     try {
       final response = await http.post(
         Uri.parse(url),

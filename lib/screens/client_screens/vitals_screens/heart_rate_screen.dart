@@ -38,20 +38,15 @@ class _HeartRateScreenState extends State<HeartRateScreen>
     //   return getHrLogs();
     // });
     initTracker().then((value) async {
-      return await getHrHistoryLogs();
+      return getHrHistoryLogs();
     });
-  //  initTracker();
   }
-
-
 
   Future<void> initTracker({bool isManual = false}) async {
     //
-    //setState(() {});
+    setState(() {});
     try {
-      //
-
-
+      LoadingDialog().onLoadingDialog("Loading", context);
       List<HeartRateData> response = await HeartRateTracker().initHeart();
 
       Map<String, dynamic> data;
@@ -89,7 +84,6 @@ class _HeartRateScreenState extends State<HeartRateScreen>
 
       log(data.toString());
       if (!mounted) return;
-      LoadingDialog().onLoadingDialog("Loading", context);
       await Provider.of<HeartRateTrackerProvider>(context, listen: false)
           .postHRLogs(data);
     } on HttpException catch (e) {
@@ -131,7 +125,7 @@ class _HeartRateScreenState extends State<HeartRateScreen>
   }
 
   Future<void> getHrHistoryLogs() async {
-   // LoadingDialog().onLoadingDialog("Loading", context);
+    LoadingDialog().onLoadingDialog("Loading", context);
     try {
       historyData = await Provider.of<HeartRateTrackerProvider>(context,
               listen: false)
@@ -158,18 +152,22 @@ class _HeartRateScreenState extends State<HeartRateScreen>
     return Scaffold(
       appBar: TabAppBar(
         appBarTitle: 'Heart Rate',
-        actionWIdget2: kSharedPreferences.getString("role") != "ROLE_EXPERT" ?
-        Padding(
-          padding: const EdgeInsets.only(top: 15, right: 10),
-          child: GestureDetector(
-              onTap: () {
-                showAppointmentSheet();
-              },
-              child: const Text(
-                "+ Add Log",
-                style: TextStyle(color: Colors.white, fontSize: 20,fontWeight: FontWeight.bold),
-              )),
-        ) : const SizedBox(),
+        actionWIdget2: preferences.getString("role") != "ROLE_EXPERT"
+            ? Padding(
+                padding: const EdgeInsets.only(top: 15, right: 10),
+                child: GestureDetector(
+                    onTap: () {
+                      showAppointmentSheet();
+                    },
+                    child: const Text(
+                      "+ Add Log",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    )),
+              )
+            : const SizedBox(),
         bottomWidget: ColoredBox(
             color: Theme.of(context).appBarTheme.backgroundColor!,
             child: customTabBar(context, tabController)),
@@ -256,7 +254,7 @@ class _HeartRateScreenState extends State<HeartRateScreen>
                           await initTracker(isManual: true);
                           //if (!mounted) return;
                           Navigator.of(context).pop();
-                        //  Navigator.of(context).pop();
+                          Navigator.of(context).pop();
                           getHrLogs();
                           getHrHistoryLogs();
                         },
@@ -324,7 +322,6 @@ class _HeartRateScreenState extends State<HeartRateScreen>
                                   .textTheme
                                   .labelLarge!
                                   .copyWith(
-                                  fontSize: 16,
                                       color: orange,
                                       fontWeight: FontWeight.bold),
                             ),
@@ -335,7 +332,6 @@ class _HeartRateScreenState extends State<HeartRateScreen>
                                   .textTheme
                                   .labelLarge!
                                   .copyWith(
-                                  fontSize: 16,
                                       color: orange,
                                       fontWeight: FontWeight.bold),
                             ),
@@ -368,7 +364,6 @@ class _HeartRateScreenState extends State<HeartRateScreen>
                                   .textTheme
                                   .labelLarge!
                                   .copyWith(
-                                  fontSize: 16,
                                       color: orange,
                                       fontWeight: FontWeight.bold),
                             ),
@@ -379,7 +374,6 @@ class _HeartRateScreenState extends State<HeartRateScreen>
                                   .textTheme
                                   .labelLarge!
                                   .copyWith(
-                                      fontSize: 16,
                                       color: orange,
                                       fontWeight: FontWeight.bold),
                             ),
@@ -417,8 +411,7 @@ class _HeartRateScreenState extends State<HeartRateScreen>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            StringDateTimeFormat()
-                                .stringtDateFormatHeartRate(
+                            StringDateTimeFormat().stringtDateFormatHeartRate(
                                 historyData[index].date!),
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
@@ -428,9 +421,7 @@ class _HeartRateScreenState extends State<HeartRateScreen>
                           ),
                           Text(
                             historyData[index].avgHr.toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge,
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
                           // Expanded(
                           //   child: Column(
@@ -802,7 +793,8 @@ class _WeeklyHeartRateTabState extends State<WeeklyHeartRateTab> {
                                             barGroups: data.map(
                                               (d) {
                                                 averageHr = d.avgHr!.toString();
-                                                maxHr = d.maxHr!.toStringAsFixed(0);
+                                                maxHr =
+                                                    d.maxHr!.toStringAsFixed(0);
                                                 double averageHeartRate =
                                                     double.parse(averageHr);
 
@@ -867,8 +859,8 @@ class _WeeklyHeartRateTabState extends State<WeeklyHeartRateTab> {
                                         .textTheme
                                         .labelLarge!
                                         .copyWith(
-                                        color: orange,
-                                        fontWeight: FontWeight.bold),
+                                            color: orange,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(width: 5),
                                   Text(
@@ -877,8 +869,8 @@ class _WeeklyHeartRateTabState extends State<WeeklyHeartRateTab> {
                                         .textTheme
                                         .labelLarge!
                                         .copyWith(
-                                        color: orange,
-                                        fontWeight: FontWeight.bold),
+                                            color: orange,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -908,8 +900,8 @@ class _WeeklyHeartRateTabState extends State<WeeklyHeartRateTab> {
                                         .textTheme
                                         .labelLarge!
                                         .copyWith(
-                                        color: orange,
-                                        fontWeight: FontWeight.bold),
+                                            color: orange,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(width: 5),
                                   Text(
@@ -918,8 +910,8 @@ class _WeeklyHeartRateTabState extends State<WeeklyHeartRateTab> {
                                         .textTheme
                                         .labelLarge!
                                         .copyWith(
-                                        color: orange,
-                                        fontWeight: FontWeight.bold),
+                                            color: orange,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),

@@ -1,21 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:healthonify_mobile/models/http_exception.dart';
-import 'package:healthonify_mobile/models/workout/workout_model.dart';
-import 'package:healthonify_mobile/providers/user_data.dart';
-import 'package:healthonify_mobile/providers/weight_management/workout_data.dart';
-import 'package:provider/provider.dart';
 
-class AssignWorkoutCard extends StatefulWidget {
+class AssignWorkoutCard extends StatelessWidget {
   const AssignWorkoutCard({Key? key}) : super(key: key);
 
-  @override
-  State<AssignWorkoutCard> createState() => _AssignWorkoutCardState();
-}
-
-class _AssignWorkoutCardState extends State<AssignWorkoutCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(

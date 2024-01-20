@@ -21,7 +21,15 @@ import 'package:healthonify_mobile/widgets/experts/home/expert_nav_drawer.dart';
 import 'package:healthonify_mobile/widgets/experts/home/home_top_appointments_card.dart';
 import 'package:provider/provider.dart';
 
-enum TopExp { physio, diet, healthcare, fitness, nothing, manageWeight,liveWell }
+enum TopExp {
+  physio,
+  diet,
+  healthcare,
+  fitness,
+  nothing,
+  manageWeight,
+  liveWell
+}
 
 class ExpertHomeScreen extends StatefulWidget {
   const ExpertHomeScreen({Key? key}) : super(key: key);
@@ -34,13 +42,13 @@ class _ExpertHomeScreenState extends State<ExpertHomeScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool isLoading = false;
   TopExp topexp = TopExp.nothing;
-  String? topLExp;
+  late String topLExp;
 
   void setCards() {
     String topLExp =
         Provider.of<UserData>(context, listen: false).userData.topLevelExpName!;
     log("top level exp set cards $topLExp");
-    kSharedPreferences.setString('topExp', topLExp);
+    preferences.setString('topExp', topLExp);
     if (topLExp == "Dietitian") {
       topexp = TopExp.diet;
       setState(() {});
@@ -54,11 +62,11 @@ class _ExpertHomeScreenState extends State<ExpertHomeScreen> {
       setState(() {});
     }
     if (topLExp == "Weight Management") {
-      topexp = TopExp.manageWeight;
+      topexp = TopExp.fitness;
       setState(() {});
     }
     if (topLExp == "Fitness") {
-      topexp = TopExp.fitness;
+      topexp = TopExp.manageWeight;
       setState(() {});
     }
     if (topLExp == "Live Well") {
@@ -178,7 +186,7 @@ class _ExpertHomeScreenState extends State<ExpertHomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const HomeTopAppointmentsCard(),
-                  ExpertHomeClientCard(topLExp: topexp),
+                  const ExpertHomeClientCard(),
                   if (topexp == TopExp.physio) const HomeCircularCards(),
                   // const SubscriptionsCard(),
                   HomeExpertiseCards(

@@ -94,10 +94,7 @@ class _MyMedicationsScreenState extends State<MyMedicationsScreen> {
       var response = await dio.post("${ApiUrl.url}upload", data: formData);
       var responseData = response.data;
 
-      print("response data... : $responseData");
       String url = responseData["data"]["location"];
-
-      print("Url... : $url");
 
       payload = {
         'userId': userId,
@@ -233,7 +230,7 @@ class _MyMedicationsScreenState extends State<MyMedicationsScreen> {
                   },
                   title: Text(
                     uploadText,
-                    style:  Theme.of(context)
+                    style: Theme.of(context)
                         .textTheme
                         .labelSmall!
                         .copyWith(color: orange),
@@ -261,7 +258,6 @@ class _MyMedicationsScreenState extends State<MyMedicationsScreen> {
                           setState(() {
                             sendingDateText =
                                 DateFormat('yyyy-MM-dd').format(value);
-                            print(sendingDateText);
                             dateText = DateFormat('dd/MM/yyyy').format(value);
                           });
                         }
@@ -321,14 +317,14 @@ class _MyMedicationsScreenState extends State<MyMedicationsScreen> {
                         shrinkWrap: true,
                         itemCount: value.userPrescriptionList.length,
                         itemBuilder: (context, index) {
-                          DateTime tempDate =
-                              DateFormat("MM/dd/yyyy").parse(
-                                  value.userPrescriptionList[index].date!);
+                          DateTime tempDate = DateFormat("MM/dd/yyyy")
+                              .parse(value.userPrescriptionList[index].date!);
                           String prescriptionDate =
                               DateFormat('dd/MM/yyyy').format(tempDate);
                           return InkWell(
-                            onTap: (){
-                              _showAttachment(value.userPrescriptionList[index].mediaLink!);
+                            onTap: () {
+                              _showAttachment(
+                                  value.userPrescriptionList[index].mediaLink!);
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(16),
@@ -358,8 +354,10 @@ class _MyMedicationsScreenState extends State<MyMedicationsScreen> {
                                   Align(
                                     alignment: Alignment.centerRight,
                                     child: GestureDetector(
-                                      onTap: (){
-                                        _showAttachment(value.userPrescriptionList[index].mediaLink!);
+                                      onTap: () {
+                                        _showAttachment(value
+                                            .userPrescriptionList[index]
+                                            .mediaLink!);
                                       },
                                       child: const Icon(Icons.remove_red_eye),
                                     ),
@@ -391,7 +389,8 @@ class _MyMedicationsScreenState extends State<MyMedicationsScreen> {
           style: TextStyle(height: 1.2),
         ),
         content: Image.network(image),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
@@ -399,9 +398,7 @@ class _MyMedicationsScreenState extends State<MyMedicationsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
-              "Close"
-            ),
+            child: const Text("Close"),
           ),
         ],
       ),

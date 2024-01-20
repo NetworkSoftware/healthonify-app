@@ -84,8 +84,8 @@ class _StorePrescriptionScreenState extends State<StorePrescriptionScreen> {
       log("Error posting prescription: $e");
       Fluttertoast.showToast(msg: "Something went wrong");
     } finally {
-      Navigator.pop(context,true);
-      Navigator.pop(context,true);
+      Navigator.pop(context);
+      Navigator.pop(context);
     }
   }
 

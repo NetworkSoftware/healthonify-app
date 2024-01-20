@@ -311,7 +311,6 @@ class LabsProvider with ChangeNotifier {
       );
       final responseData = json.decode(response.body);
 
-      print("RESponse : $responseData");
       if (response.statusCode >= 400) {
         throw HttpException(responseData["message"]);
       }

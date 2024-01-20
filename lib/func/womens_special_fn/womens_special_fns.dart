@@ -53,7 +53,6 @@ class WomensSpecialFun {
     try {
       await Provider.of<WomensSpecialProvider>(context, listen: false)
           .postPeriodLogs(data);
-      print(data);
       log("posted periods");
       Fluttertoast.showToast(msg: "Flow Stored");
     } on HttpException catch (e) {

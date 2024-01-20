@@ -14,19 +14,19 @@ class Subscriptions {
   String? flow;
   bool? isActive;
 
-  Subscriptions({
-    this.id,
-    this.expertId,
-    this.userId,
-    this.packageId,
-    this.startDate,
-    this.grossAmount,
-    this.gstAmount,
-    this.discount,
-    this.netAmount,
-    this.status,
-    this.packageName,
-    this.isActive,
-    this.ticketNumber,this.flow
-  });
+  Subscriptions(
+      {this.id,
+      this.expertId,
+      this.userId,
+      this.packageId,
+      this.startDate,
+      this.grossAmount,
+      this.gstAmount,
+      this.discount,
+      this.netAmount,
+      this.status,
+      this.packageName,
+      this.isActive,
+      this.ticketNumber,
+      this.flow});
 }

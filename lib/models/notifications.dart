@@ -6,8 +6,12 @@ class Notifications {
   String? body;
   String? userId;
   String? createdAt;
-  String? time;
 
-  Notifications(
-      {this.id, this.title, this.body, this.userId, this.createdAt, this.time});
+  Notifications({
+    this.id,
+    this.title,
+    this.body,
+    this.userId,
+    this.createdAt,
+  });
 }

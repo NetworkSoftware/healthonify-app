@@ -31,25 +31,6 @@ class _HbA1cScreenState extends State<HbA1cScreen>
     return Scaffold(
       appBar: TabAppBar(
         appBarTitle: 'HbA1c Level',
-        actionWIdget2: kSharedPreferences.getString("role") != "ROLE_EXPERT" ?
-        Padding(
-          padding: const EdgeInsets.only(top: 15, right: 10),
-          child: GestureDetector(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const LogHbA1cScreen();
-                })).then((value) {
-                  setState(() {
-                    tab1DateType = 'monthly';
-                    tab2DateType = 'yearly';
-                  });
-                });
-              },
-              child: const Text(
-                "+ Add Log",
-                style: TextStyle(color: Colors.white, fontSize: 20,fontWeight: FontWeight.bold),
-              )),
-        ) : const SizedBox(),
         bottomWidget: ColoredBox(
           color: Theme.of(context).appBarTheme.backgroundColor!,
           child: customTabBar(context, tabController),
@@ -73,24 +54,25 @@ class _HbA1cScreenState extends State<HbA1cScreen>
           ),
         ),
       ),
-      // bottomNavigationBar: kSharedPreferences.getString("role") != "ROLE_EXPERT" ?
-      // SizedBox(
-      //   height: 56,
-      //   child: GradientButton2(
-      //     func: () {
-      //       Navigator.push(context, MaterialPageRoute(builder: (context) {
-      //         return const LogHbA1cScreen();
-      //       })).then((value) {
-      //         setState(() {
-      //           tab1DateType = 'monthly';
-      //           tab2DateType = 'yearly';
-      //         });
-      //       });
-      //     },
-      //     title: "Add Manually",
-      //     gradient: orangeGradient,
-      //   ),
-      // ) : const SizedBox(),
+      bottomNavigationBar: preferences.getString("role") != "ROLE_EXPERT"
+          ? SizedBox(
+              height: 56,
+              child: GradientButton2(
+                func: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const LogHbA1cScreen();
+                  })).then((value) {
+                    setState(() {
+                      tab1DateType = 'monthly';
+                      tab2DateType = 'yearly';
+                    });
+                  });
+                },
+                title: "Add Manually",
+                gradient: orangeGradient,
+              ),
+            )
+          : const SizedBox(),
     );
   }
 

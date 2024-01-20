@@ -14,8 +14,6 @@ class AllTrackers {
   List<dynamic>? bloodPressureLogs;
   List<dynamic>? hba1cLogs;
   List<dynamic>? bloodGlucoseLogs;
-  //List<dynamic>? fitnessToolsData;
-  Map<String, dynamic>? fitnessToolsData;
 
   AllTrackers({
     this.totalSleepGoal,
@@ -32,7 +30,6 @@ class AllTrackers {
     this.bloodPressureLogs,
     this.hba1cLogs,
     this.bloodGlucoseLogs,
-    this.fitnessToolsData
   });
 }
 

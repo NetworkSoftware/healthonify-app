@@ -46,7 +46,6 @@ class AllTrackersData with ChangeNotifier {
         _allTrackerData.totalSleepGoal =
             int.parse(data["sleepProgress"]["totalSleepGoal"]);
 
-        print("qwertyuio : ${data["sleepProgress"]["userSleepCount"]}");
         _allTrackerData.userSleepCount =
             int.parse(data["sleepProgress"]["userSleepCount"]);
 
@@ -110,7 +109,6 @@ class AllTrackersData with ChangeNotifier {
         diaryData.bloodPressureLogs = data["bloodPressureLogs"];
         diaryData.hba1cLogs = data["hba1cLogs"];
         diaryData.bloodGlucoseLogs = data["bloodGlucoseLogs"];
-        diaryData.fitnessToolsData = data["userFitnessToolsData"];
 
         return diaryData;
       } else {
@@ -149,7 +147,7 @@ class AllTrackersData with ChangeNotifier {
 
   void localUpdateSleepCount(int value) {
     _allTrackerData.userSleepCount;
-   // _allTrackerData.userSleepCount = value;
+    // _allTrackerData.userSleepCount = value;
     notifyListeners();
   }
 
@@ -174,8 +172,6 @@ class AllTrackersData with ChangeNotifier {
   Future<WeeklyWorkoutsModel> getWeeklyActivity(
       Map<String, dynamic> data) async {
     String url = "${ApiUrl.wm}user/getWeeklyWorkoutsData";
-
-    print("url : $url");
     WeeklyWorkoutsModel workoutsModel = WeeklyWorkoutsModel();
     log(data.toString());
     try {

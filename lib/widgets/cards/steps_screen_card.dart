@@ -35,7 +35,6 @@ class _StepsScreenCardState extends State<StepsScreenCard> {
 
       stepsData = await StepTracker().initHealth(goal, startDate);
 
-      print("STEEEEp DATA : $stepsData");
       if (startDate.isBefore(DateTime.now()) ||
           stepsData.stepCount != null && stepsData.stepCount != "null") {
         log(stepsData.stepCount.runtimeType.toString());
@@ -55,8 +54,6 @@ class _StepsScreenCardState extends State<StepsScreenCard> {
   void initState() {
     super.initState();
 
-    print("Goal Step.....:${widget.goal}");
-    print("Stepppppppppp.....:${widget.stepCount}");
     getSteps(
       context,
       widget.goal,
@@ -114,7 +111,9 @@ class _StepsScreenCardState extends State<StepsScreenCard> {
                           //   style: Theme.of(context).textTheme.titleLarge,
                           // ),
                           Text(
-                            widget.stepCount == null ? "0" : widget.stepCount.toString(),
+                            widget.stepCount == null
+                                ? "0"
+                                : widget.stepCount.toString(),
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           Text(
@@ -134,8 +133,9 @@ class _StepsScreenCardState extends State<StepsScreenCard> {
                       //   style: Theme.of(context).textTheme.bodyLarge,
                       // ),
                       Text(
-                        widget.stepCount == null ? "0 Kcal" : stepsToCal(widget.stepCount.toString())
-                        ,
+                        widget.stepCount == null
+                            ? "0 Kcal"
+                            : stepsToCal(widget.stepCount.toString()),
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ],
@@ -146,8 +146,8 @@ class _StepsScreenCardState extends State<StepsScreenCard> {
                   child: LinearPercentIndicator(
                     percent: stepsData.percent != null
                         ? stepsData.percent! > 1
-                        ? 1
-                        : stepsData.percent!
+                            ? 1
+                            : stepsData.percent!
                         : 0.0,
                     progressColor: const Color(0xFF0C9DE9),
                     backgroundColor: Colors.white,

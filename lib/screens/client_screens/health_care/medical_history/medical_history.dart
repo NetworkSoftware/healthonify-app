@@ -47,24 +47,25 @@ class _MedicalHistoryScreenState extends State<MedicalHistoryScreen> {
                     'Allergic History',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  kSharedPreferences.getString("role") != "ROLE_EXPERT" ?
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return AllergicHistoryScreen(
-                          userId: widget.userId,
-                        );
-                      }));
-                    },
-                    child: Text(
-                      'Add New',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelSmall!
-                          .copyWith(color: orange),
-                    ),
-                  ) : const SizedBox(),
+                  preferences.getString("role") != "ROLE_EXPERT"
+                      ? TextButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return AllergicHistoryScreen(
+                                userId: widget.userId,
+                              );
+                            }));
+                          },
+                          child: Text(
+                            'Add New',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall!
+                                .copyWith(color: orange),
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
               trailing: TextButton(
@@ -93,24 +94,25 @@ class _MedicalHistoryScreenState extends State<MedicalHistoryScreen> {
                     'Family History',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  kSharedPreferences.getString("role") != "ROLE_EXPERT" ?
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return FamilyHistoryScreen(
-                          userID: widget.userId,
-                        );
-                      }));
-                    },
-                    child: Text(
-                      'Add New',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelSmall!
-                          .copyWith(color: orange),
-                    ),
-                  ) : const SizedBox(),
+                  preferences.getString("role") != "ROLE_EXPERT"
+                      ? TextButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return FamilyHistoryScreen(
+                                userID: widget.userId,
+                              );
+                            }));
+                          },
+                          child: Text(
+                            'Add New',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall!
+                                .copyWith(color: orange),
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
               trailing: TextButton(
@@ -141,24 +143,25 @@ class _MedicalHistoryScreenState extends State<MedicalHistoryScreen> {
                     'Major Illness History',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  kSharedPreferences.getString("role") != "ROLE_EXPERT" ?
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return MajorIllnessScreen(
-                          userID: widget.userId,
-                        );
-                      }));
-                    },
-                    child: Text(
-                      'Add New',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelSmall!
-                          .copyWith(color: orange),
-                    ),
-                  ) : const SizedBox(),
+                  preferences.getString("role") != "ROLE_EXPERT"
+                      ? TextButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return MajorIllnessScreen(
+                                userID: widget.userId,
+                              );
+                            }));
+                          },
+                          child: Text(
+                            'Add New',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall!
+                                .copyWith(color: orange),
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
               trailing: TextButton(
@@ -189,22 +192,23 @@ class _MedicalHistoryScreenState extends State<MedicalHistoryScreen> {
                     'Social Habits',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  kSharedPreferences.getString("role") != "ROLE_EXPERT" ?
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return SocialHabitsScreen(userID: widget.userId);
-                      }));
-                    },
-                    child: Text(
-                      'Add New',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelSmall!
-                          .copyWith(color: orange),
-                    ),
-                  ) : const SizedBox(),
+                  preferences.getString("role") != "ROLE_EXPERT"
+                      ? TextButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return SocialHabitsScreen(userID: widget.userId);
+                            }));
+                          },
+                          child: Text(
+                            'Add New',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall!
+                                .copyWith(color: orange),
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
               trailing: TextButton(
@@ -235,24 +239,25 @@ class _MedicalHistoryScreenState extends State<MedicalHistoryScreen> {
                     'Surgical History',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  kSharedPreferences.getString("role") != "ROLE_EXPERT" ?
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return SurgicalHistoryScreen(
-                          userId: widget.userId,
-                        );
-                      }));
-                    },
-                    child: Text(
-                      'Add New',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelSmall!
-                          .copyWith(color: orange),
-                    ),
-                  ) : const SizedBox(),
+                  preferences.getString("role") != "ROLE_EXPERT"
+                      ? TextButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return SurgicalHistoryScreen(
+                                userId: widget.userId,
+                              );
+                            }));
+                          },
+                          child: Text(
+                            'Add New',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall!
+                                .copyWith(color: orange),
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
               trailing: TextButton(

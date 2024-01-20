@@ -12,8 +12,6 @@ class BloodGlucoseData with ChangeNotifier {
     String url =
         "${ApiUrl.wm}fetchLogs/userBloodGlucose?userId=$userId&dateType=$dateType";
 
-    print("url :$url");
-
     BloodGlucose bloodGlucose = BloodGlucose();
 
     log(url);

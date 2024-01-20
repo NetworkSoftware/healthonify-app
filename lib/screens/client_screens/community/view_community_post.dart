@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:healthonify_mobile/constants/theme_data.dart';
@@ -10,8 +9,6 @@ import 'package:healthonify_mobile/providers/community_provider/community_provid
 import 'package:healthonify_mobile/providers/user_data.dart';
 import 'package:healthonify_mobile/widgets/cards/custom_appbar.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ViewCommunityPost extends StatefulWidget {
   final CommunityModel communityData;
@@ -19,7 +16,6 @@ class ViewCommunityPost extends StatefulWidget {
   final Function dislikeAction;
   final int likeCount;
   final bool isLikedActiveState;
-
   const ViewCommunityPost(
       {required this.communityData,
       required this.likeAction,
@@ -123,8 +119,6 @@ class _ViewCommunityPostState extends State<ViewCommunityPost> {
     postComment();
   }
 
-  late FlickManager flickManager;
-
   @override
   void initState() {
     super.initState();
@@ -132,20 +126,10 @@ class _ViewCommunityPostState extends State<ViewCommunityPost> {
     isActive = widget.isLikedActiveState;
     likeCount = widget.likeCount;
     commentsCount = int.parse(widget.communityData.commentsCount!);
-    flickManager = FlickManager(
-        videoPlayerController: VideoPlayerController.networkUrl(
-      Uri.parse(widget.communityData.mediaLink!),
-    ));
   }
 
   TextEditingController commentsController = TextEditingController();
   String enteredComment = "";
-
-  @override
-  void dispose() {
-    flickManager.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,40 +168,14 @@ class _ViewCommunityPostState extends State<ViewCommunityPost> {
                   ],
                 ),
               ),
-              widget.communityData.format == "externalLink"
-                  ? YoutubePlayer(
-                      controller: YoutubePlayerController(
-                        initialVideoId: YoutubePlayer.convertUrlToId(
-                            widget.communityData.mediaLink!)!,
-                        flags: const YoutubePlayerFlags(
-                          mute: false,
-                          autoPlay: true,
-                          disableDragSeek: false,
-                          loop: false,
-                          isLive: false,
-                          forceHD: false,
-                          enableCaption: true,
-                        ),
-                      ),
-                      showVideoProgressIndicator: true,
-                      progressIndicatorColor: Colors.red,
-                      progressColors: const ProgressBarColors(
-                          playedColor: Colors.red,
-                          handleColor: Colors.redAccent),
-                    )
-                  : widget.communityData.format == "video"
-                      ? FlickVideoPlayer(flickManager: flickManager)
-                      : widget.communityData.format == "image"
-                          ? SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.4,
-                              width: double.infinity,
-                              child: CachedNetworkImage(
-                                imageUrl: widget.communityData.mediaLink!,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          : const SizedBox(),
-
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                width: double.infinity,
+                child: CachedNetworkImage(
+                  imageUrl: widget.communityData.mediaLink!,
+                  fit: BoxFit.cover,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Row(
@@ -410,25 +368,25 @@ class _ViewCommunityPostState extends State<ViewCommunityPost> {
     );
   }
 
-// Route _createRoute() {
-//   return PageRouteBuilder(
-//     transitionDuration: const Duration(milliseconds: 500),
-//     pageBuilder: (context, animation, secondaryAnimation) => CommentsScreen(
-//       data: widget.communityData,
-//     ),
-//     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-//       const begin = Offset(0.0, 1.0);
-//       const end = Offset.zero;
-//       const curve = Curves.ease;
+  // Route _createRoute() {
+  //   return PageRouteBuilder(
+  //     transitionDuration: const Duration(milliseconds: 500),
+  //     pageBuilder: (context, animation, secondaryAnimation) => CommentsScreen(
+  //       data: widget.communityData,
+  //     ),
+  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+  //       const begin = Offset(0.0, 1.0);
+  //       const end = Offset.zero;
+  //       const curve = Curves.ease;
 
-//       var tween =
-//           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+  //       var tween =
+  //           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-//       return SlideTransition(
-//         position: animation.drive(tween),
-//         child: child,
-//       );
-//     },
-//   );
-// }
+  //       return SlideTransition(
+  //         position: animation.drive(tween),
+  //         child: child,
+  //       );
+  //     },
+  //   );
+  // }
 }

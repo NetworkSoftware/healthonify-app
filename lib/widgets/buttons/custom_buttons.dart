@@ -317,7 +317,10 @@ class BackToLoginButton extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               'Back to Login',
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: orange),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: orange),
             ),
           ),
         ),
@@ -364,9 +367,7 @@ class _SignInGoogleButtonState extends State<SignInGoogleButton> {
     //
     //   _userData = userData;
     //
-    //   print("USerData : $_userData");
     // } else {
-    //   print(result.message);
     // }
     //
     //
@@ -375,7 +376,6 @@ class _SignInGoogleButtonState extends State<SignInGoogleButton> {
     //
     // final user = FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
     //
-    // print("USerData1 : $user");
   }
 
   void pushForgotPasswordScreen() {
@@ -399,7 +399,9 @@ class _SignInGoogleButtonState extends State<SignInGoogleButton> {
         "email": data["email"],
         "socialAccountId": data["id"],
         "name": data["name"],
-        "imageUrl": data["picture"]["data"]["url"] == "" ? "": data["picture"]["data"]["url"],
+        "imageUrl": data["picture"]["data"]["url"] == ""
+            ? ""
+            : data["picture"]["data"]["url"],
         "roles": "client"
       });
       if (!response) {
@@ -446,7 +448,6 @@ class _SignInGoogleButtonState extends State<SignInGoogleButton> {
         }
       });
     } catch (e) {
-      print("Error : ${e.toString()}");
       log(e.toString());
     }
 
@@ -465,7 +466,6 @@ class _SignInGoogleButtonState extends State<SignInGoogleButton> {
     //     });
     //   }
     // }).catchError((e) {
-    //   print("Error : ${e.toString()}");
     //   log(e.toString());
     // });
   }
@@ -478,13 +478,6 @@ class _SignInGoogleButtonState extends State<SignInGoogleButton> {
           AppleIDAuthorizationScopes.fullName,
         ],
       );
-      print(credential.email);
-      print(credential.familyName);
-      print(credential.givenName);
-      print(credential.identityToken);
-      print(credential.state);
-      print(credential.authorizationCode);
-      print(credential.userIdentifier);
 
       try {
         login({
@@ -498,11 +491,9 @@ class _SignInGoogleButtonState extends State<SignInGoogleButton> {
           }
         });
       } catch (e) {
-        print("Error : ${e.toString()}");
         log(e.toString());
       }
     } catch (e) {
-      print("Exeption Error : $e");
       return;
     }
   }
@@ -522,7 +513,10 @@ class _SignInGoogleButtonState extends State<SignInGoogleButton> {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   "Or",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,color: Color(0xFF959EAD)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Color(0xFF959EAD)),
                 ),
               ),
               Expanded(child: Divider(color: Color(0xFF959EAD), thickness: 1)),
@@ -567,39 +561,40 @@ class _SignInGoogleButtonState extends State<SignInGoogleButton> {
                 ),
               ),
               const SizedBox(width: 10),
-              Platform.isIOS ?
-              GestureDetector(
-                onTap: () async {
-                  // facebookLogin();
-                  await signInWithApple();
-                  // log(userCredential.toString());
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0.0, 1.0), //(x,y)
-                        blurRadius: 6.0,
+              Platform.isIOS
+                  ? GestureDetector(
+                      onTap: () async {
+                        // facebookLogin();
+                        await signInWithApple();
+                        // log(userCredential.toString());
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.grey,
+                              offset: Offset(0.0, 1.0), //(x,y)
+                              blurRadius: 6.0,
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(2),
+                            child: Image.asset(
+                              'assets/icons/apple_logo.png',
+                              height: 38,
+                              width: 38,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(2),
-                      child: Image.asset(
-                        'assets/icons/apple_logo.png',
-                        height: 38,
-                        width: 38,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-              ) : const SizedBox(),
+                    )
+                  : const SizedBox(),
               // const SizedBox(width: 10),
               // GestureDetector(
               //   onTap: () {

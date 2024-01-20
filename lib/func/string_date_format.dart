@@ -16,7 +16,6 @@ class StringDateTimeFormat {
   bool checkForVideoCallValidation(String tod, String date) {
     Duration hrsDiff;
 
-    print("Date : $date");
     // final timeFormat = DateFormat("HH:mm:ss").parse(tod);
     // final dateFormat = DateFormat("MM/dd/yyyy").parse(date);
 
@@ -117,20 +116,6 @@ class StringDateTimeFormat {
     return formattedDate;
   }
 
-  String stringAssignFormat(String d) {
-    final dateFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-    final date = dateFormat.parse(d);
-    final formattedDate = DateFormat("dd/MM/yyyy").format(date);
-    return formattedDate;
-  }
-
-  String stringAssignTimeFormat(String d) {
-    final dateFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-    final date = dateFormat.parse(d);
-    final formattedDate = DateFormat("HH:mm a").format(date);
-    return formattedDate;
-  }
-
   String stringDateBloodGlucoseFormat(String d) {
     final dateFormat = DateFormat("MM/dd/yyyy");
     final date = dateFormat.parse(d);
@@ -146,7 +131,6 @@ class StringDateTimeFormat {
   }
 
   String stringtDateFormatLogWeight(String d) {
-
     final dateFormat = DateFormat("MM/dd/yyyy");
     final date = dateFormat.parse(d);
     final formattedDate = DateFormat("EEE, MMM d ''yy").format(date);

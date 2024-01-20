@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:healthonify_mobile/func/string_date_format.dart';
 import 'package:healthonify_mobile/models/http_exception.dart';
 import 'package:healthonify_mobile/providers/notifications_data.dart';
 import 'package:healthonify_mobile/providers/user_data.dart';
@@ -120,7 +119,7 @@ class NotificationScreen extends StatelessWidget {
                                                       bottom: 12,
                                                     ),
                                                     child: Text(
-                                                      "${StringDateTimeFormat().stringAssignFormat(value.notificationData[index].createdAt!)} ${value.notificationData[index].time!}",
+                                                      '${value.notificationData[index].createdAt}',
                                                       style: Theme.of(context)
                                                           .textTheme
                                                           .bodySmall,

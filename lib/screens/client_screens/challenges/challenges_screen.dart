@@ -42,7 +42,6 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
       isLoading = true;
     });
     try {
-      print(widget.challengeData.id!);
       leaderboardData =
           await Provider.of<ChallengesProvider>(context, listen: false)
               .fetchLeaderboard(widget.challengeData.id!);

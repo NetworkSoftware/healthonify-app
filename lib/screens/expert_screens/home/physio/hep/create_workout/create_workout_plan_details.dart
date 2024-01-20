@@ -49,22 +49,21 @@ class _CreateWorkoutPlanDetailsState extends State<CreateWorkoutPlanDetails> {
           MaterialPageRoute(builder: (context) => const MyWorkouts()),
           (Route<dynamic> route) => route.isFirst);
     } else {
-      if(kSharedPreferences.getString('topExp') == 'Physiotherapy'){
+      if (preferences.getString('topExp') == 'Physiotherapy') {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) => const HepListScreen(
-                  title: "HEP",
-                )),
-                (Route<dynamic> route) => route.isFirst);
-      }else{
+                      title: "HEP",
+                    )),
+            (Route<dynamic> route) => route.isFirst);
+      } else {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) => const HepListScreen(
-                  title: "My Workout Plans",
-                )),
-                (Route<dynamic> route) => route.isFirst);
+                      title: "My Workout Plans",
+                    )),
+            (Route<dynamic> route) => route.isFirst);
       }
-
     }
 
     // (route) => route.);

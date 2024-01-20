@@ -21,7 +21,7 @@ class StorePrescriptionProvider with ChangeNotifier {
   Future<void> storePrescription(Map<String, dynamic> data) async {
     String url = '${ApiUrl.hc}expert/storeHcPrescription';
     log("urk : $url");
-    log(json.encode(data));
+    log(json.encode(data.toString()));
 
     try {
       final response = await http.post(

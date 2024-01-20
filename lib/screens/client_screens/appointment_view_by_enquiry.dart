@@ -13,8 +13,6 @@ import "package:healthonify_mobile/screens/video_call_1.dart";
 import "package:healthonify_mobile/widgets/cards/custom_appBar.dart";
 import "package:provider/provider.dart";
 import "package:pull_to_refresh/pull_to_refresh.dart";
-import "package:zego_zimkit/pages/message_list_page.dart";
-import "package:zego_zimkit/services/services.dart";
 
 class AppointmentViewByEnquiry extends StatefulWidget {
   AppointmentViewByEnquiry(
@@ -39,16 +37,11 @@ class _AppointmentViewByEnquiryState extends State<AppointmentViewByEnquiry> {
     duration: Duration(milliseconds: 1000),
   );
   final RefreshController _refreshController = RefreshController();
-  ZIMRoomInfo roomInfo = ZIMRoomInfo();
 
   @override
   void initState() {
     super.initState();
     getConsultations();
-    String userId = Provider.of<UserData>(context, listen: false).userData.id!;
-    String userName =
-        Provider.of<UserData>(context, listen: false).userData.firstName!;
-    ZIMKit().connectUser(id: userId, name: userName);
   }
 
   @override
@@ -130,6 +123,17 @@ class _AppointmentViewByEnquiryState extends State<AppointmentViewByEnquiry> {
                           Text("${consult.expertiseId!.first['name']}")
                         ],
                       ),
+                      // CircleAvatar(
+                      //   backgroundColor: Colors.lightBlue,
+                      //   backgroundImage: consult.expert!.first['imageUrl'].isEmpty
+                      //       ? const AssetImage(
+                      //           "assets/icons/user.png",
+                      //         ) as ImageProvider
+                      //       : NetworkImage(
+                      //           consult.expert!.first['imageUrl'],
+                      //         ),
+                      //   radius: 35,
+                      // ),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -179,119 +183,76 @@ class _AppointmentViewByEnquiryState extends State<AppointmentViewByEnquiry> {
                         )
                       : consult.status == "consulationCompleted"
                           ? const SizedBox()
-                          : consult.status == "closed"
-                              ? const SizedBox()
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        print(
-                                            "name : ${consult.expert![0]["_id"]}");
-                                        Navigator.push(context,
+                          : consult.status == "closed" ? const SizedBox() :
+                  Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                InkWell(
+                                  onTap: () {},
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4),
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          'assets/icons/chat.png',
+                                          height: 46,
+                                          width: 46,
+                                        ),
+                                        // const SizedBox(height: 10),
+                                        // const Text('Chat'),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                InkWell(
+                                  onTap: StringDateTimeFormat()
+                                          .checkForVideoCallSessionValidation(
+                                              consult.startTime!,
+                                              consult.startDate!)
+                                      ? () {
+                                          // Navigator.of(context).push(
+                                          //   MaterialPageRoute(
+                                          //     builder: (context) => VideoCall(
+                                          //       meetingId: consult.id,
+                                          //       onVideoCallEnds: () {},
+                                          //     ),
+                                          //   ),
+                                          // );
+                                          Navigator.of(context).push(
                                             MaterialPageRoute(
-                                                builder: (context) {
-                                                  return ZIMKitMessageListPage(
-                                                    conversationID: consult
-                                                        .expert![0]["_id"],
-                                                    conversationType:
-                                                    ZIMConversationType
-                                                        .peer,
-                                                  );
-                                                }));
-                                        // roomInfo.roomID = consult.ticketNumber!;
-                                        // roomInfo.roomName =
-                                        //     consult.ticketNumber!;
-                                        //
-                                        // ZIMRoomAdvancedConfig advancedConfig =
-                                        //     ZIMRoomAdvancedConfig();
-                                        //
-                                        // // ZIM
-                                        //     .getInstance()!
-                                        //     .joinRoom(roomInfo.roomID)
-                                        //     .then((value) => {
-                                        //           print(
-                                        //               "Value : ${value.roomInfo}")
-                                        //         })
-                                        //     .catchError((onError) {
-                                        //   print("Error : $onError");
-                                        // });
-                                        // ZIM
-                                        //     .getInstance()!
-                                        //     .createRoom(
-                                        //         roomInfo, advancedConfig)
-                                        //     .then((value) {
-                                        //   print("Value : ${value.roomInfo}");
-                                        // }).catchError((onError) {
-                                        //   print("Error : $onError");
-                                        // });
-                                      },
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(4),
-                                        child: Column(
-                                          children: [
-                                            Image.asset(
-                                              'assets/icons/chat.png',
-                                              height: 46,
-                                              width: 46,
+                                              builder: (context) => VideoCall1(
+                                                meetingId: consult.id,
+                                                onVideoCallEnds: () {},
+                                              ),
                                             ),
-                                            // const SizedBox(height: 10),
-                                            // const Text('Chat'),
-                                          ],
+                                          );
+                                        }
+                                      : () {
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  "Video call will be available 15 mins before and till 1 hour after the assigned time ",
+                                              toastLength: Toast.LENGTH_LONG);
+                                        },
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4),
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          'assets/icons/video_meeting.png',
+                                          height: 46,
+                                          width: 46,
                                         ),
-                                      ),
+                                        // const SizedBox(height: 10),
+                                        // const Text('Video Call'),
+                                      ],
                                     ),
-                                    const SizedBox(width: 10),
-                                    InkWell(
-                                      onTap: StringDateTimeFormat()
-                                              .checkForVideoCallSessionValidation(
-                                                  consult.startTime!,
-                                                  consult.startDate!)
-                                          ? () {
-                                              // Navigator.of(context).push(
-                                              //   MaterialPageRoute(
-                                              //     builder: (context) => VideoCall(
-                                              //       meetingId: consult.id,
-                                              //       onVideoCallEnds: () {},
-                                              //     ),
-                                              //   ),
-                                              // );
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      VideoCall1(
-                                                    meetingId: consult.id,
-                                                    onVideoCallEnds: () {},
-                                                  ),
-                                                ),
-                                              );
-                                            }
-                                          : () {
-                                              Fluttertoast.showToast(
-                                                  msg:
-                                                      "Video call will be available 15 mins before and till 1 hour after the assigned time ",
-                                                  toastLength:
-                                                      Toast.LENGTH_LONG);
-                                            },
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(4),
-                                        child: Column(
-                                          children: [
-                                            Image.asset(
-                                              'assets/icons/video_meeting.png',
-                                              height: 46,
-                                              width: 46,
-                                            ),
-                                            // const SizedBox(height: 10),
-                                            // const Text('Video Call'),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
+                                  ),
+                                ),
+                              ],
+                            )
                 ],
               ),
             ),

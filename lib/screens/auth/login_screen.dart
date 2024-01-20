@@ -39,8 +39,9 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Platform.isAndroid ?
-                SizedBox(height: size.height*0.28):  SizedBox(height: size.height*0.30),
+                Platform.isAndroid
+                    ? SizedBox(height: size.height * 0.28)
+                    : SizedBox(height: size.height * 0.30),
                 // const AppLogoLogin(),
                 // const SizedBox(height: 30),
                 const AuthLoginForm(),
@@ -61,8 +62,8 @@ class LoginScreen extends StatelessWidget {
                               ..onTap = () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
-                                      return const SignupScreen(role: "client");
-                                    }));
+                                  return const SignupScreen(role: "client");
+                                }));
                               })
                       ]),
                 ),
@@ -72,19 +73,20 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                                return const SignupScreen(
-                                  role: "corporateEmployee",
-                                );
-                              }));
+                            return const SignupScreen(
+                              role: "corporateEmployee",
+                            );
+                          }));
                         },
                         child: Container(
                           //height: 56,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10), color: orange),
+                              borderRadius: BorderRadius.circular(10),
+                              color: orange),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
@@ -102,18 +104,19 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(width: 10),
                     Expanded(
                       child: GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (ctx) =>
-                                const SignupScreen(role: "expert")),
+                                    const SignupScreen(role: "expert")),
                           );
                         },
                         child: Container(
                           //height: 56,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10), color: orange),
+                              borderRadius: BorderRadius.circular(10),
+                              color: orange),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
@@ -228,7 +231,8 @@ class _AuthLoginFormState extends State<AuthLoginForm> {
       _authData['firebaseToken'] = firebaseId!;
 
       await Provider.of<LoginData>(context, listen: false)
-          .login(_authData['phoneNo']!, _authData['password']!,_authData['firebaseToken']!)
+          .login(_authData['phoneNo']!, _authData['password']!,
+              _authData['firebaseToken']!)
           .then((value) {
         String? mobile =
             Provider.of<LoginData>(context, listen: false).loginData.mobileNo;
@@ -236,7 +240,7 @@ class _AuthLoginFormState extends State<AuthLoginForm> {
             Provider.of<LoginData>(context, listen: false).loginData.email;
         String? role =
             Provider.of<LoginData>(context, listen: false).loginData.roles;
-        kSharedPreferences.setString("role",role!);
+        preferences.setString("role", role!);
         String? message =
             Provider.of<LoginData>(context, listen: false).loginData.message;
 
@@ -253,13 +257,13 @@ class _AuthLoginFormState extends State<AuthLoginForm> {
             context, /*rootnavigator: true*/
           ).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => const MainScreen()),
-                  (Route<dynamic> route) => false);
+              (Route<dynamic> route) => false);
         }
       });
     } on HttpException catch (e) {
       log(e.toString());
       Fluttertoast.showToast(msg: e.toString());
-    } catch (e,trace) {
+    } catch (e, trace) {
       log("Error login auth widget $e");
       log("Error login auth widget $trace");
       Fluttertoast.showToast(msg: "Unable to login, please try again");

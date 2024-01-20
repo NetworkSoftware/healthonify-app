@@ -11,7 +11,6 @@ import 'package:http/http.dart' as http;
 class PillReminderProvider with ChangeNotifier {
   Future<List<PillsReminderModel>> getPillsDataa(String? userId) async {
     String url = '${ApiUrl.hc}get/pillsReminder?userId=$userId';
-    print("Url : $url");
 
     List<PillsReminderModel> pillReminders = [];
 
@@ -30,9 +29,8 @@ class PillReminderProvider with ChangeNotifier {
       if (responseBody["status"] == 1) {
         final responseData = json.decode(response.body)["data"];
         // final data = responseData["data"];
-        // print(responseData);
-       
-          for (var ele in responseData) {
+
+        for (var ele in responseData) {
           pillReminders.add(PillsReminderModel(
             id: ele['_id'],
             medicineName: ele['medicineName'],
@@ -43,9 +41,6 @@ class PillReminderProvider with ChangeNotifier {
           ));
         }
         return pillReminders;
-      
-        
-        
       } else {
         throw HttpException(responseBody["message"]);
       }
@@ -131,8 +126,8 @@ class PillReminderProvider with ChangeNotifier {
   }
 
   Future<void> addPillReminder(
-      Map<String, dynamic> data,
-      ) async {
+    Map<String, dynamic> data,
+  ) async {
     String url = '${ApiUrl.hc}store/pillReminder';
     log("url : $url");
     log(data.toString());
@@ -163,7 +158,6 @@ class PillReminderProvider with ChangeNotifier {
   Future deletePillReminder(String pillReminderId) async {
     String url = '${ApiUrl.hc}remove/pillReminder?id=$pillReminderId';
 
-    print("url : $url");
     try {
       final response = await http.post(
         Uri.parse(url),

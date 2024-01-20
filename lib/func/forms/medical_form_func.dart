@@ -6,10 +6,14 @@ import 'package:healthonify_mobile/models/http_exception.dart';
 import 'package:http/http.dart' as http;
 
 class MedicalForm {
-  String? id, question, conditionName, answer, notes;
+  String? id, question, conditionName, answer;
 
-  MedicalForm(
-      {this.id, this.question, this.conditionName, this.answer, this.notes});
+  MedicalForm({
+    this.id,
+    this.question,
+    this.conditionName,
+    this.answer,
+  });
 }
 
 class MedicalFormFunc {
@@ -82,8 +86,6 @@ class MedicalFormFunc {
             ),
           );
         }
-        loadedData.add(
-            MedicalForm(notes: json.decode(response.body)['data'][0]['notes']));
         return loadedData;
       } else {
         throw HttpException(responseData["message"]);

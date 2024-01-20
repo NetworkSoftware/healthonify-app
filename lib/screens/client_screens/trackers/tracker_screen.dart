@@ -1,12 +1,10 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:healthonify_mobile/constants/theme_data.dart';
-import 'package:healthonify_mobile/models/all_trackers.dart';
 import 'package:healthonify_mobile/models/home_tracker_model/home_tracker_model.dart';
 import 'package:healthonify_mobile/models/http_exception.dart';
 import 'package:healthonify_mobile/providers/tracker_data/home_tracker_data.dart';
-import 'package:healthonify_mobile/providers/trackers/all_tracker_data.dart';
-import 'package:healthonify_mobile/providers/trackers/calorie_tracker_provider.dart';
 import 'package:healthonify_mobile/providers/user_data.dart';
 import 'package:healthonify_mobile/screens/client_screens/fitness_tools/bmi_details.dart';
 import 'package:healthonify_mobile/screens/client_screens/fitness_tools/bmr_screen.dart';
@@ -25,7 +23,6 @@ import 'package:healthonify_mobile/screens/client_screens/trackers/watertracker/
 import 'package:healthonify_mobile/screens/client_screens/weight_management/meal_plans_screen.dart';
 import 'package:healthonify_mobile/screens/my_diary/exercises/cardio_strength_screen.dart';
 import 'package:healthonify_mobile/screens/my_diary/workout_routines.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class TrackerScreen extends StatefulWidget {
@@ -37,7 +34,7 @@ class TrackerScreen extends StatefulWidget {
 
 class _TrackerScreenState extends State<TrackerScreen> {
   HomeTrackerModel trackerData = HomeTrackerModel();
-  AllTrackers data = AllTrackers();
+
   String? calories;
   String? steps;
   String? water;
@@ -47,19 +44,6 @@ class _TrackerScreenState extends State<TrackerScreen> {
   String? hba1c;
   String? bmr;
   String? bmi;
-  bool isLoading = true;
-
-  late String userId;
-  dynamic fastingRecord,
-      randomRecord,
-      bmiData,
-      rmrData,
-      bfpData,
-      calorieIntakeData,
-      idealWeightData,
-      lbmData,
-      macroCalculatorData,bmrData;
-  String? sleepInHours;
 
   Future<void> fetchHomeTrackerData() async {
     try {
@@ -77,90 +61,22 @@ class _TrackerScreenState extends State<TrackerScreen> {
     }
   }
 
-  Future<void> getAllTrackers() async {
-    try {
-      data = await Provider.of<AllTrackersData>(context, listen: false)
-          .getDiaryData(
-              userId, DateFormat("yyyy-MM-dd").format(DateTime.now()));
-      updateCaloriesTracker(
-          double.parse(data.calorieProgress!['totalWorkoutCalories']));
+  late String userId;
 
-      if (data.fitnessToolsData!.isNotEmpty) {
-        if (data.fitnessToolsData!['bmr'].isNotEmpty) {
-          bmrData = data.fitnessToolsData!['bmr'];
-        }
-        if (data.fitnessToolsData!['bmi'].isNotEmpty) {
-          bmiData = data.fitnessToolsData!['bmi'];
-        }
-        if (data.fitnessToolsData!['lbm'].isNotEmpty) {
-          lbmData = data.fitnessToolsData!['lbm'];
-        }
-        if (data.fitnessToolsData!['idealWeight'].isNotEmpty) {
-          idealWeightData = data.fitnessToolsData!['idealWeight'];
-        }
-        if (data.fitnessToolsData!['rmr'].isNotEmpty) {
-          rmrData = data.fitnessToolsData!['rmr'];
-        }
-        if (data.fitnessToolsData!['calorieIntake'].isNotEmpty) {
-          calorieIntakeData = data.fitnessToolsData!['calorieIntake'];
-        }
-        if (data.fitnessToolsData!['bfp'].isNotEmpty) {
-          bfpData = data.fitnessToolsData!['bfp'];
-        }
-      }
-
-      print("BFP DATA : $bfpData");
-
-      if (data.bloodGlucoseLogs!.isNotEmpty) {
-        fastingRecord = data.bloodGlucoseLogs!
-            .firstWhere((element) => element["testType"] == "fasting");
-        randomRecord = data.bloodGlucoseLogs!
-            .firstWhere((element) => element["testType"] == "random");
-      }
-
-
-      int totalSleepHrs = (data.userSleepCount! ~/ 3600);
-      int totalSleepMins = (data.userSleepCount!.remainder(3600) ~/ 60);
-      if (totalSleepMins != 0 && totalSleepHrs != 0) {
-        sleepInHours = "${totalSleepHrs}h ${totalSleepMins}m";
-      } else if (totalSleepMins != 0 && totalSleepHrs == 0) {
-        sleepInHours = "$totalSleepMins m";
-      } else {
-        sleepInHours = "$totalSleepHrs h";
-      }
-
-      // sleepInHours = hours.toString();
-    } on HttpException catch (e) {
-      log(e.toString());
-      // Fluttertoast.showToast(msg: e.message);
-    } catch (e) {
-      log("Error something went wrong1112 $e");
-      // Fluttertoast.showToast(msg: "Unable to fetch water intake data");
-    } finally {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
-  }
-
-  void updateCaloriesTracker(double value) {
-    Future.delayed(
-        Duration.zero,
-        () => Provider.of<CalorieTrackerProvider>(context, listen: false)
-            .updateCaloriesTrackerExercise(value.toString()));
-  }
+  String? sleepInHours;
 
   @override
   void initState() {
     super.initState();
     userId = Provider.of<UserData>(context, listen: false).userData.id!;
-    getAllTrackers();
   }
 
   @override
   Widget build(BuildContext context) {
+    // calories = trackerData.calorieProgress!.totalFoodCalories;
+    // steps = trackerData.stepsProgress!.userStepsCount;
+    // sleep = trackerData.sleepProgress!.userSleepCount;
+    // water = trackerData.waterProgress!.userWaterGlassCount;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -172,234 +88,249 @@ class _TrackerScreenState extends State<TrackerScreen> {
         ),
         shadowColor: Colors.transparent,
       ),
-      body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : SafeArea(
-              child: ListView(
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                children: [
-                  const SizedBox(height: 8),
-                  otherCards(
-                    context,
-                    'Diet/Nutrition',
-                    'Calories consumed today',
-                    '${data.calorieProgress!['totalDietAnalysisData']['totalCalories']} cal',
-                    'Add food',
-                    () async {
-                      bool result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const MealPlansScreen();
-                      }));
-
-                      if (result == true) {
-                        getAllTrackers();
-                      }
-                    },
+      body: FutureBuilder(
+        future: fetchHomeTrackerData(),
+        builder: (context, snapshot) {
+          return snapshot.connectionState == ConnectionState.waiting
+              ? const Center(child: CircularProgressIndicator())
+              : SafeArea(
+                  child: ListView(
+                    physics: const BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    children: [
+                      const SizedBox(height: 8),
+                      otherCards(
+                        context,
+                        'Diet/Nutrition',
+                        'Calories consumed in the last 24h',
+                        trackerData.calorieProgress == null
+                            ? "0"
+                            : trackerData.calorieProgress!.totalFoodCalories!,
+                        'Add food',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const MealPlansScreen();
+                          }));
+                        },
+                      ),
+                      // exerciseCard(context),
+                      otherCards(
+                        context,
+                        'Steps',
+                        'No. of steps walked the previous day',
+                        trackerData.stepsProgress == null
+                            ? "0"
+                            : trackerData.stepsProgress!.userStepsCount!,
+                        'Add Steps',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const StepsScreen();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'Water',
+                        'Quantity of water consumed in mL',
+                        trackerData.waterProgress == null
+                            ? "0"
+                            : trackerData.waterProgress!.userWaterGlassCount!,
+                        'Add Water',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const WaterTrackerScreen();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'Sleep',
+                        'No. of hours slept previous night',
+                        trackerData.sleepProgress == null ? "0" : sleepInHours!,
+                        // : trackerData.sleepProgress!.userSleepCount!,
+                        'Add Sleep',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const SleepScreen();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'Blood Pressure',
+                        'Latest blood pressure reading',
+                        trackerData.bloodPressureLogs == null ||
+                                trackerData.bloodPressureLogs!.isEmpty
+                            ? 'No data available'
+                            : "${trackerData.bloodPressureLogs![0].systolic!}/${trackerData.bloodPressureLogs![0].diastolic}",
+                        'Add BP reading',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const BloodPressureScreen();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'Blood Glucose',
+                        'Latest glucose reading',
+                        trackerData.bloodGlucoseLogs == null ||
+                                trackerData.bloodGlucoseLogs!.isEmpty
+                            ? 'No data available'
+                            : "${trackerData.bloodGlucoseLogs![0].bloodGlucoseLevel}",
+                        'Add Glucose reading',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const BloodGlucoseScreen();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'Hb1Ac',
+                        'Latest heamoglobin content reading',
+                        trackerData.hba1CLogs == null ||
+                                trackerData.hba1CLogs!.isEmpty
+                            ? 'No data available'
+                            : "${trackerData.hba1CLogs![0].hba1CLevel}",
+                        'Add Hb1Ac reading',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const HbA1cScreen();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'BMR',
+                        'Latest BMR reading',
+                        '123',
+                        'Calculate BMR',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const BMRScreen();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'BMI',
+                        'Latest BMI reading',
+                        '123',
+                        'Calculate BMI',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return  BmiDetailsScreen();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'Calorie Intake',
+                        'Latest reading',
+                        '-',
+                        'Set Calorie Intake',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const SetCaloriesTarget();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'Ideal Weight',
+                        'Latest reading',
+                        '-',
+                        'Calculate Ideal Weight',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const IdealWeightScreen();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'Body Fat',
+                        'Latest reading',
+                        '-',
+                        'Calculate Body Fat',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const BodyFatScreen();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'Lean Body Mass',
+                        'Latest reading',
+                        '-',
+                        'Calculate Lean Body Mass',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const LeanBodyMassScreen();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'Macro Calculator',
+                        'Latest reading',
+                        '-',
+                        'Calculate Macros',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const MacrosCalculatorScreen();
+                          }));
+                        },
+                      ),
+                      otherCards(
+                        context,
+                        'RMR',
+                        'Latest reading',
+                        '-',
+                        'Calculate RMR',
+                        () {
+                          Navigator.of(
+                            context, /*rootnavigator: true*/
+                          ).push(MaterialPageRoute(builder: (context) {
+                            return const RMRscreen();
+                          }));
+                        },
+                      ),
+                    ],
                   ),
-                  otherCards(
-                    context,
-                    'Steps',
-                    'No. of steps walked the previous day',
-                    '${data.userStepsCount!}',
-                    'Add Steps',
-                    () {
-                      Navigator.of(
-                        context, /*rootnavigator: true*/
-                      ).push(MaterialPageRoute(builder: (context) {
-                        return const StepsScreen();
-                      }));
-                    },
-                  ),
-                  otherCards(
-                    context,
-                    'Water',
-                    'Glasses of water consumed (one glass = 250ml) ',
-                    '${data.userWaterGlassCount}',
-                    'Add Water',
-                    () async {
-                      bool result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const WaterTrackerScreen();
-                      }));
-
-                      if (result == true) {
-                        getAllTrackers();
-                      }
-                    },
-                  ),
-                  otherCards(
-                    context,
-                    'Blood Pressure',
-                    'Latest blood pressure reading',
-                    '${data.bloodPressureLogs!.isEmpty ? "0" : data.bloodPressureLogs![0]["systolic"]} /  ${data.bloodPressureLogs!.isEmpty ? "0" : data.bloodPressureLogs![0]["diastolic"]}',
-                    'Add BP reading',
-                    () async {
-                      bool result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const BloodPressureScreen();
-                      }));
-
-                      if (result == true) {
-                        getAllTrackers();
-                      }
-                    },
-                  ),
-                  otherSecondaryCards(
-                    context,
-                    'Blood Glucose',
-                    'Latest glucose reading(Fasting)',
-                    '${fastingRecord == null ? "0" : fastingRecord["bloodGlucoseLevel"]}',
-                    'Latest glucose reading(Random)',
-                    '${randomRecord == null ? "0" : randomRecord["bloodGlucoseLevel"]}',
-                    'Add Glucose reading',
-                    () async {
-                      bool result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const BloodGlucoseScreen();
-                      }));
-
-                      if (result == true) {
-                        getAllTrackers();
-                      }
-                    },
-                  ),
-                  otherCards(
-                    context,
-                    'HbA1c',
-                    'Latest heamoglobin content reading',
-                    '${data.hba1cLogs!.isEmpty ? "0" : data.hba1cLogs![0]["hba1cLevel"]}',
-                    'Add HbA1c reading',
-                    () async {
-                      bool result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const HbA1cScreen();
-                      }));
-
-                      if (result == true) {
-                        getAllTrackers();
-                      }
-                    },
-                  ),
-                  // exerciseCard(context),
-
-                  otherCards(
-                    context,
-                    'BMR',
-                    'Latest BMR reading',
-                    '${bmrData == null ? "0" : bmrData["data"]["bmr"]}',
-                    'Calculate BMR',
-                    () {
-                      Navigator.of(
-                        context, /*rootnavigator: true*/
-                      ).push(MaterialPageRoute(builder: (context) {
-                        return const BMRScreen();
-                      }));
-                    },
-                  ),
-                  otherCards(
-                    context,
-                    'BMI',
-                    'Latest BMI reading',
-                    '${bmiData == null ? "0" : bmiData["data"]["bmi"]}',
-                    'Calculate BMI',
-                    () {
-                      Navigator.of(
-                        context, /*rootnavigator: true*/
-                      ).push(MaterialPageRoute(builder: (context) {
-                        return BmiDetailsScreen();
-                      }));
-                    },
-                  ),
-                  otherCards(
-                    context,
-                    'Calorie Intake',
-                    'Latest reading',
-                    '${calorieIntakeData == null ? "0" : calorieIntakeData["data"]["calorieCount"]}',
-                    'Set Calorie Intake',
-                    () {
-                      Navigator.of(
-                        context, /*rootnavigator: true*/
-                      ).push(MaterialPageRoute(builder: (context) {
-                        return const SetCaloriesTarget();
-                      }));
-                    },
-                  ),
-                  otherCards(
-                    context,
-                    'Ideal Weight',
-                    'Latest reading',
-                    '${idealWeightData == null ? "0" : idealWeightData["data"]["idealWeight"]}',
-                    'Calculate Ideal Weight',
-                    () {
-                      Navigator.of(
-                        context, /*rootnavigator: true*/
-                      ).push(MaterialPageRoute(builder: (context) {
-                        return const IdealWeightScreen();
-                      }));
-                    },
-                  ),
-                  otherCards(
-                    context,
-                    'Body Fat',
-                    'Latest reading',
-                    '${bfpData == null ? "0" : bfpData["data"]["bfp"]}',
-                    'Calculate Body Fat',
-                    () {
-                      Navigator.of(
-                        context, /*rootnavigator: true*/
-                      ).push(MaterialPageRoute(builder: (context) {
-                        return const BodyFatScreen();
-                      }));
-                    },
-                  ),
-                  otherCards(
-                    context,
-                    'Lean Body Mass',
-                    'Latest reading',
-                    '${lbmData == null ? "0" : lbmData["data"]["lbm"]}',
-                    'Calculate Lean Body Mass',
-                    () {
-                      Navigator.of(
-                        context, /*rootnavigator: true*/
-                      ).push(MaterialPageRoute(builder: (context) {
-                        return const LeanBodyMassScreen();
-                      }));
-                    },
-                  ),
-                  // otherCards(
-                  //   context,
-                  //   'Macro Calculator',
-                  //   'Latest reading',
-                  //   '${macroCalculatorData == null ? "0" : macroCalculatorData["data"]["lbm"]}',
-                  //   'Calculate Macros',
-                  //   () {
-                  //     Navigator.of(
-                  //       context, /*rootnavigator: true*/
-                  //     ).push(MaterialPageRoute(builder: (context) {
-                  //       return const MacrosCalculatorScreen();
-                  //     }));
-                  //   },
-                  // ),
-                  otherCards(
-                    context,
-                    'RMR',
-                    'Latest reading',
-                    '${rmrData == null ? "0" : rmrData["data"]["rmr"]}',
-                    'Calculate RMR',
-                    () {
-                      Navigator.of(
-                        context, /*rootnavigator: true*/
-                      ).push(MaterialPageRoute(builder: (context) {
-                        return const RMRscreen();
-                      }));
-                    },
-                  ),
-                ],
-              ),
-            ),
+                );
+        },
+      ),
     );
   }
 
@@ -431,87 +362,6 @@ class _TrackerScreenState extends State<TrackerScreen> {
                 ),
                 Text(
                   qty,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    onTap();
-                  },
-                  child: Text(
-                    button,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.more_horiz_rounded,
-                    size: 22,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  splashRadius: 18,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget otherSecondaryCards(
-    context,
-    String cardTitle,
-    String desc1,
-    String qty1,
-    String desc2,
-    String qty2,
-    String button,
-    Function onTap,
-  ) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              cardTitle,
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    desc1,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-                Text(
-                  qty1,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    desc2,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-                Text(
-                  qty2,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],

@@ -6,7 +6,6 @@ import 'package:healthonify_mobile/constants/set_calories_constants/set_calories
 import 'package:healthonify_mobile/constants/theme_data.dart';
 import 'package:healthonify_mobile/models/http_exception.dart';
 import 'package:healthonify_mobile/providers/fitness_tools/fitness_tools_data.dart';
-import 'package:healthonify_mobile/providers/user_data.dart';
 import 'package:healthonify_mobile/screens/client_screens/calories_plan.dart';
 import 'package:healthonify_mobile/screens/client_screens/fitness_tools/bmi_details.dart';
 import 'package:healthonify_mobile/widgets/buttons/custom_buttons.dart';
@@ -67,11 +66,10 @@ class _SetCaloriesTargetState extends State<SetCaloriesTarget> {
   void getInches(String val) => heightInches = val;
 
   Future calculateCalories(Function(Map<String, dynamic>) onSuccess) async {
-    String userId = Provider.of<UserData>(context, listen: false).userData.id!;
     try {
       var data = await Provider.of<FitnessToolsData>(context, listen: false)
           .calculateTool(
-              "tool=calorieIntake&weight=$weight&height=$height&age=$age&gender=$gender&targetWeight=$targetWeight&goal=$dropdownValue1&activityLevel=$dropdownValue2&goalValue=$goalValue&userId=$userId");
+              "tool=calorieIntake&weight=$weight&height=$height&age=$age&gender=$gender&targetWeight=$targetWeight&goal=$dropdownValue1&activityLevel=$dropdownValue2&goalValue=$goalValue");
 
       onSuccess.call(data);
     } on HttpException catch (e) {
@@ -278,7 +276,6 @@ class _SetCaloriesTargetState extends State<SetCaloriesTarget> {
                                     ),
                                     onSaved: (value) {
                                       getInches(value!);
-                                      print(inchesController.text);
                                       convFeetToCm();
                                     },
                                     validator: (value) {

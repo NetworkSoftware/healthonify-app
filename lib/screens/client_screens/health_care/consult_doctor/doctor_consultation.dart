@@ -265,6 +265,9 @@ class _DoctorConsultationScreenState extends State<DoctorConsultationScreen> {
                       ],
                     ),
                   ),
+                  // ExpertsHorizontalList(
+                  //   title: 'Our Doctors',
+                  // ),
                   if (experts.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(left: 16),
@@ -298,10 +301,15 @@ class _DoctorConsultationScreenState extends State<DoctorConsultationScreen> {
                                     }));
                                   },
                                   borderRadius: BorderRadius.circular(30),
-                                  child: experts[index].imageUrl == ""
+                                  // child: const CircleAvatar(
+                                  //   backgroundImage: AssetImage(
+                                  //       'assets/icons/expert_pfp.png'),
+                                  //   radius: 32,
+                                  // ),
+                                  child: experts[index].imageUrl == null
                                       ? const CircleAvatar(
                                           backgroundImage: AssetImage(
-                                              'assets/images/experts.png'),
+                                              'assets/icons/expert_pfp.png'),
                                           radius: 32,
                                         )
                                       : CircleAvatar(
@@ -345,7 +353,7 @@ class _DoctorConsultationScreenState extends State<DoctorConsultationScreen> {
                           ],
                         ),
                         SizedBox(
-                          height: 200,
+                          height: 100,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             physics: const BouncingScrollPhysics(),
@@ -362,49 +370,16 @@ class _DoctorConsultationScreenState extends State<DoctorConsultationScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(4),
                                   child: SizedBox(
-                                    width: 150,
+                                    width: 200,
                                     child: Card(
                                       child: Center(
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            children: [
-                                              healthCarePlans[index]
-                                                          .mediaLink !=
-                                                      null
-                                                  ? ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              6),
-                                                      child: Image.network(
-                                                        healthCarePlans[index]
-                                                            .mediaLink!,
-                                                        height: 80,
-                                                        width: 100,
-                                                        fit: BoxFit.cover,
-                                                      ))
-                                                  : ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              6),
-                                                      child: Image.asset(
-                                                        'assets/images/sample_helthcre.jpg',
-                                                        height: 80,
-                                                        width: 100,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                              const SizedBox(height: 10),
-                                              Text(
-                                                '${healthCarePlans[index].name}',
-                                                textAlign: TextAlign.center,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 3,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium,
-                                              ),
-                                            ],
+                                          child: Text(
+                                            '${healthCarePlans[index].name}',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
                                           ),
                                         ),
                                       ),
@@ -824,7 +799,6 @@ class _DoctorConsultationScreenState extends State<DoctorConsultationScreen> {
   }
 
   String? startTime;
-
   void timePicker(TextEditingController controller) {
     showTimePicker(
       context: context,
@@ -846,7 +820,6 @@ class _DoctorConsultationScreenState extends State<DoctorConsultationScreen> {
 
       log("qwee${ymdFormat.toString()}");
       if (ymdFormat.toString() == todayDate[0]) {
-        print("ValueHour : ${value.hour}");
         if (value.hour < (DateTime.now().hour + 3)) {
           Fluttertoast.showToast(
               msg:
@@ -893,7 +866,6 @@ class _DoctorConsultationScreenState extends State<DoctorConsultationScreen> {
       //
       // log(ymdFormat.toString());
       //
-      //   print("ValueHour : ${value.hour}");
       //   if (value.hour < (DateTime.now().hour + 3)) {
       //     Fluttertoast.showToast(
       //         msg:

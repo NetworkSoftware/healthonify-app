@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthonify_mobile/screens/client_screens/health_care/lab_reports/lab_appointment_details.dart';
 import 'package:healthonify_mobile/screens/client_screens/health_care/lab_reports/lab_reports.dart';
-import 'package:healthonify_mobile/screens/client_screens/medical_history.dart';
+import 'package:healthonify_mobile/screens/client_screens/health_care/medical_history/medical_history.dart';
 import 'package:healthonify_mobile/screens/client_screens/health_care/medical_reports/medical_reports.dart';
 import 'package:healthonify_mobile/screens/client_screens/health_care/my_medication/my_medications.dart';
 import 'package:healthonify_mobile/screens/client_screens/health_care/second_opinion/second_opinion.dart';
@@ -68,46 +68,42 @@ List<Map<String, dynamic>> healthCareQuickLinks = [
     },
     "icon": 'assets/icons/sleep_tracker.png',
   },
-  {
-    "title": 'Medical Form',
-    "onClick": (context) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const MedicalHistoryScreen();
-      }));
-    },
-    "icon": 'assets/icons/measure.png',
-  },
 ];
 
 List<Map<String, dynamic>> healthCareGridView = [
   {
+    "title": "Your lab Appointments",
+    "onClick": (context) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) {
+            return const MyLabAppointmentScreen();
+          }));
+    },
+    "icon": 'assets/icons/lab_test.png',
+  },
+  {
     "title": 'Lab Tests',
     "onClick": (context) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const LabReportScreen();
-      }));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) {
+            return const LabReportScreen();
+          }));
       //locationDisclosure();
     },
     "icon": 'assets/images/lab_test.png',
   },
   {
-    "title": "Your lab Appointments",
-    "onClick": (context) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const MyLabAppointmentScreen();
-      }));
-    },
-    "icon": 'assets/icons/lab_test.png',
-  },
-  {
     "title": 'Lab Reports',
     "onClick": (context) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const MyReportsScreen();
-      }));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) {
+            return const MyReportsScreen();
+          }));
     },
     "icon": 'assets/icons/my_reports.png',
   },
+
+
   {
     "title": 'Medical History',
     "onClick": (context) {

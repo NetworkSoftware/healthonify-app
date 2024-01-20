@@ -608,7 +608,6 @@ class _AddBodyMeasurementsScreenState extends State<AddBodyMeasurementsScreen> {
                             isFromMasurementScreen: true,
                           );
                         }));
-                        // print("heello");
                         if (!mounted) return;
                         setState(() {
                           if (result != null) {

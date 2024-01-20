@@ -100,11 +100,6 @@ class ConsultNowData with ChangeNotifier {
       url = "${ApiUrl.url}user/subscribePackage";
     }
 
-    print("URL : $url");
-    print("DATA : ${json.encode(data)}");
-
-    // log(requestData);
-    // log(json.encode(data));
     try {
       final response = await http.post(
         Uri.parse(url),

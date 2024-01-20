@@ -42,14 +42,16 @@ class LoginEmailTextField extends StatelessWidget {
             fontFamily: 'OpenSans',
           ),
         ),
-        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.black),
+        style: Theme.of(context)
+            .textTheme
+            .bodyMedium!
+            .copyWith(color: Colors.black),
         onSaved: (value) {
           getEmail(value);
         },
         validator: (value) {
           String pattern = r'(^[0-9]{10}$)';
           RegExp regExp = RegExp(pattern);
-          // print(regExp.hasMatch(value!));
 
           if (value!.isEmpty) {
             return 'Please enter your phone number or email id';
@@ -130,7 +132,10 @@ class _LoginPasswordTextFieldState extends State<LoginPasswordTextField> {
                 : const Icon(Icons.visibility_off_outlined),
           ),
         ),
-        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.black),
+        style: Theme.of(context)
+            .textTheme
+            .bodyMedium!
+            .copyWith(color: Colors.black),
         obscureText: !_passVisible,
         onSaved: (value) {
           widget.getPassword(value);

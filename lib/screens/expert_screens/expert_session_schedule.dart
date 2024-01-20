@@ -9,7 +9,8 @@ import "package:intl/intl.dart";
 import "package:provider/provider.dart";
 
 class ExpertSessionSchedule extends StatefulWidget {
-  ExpertSessionSchedule({Key? key, required this.ticketNumber,required this.sessionNumber})
+  ExpertSessionSchedule(
+      {Key? key, required this.ticketNumber, required this.sessionNumber})
       : super(key: key);
   String ticketNumber;
   String sessionNumber;
@@ -259,7 +260,6 @@ class _ExpertSessionScheduleState extends State<ExpertSessionSchedule> {
 
       log("qwee${ymdFormat.toString()}");
       // if (ymdFormat.toString() == todayDate[0]) {
-      //   print("ValueHour : ${value.hour}");
       //   if (value.hour < (DateTime.now().hour + 3)) {
       //     Fluttertoast.showToast(
       //         msg:
@@ -290,8 +290,6 @@ class _ExpertSessionScheduleState extends State<ExpertSessionSchedule> {
       "durationInMinutes": durationController.text,
       "ticketNumber": widget.ticketNumber,
     };
-
-    print("payload : $payload");
 
     await Provider.of<AllConsultationsData>(context, listen: false)
         .postSessionSchedule(payload)

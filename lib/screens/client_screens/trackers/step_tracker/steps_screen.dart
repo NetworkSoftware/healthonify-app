@@ -33,7 +33,6 @@ class _StepsScreenState extends State<StepsScreen> {
     try {
       date = await Provider.of<StepTrackerProvider>(context, listen: false)
           .getStepsCount(userId!);
-      print("Date : $date");
       return date;
     } on HttpException catch (e) {
       log(e.toString());
@@ -69,35 +68,36 @@ class _StepsScreenState extends State<StepsScreen> {
                     const SizedBox(height: 12),
                     Consumer<StepTrackerProvider>(
                         builder: (context, value, child) {
-                          if(value.stepsData.isNotEmpty){
-                            print("Stepcount : ${value.stepsData.first.stepsCount!}");
-                            return StepsScreenCard(
-                              goal: value.stepsData.last.goalCount!,
-                              stepCount: value.stepsData.last.stepsCount,
-                              startDate: date,
-                            );
-                          }else{
-                            return StepsScreenCard(
-                              goal: 0,
-                              startDate: date,
-                            );
-                          }
-
-                        }),
+                      if (value.stepsData.isNotEmpty) {
+                        return StepsScreenCard(
+                          goal: value.stepsData.last.goalCount!,
+                          stepCount: value.stepsData.last.stepsCount,
+                          startDate: date,
+                        );
+                      } else {
+                        return StepsScreenCard(
+                          goal: 0,
+                          startDate: date,
+                        );
+                      }
+                    }),
                     const SizedBox(height: 14),
                     //const SyncHealthAppCard(),
                     Consumer<StepTrackerProvider>(
                         builder: (context, value, child) {
-                          return Padding(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                            child: StepsGraphCard(
-                              goal: value.stepsData.isNotEmpty ? value.stepsData.last.goalCount! : 0,
-                              stepCount: value.stepsData.isNotEmpty ? value.stepsData.last.stepsCount : 0,
-                            ),
-                          );
-
-                        }),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 8),
+                        child: StepsGraphCard(
+                          goal: value.stepsData.isNotEmpty
+                              ? value.stepsData.last.goalCount!
+                              : 0,
+                          stepCount: value.stepsData.isNotEmpty
+                              ? value.stepsData.last.stepsCount
+                              : 0,
+                        ),
+                      );
+                    }),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

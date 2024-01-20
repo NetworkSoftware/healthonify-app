@@ -268,25 +268,22 @@ class WorkoutFunc {
     required String workoutId,
     required List<ExerciseWorkoutModel> selectedExs,
     required Schedule schedule,
-    required String time,
   }) async {
     // LoadingDialog().onLoadingDialog("Updating", context);
     String userId = Provider.of<UserData>(context, listen: false).userData.id!;
-    String weight =
-        Provider.of<UserData>(context, listen: false).userData.weight!;
 
     try {
       Map<String, dynamic> data = {
         "userId": userId,
         "date": DateFormat("MM/dd/yyyy").format(DateTime.now()),
-        "weight": weight,
+        "weight": "65",
         "workoutPlanId": workoutId,
         "schedule": schedule.day,
         "exercises": List.generate(
           selectedExs.length,
           (index) => {
             "exerciseId": selectedExs[index].exerciseId!["_id"],
-            "durationInMinutes": time,
+            "durationInMinutes": 2,
             "sets": List.generate(
                 selectedExs[index].sets!.length,
                 (i) => {

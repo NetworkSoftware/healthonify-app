@@ -5,7 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:healthonify_mobile/models/http_exception.dart';
 import 'package:healthonify_mobile/models/live_well/live_well_models.dart';
 import 'package:healthonify_mobile/providers/live_well_providers/live_well_provider.dart';
-import 'package:healthonify_mobile/screens/client_screens/live_well/play_list_screen.dart';
 import 'package:healthonify_mobile/screens/video_screen/video_screen.dart';
 import 'package:healthonify_mobile/widgets/cards/custom_appBar.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +13,6 @@ class LiveWellCategoryVideos extends StatefulWidget {
   final String screenTitle;
   final String categoryId;
   final String? categoryTitle;
-
   const LiveWellCategoryVideos(
       {required this.screenTitle,
       required this.categoryId,
@@ -33,7 +31,7 @@ class _LiveWellCategoryVideosState extends State<LiveWellCategoryVideos> {
     try {
       categoryContent =
           await Provider.of<LiveWellProvider>(context, listen: false)
-              .getPlayList(widget.categoryId);
+              .getContent(widget.categoryId);
 
       log('fetched category videos');
     } on HttpException catch (e) {
@@ -58,77 +56,99 @@ class _LiveWellCategoryVideosState extends State<LiveWellCategoryVideos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(appBarTitle: widget.screenTitle),
-        body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : GridView.builder(
-                itemCount: categoryContent.length,
-                physics: const ScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                cacheExtent: 10000,
-                addAutomaticKeepAlives: true,
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: (1.0 / 3.5) / (1.0 / 3),
-                  mainAxisSpacing: 0,
-                  crossAxisSpacing: 0,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: (){
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                            return LiveWellPlayListVideos(
-                              playListId: categoryContent[index].id!,
-                              playListTitle: categoryContent[index].title!,
-                            );
-                          }));
-
-                    },
-                    child
-                        : Card(
-                      elevation: 3,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).drawerTheme.backgroundColor,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.network(
-                                categoryContent[index].mediaLink!,
-                                height: 150,
-                                width: MediaQuery.of(context).size.width,
-                                fit: BoxFit.fill,
+      appBar: CustomAppBar(appBarTitle: widget.screenTitle),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: categoryContent.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        child: Card(
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return VideoScreen(
+                                  videoTitle: categoryContent[index].title!,
+                                  description:
+                                      categoryContent[index].description!,
+                                  videoLink: categoryContent[index].mediaLink!,
+                                  videoId: categoryContent[index].id!,
+                                  playlistId: widget.categoryId,
+                                );
+                              }));
+                            },
+                            borderRadius: BorderRadius.circular(8),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(6),
+                                        child: Image.network(
+                                          categoryContent[index].thumbnail ??
+                                              "https://imgs.search.brave.com/tmNeS6hU9sY_YJpxJVyn99TW3WUMxInZ2zW1qf2m0b8/rs:fit:1200:960:1/g:ce/aHR0cHM6Ly9hc3Nl/dHMud2ViaWNvbnNw/bmcuY29tL3VwbG9h/ZHMvMjAxNi8xMi9Q/bGFjZWhvbGRlci1W/ZWN0b3ItQXJ0LUlj/b24ucG5n",
+                                          height: 80,
+                                          width: 100,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 12),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                categoryContent[index].title!,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelMedium,
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                categoryContent[index]
+                                                    .description!,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 10),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5),
-                                child: Text(
-                                  categoryContent[index].title!,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5),
-                                child: Text(
-                                  categoryContent[index].description!,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.labelSmall!,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ));
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+    );
   }
 }

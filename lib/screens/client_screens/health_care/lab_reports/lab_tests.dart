@@ -61,7 +61,6 @@ class _LabTestsScreenState extends State<LabTestsScreen> {
           Provider.of<UserData>(context, listen: false).userData.firstName!;
 
       userDob = Provider.of<UserData>(context, listen: false).userData.dob!;
-      print("User DOB : $userDob");
       userId = Provider.of<UserData>(context, listen: false).userData.id!;
       userMobile =
           Provider.of<UserData>(context, listen: false).userData.mobile!;
@@ -69,13 +68,9 @@ class _LabTestsScreenState extends State<LabTestsScreen> {
       var tempAge = DateFormat('MM/dd/yyyy').parse(userDob!);
       var datenow = DateTime.now();
       var age = datenow.difference(tempAge);
-      print("Age : $age");
       var hours = age.inHours;
-      print("Hour : $hours");
       var days = hours / 24;
-      print("Days : $days");
       userAge = days / 365.25;
-      print("userAge : $userAge");
 
       labRequest['userId'] = userId;
       labRequest['location'] = {

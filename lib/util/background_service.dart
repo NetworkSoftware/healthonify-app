@@ -56,6 +56,5 @@
 // // run app from xcode, then from xcode menu, select Simulate Background Fetch
 // bool onIosBackground(ServiceInstance service) {
 //   WidgetsFlutterBinding.ensureInitialized();
-//   print('FLUTTER BACKGROUND FETCH');
 //   return true;
 // }

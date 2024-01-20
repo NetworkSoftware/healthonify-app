@@ -57,8 +57,6 @@ class ExpertsData with ChangeNotifier {
     String url =
         "${ApiUrl.url}get/user?topExpertise=6343acb2f427d20b635ec853&isAdminApproved=true";
 
-    print("Url : $url");
-
     final List<Expert> healthCareExperts = [];
     try {
       final response = await http.get(
@@ -119,8 +117,6 @@ class ExpertsData with ChangeNotifier {
             HealthCareExpert(
               email: element["email"],
               topExpertiseId: element["topExpertise"]["_id"],
-              topExpertiseName: element["topExpertise"]["name"],
-              topExpertiseFlow: element["topExpertise"]["flowName"],
               firstName: element["firstName"],
               id: element["_id"],
               isVerified: element["isVerified"],

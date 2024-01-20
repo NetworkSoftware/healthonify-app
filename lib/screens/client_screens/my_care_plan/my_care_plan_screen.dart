@@ -16,7 +16,6 @@ import 'package:healthonify_mobile/screens/client_screens/health_care/subscripti
 import 'package:healthonify_mobile/screens/client_screens/live_well/browse_livewell_plans.dart';
 import 'package:healthonify_mobile/screens/client_screens/live_well/subscription/live_well_subscription.dart';
 import 'package:healthonify_mobile/screens/client_screens/physio/subscriptions/physio_viewall_subscriptions.dart';
-import 'package:healthonify_mobile/screens/client_screens/view_all_subscription.dart';
 import 'package:healthonify_mobile/screens/client_screens/weight_management/quick_actions/browse_plans.dart';
 import 'package:healthonify_mobile/screens/client_screens/weight_management/subscription/wm_viewall_subscription.dart';
 import 'package:healthonify_mobile/screens/client_screens/weight_management/wm_subscriptions.dart';
@@ -134,7 +133,7 @@ class _MyCarePlanScreenState extends State<MyCarePlanScreen> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                    ViewAllSubscriptions(flow: "physioTherapy")
+                                      PhysioViewAllSubscriptions(),
                                 ),
                               );
                             },
@@ -173,15 +172,9 @@ class _MyCarePlanScreenState extends State<MyCarePlanScreen> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        ViewAllSubscriptions(flow: "fitness")
+                                  builder: (context) => FitnessViewAllSubscriptions(),
                                 ),
                               );
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (context) => FitnessViewAllSubscriptions(),
-                              //   ),
-                              // );
                             },
                             child: const Text("View all"))
                       ],
@@ -209,6 +202,44 @@ class _MyCarePlanScreenState extends State<MyCarePlanScreen> {
                               ),
                             ),
                     ),
+                    // Row(
+                    //   children: [
+                    //     Text(
+                    //       "Diet Plan",
+                    //       style: Theme.of(context).textTheme.labelLarge,
+                    //     ),
+                    //     const Spacer(),
+                    //     TextButton(
+                    //         onPressed: () {
+                    //           Navigator.of(context).push(
+                    //             MaterialPageRoute(
+                    //               builder: (context) => const MyDietPlans(),
+                    //             ),
+                    //           );
+                    //         },
+                    //         child: const Text("View all"))
+                    //   ],
+                    // ),
+                    // dietPlans.isEmpty
+                    //     ? const Text("No Plans Available")
+                    //     : ListView.builder(
+                    //         itemCount:
+                    //             dietPlans.length > 4 ? 4 : dietPlans.length,
+                    //         shrinkWrap: true,
+                    //         physics: const NeverScrollableScrollPhysics(),
+                    //         itemBuilder: (context, index) => Card(
+                    //           child: Padding(
+                    //             padding: const EdgeInsets.all(8.0),
+                    //             child: Text(
+                    //               dietPlans[index].name ?? "-",
+                    //               style: Theme.of(context)
+                    //                   .textTheme
+                    //                   .bodySmall!
+                    //                   .copyWith(color: Colors.black),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
                     Row(
                       children: [
                         Text(
@@ -220,16 +251,10 @@ class _MyCarePlanScreenState extends State<MyCarePlanScreen> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      ViewAllSubscriptions(flow: "healthCare")
+                                builder: (context) =>
+                                    HCViewAllSubscriptions(),
                               ),
                             );
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         HCViewAllSubscriptions(),
-                            //   ),
-                            // );
                           },
                           child: const Text("View all"),
                         ),
@@ -268,16 +293,10 @@ class _MyCarePlanScreenState extends State<MyCarePlanScreen> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      ViewAllSubscriptions(flow: "ayurveda")
+                                builder: (context) =>
+                                     AyurvedaViewAllSubscriptions(),
                               ),
                             );
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //          AyurvedaViewAllSubscriptions(),
-                            //   ),
-                            // );
                           },
                           child: const Text("View all"),
                         ),
@@ -313,18 +332,12 @@ class _MyCarePlanScreenState extends State<MyCarePlanScreen> {
                         const Spacer(),
                         TextButton(
                           onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
                                 builder: (context) =>
-                                    ViewAllSubscriptions(flow: "manageWeight")
-                            ),
-                          );
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         WmViewAllSubscriptions(),
-                            //   ),
-                            // );
+                                    WmViewAllSubscriptions(),
+                              ),
+                            );
                           },
                           child: const Text("View all"),
                         ),
@@ -362,16 +375,10 @@ class _MyCarePlanScreenState extends State<MyCarePlanScreen> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      ViewAllSubscriptions(flow: "liveWell")
+                                builder: (context) =>
+                                    LiveWellViewAllSubscriptions(),
                               ),
                             );
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         LiveWellViewAllSubscriptions(),
-                            //   ),
-                            // );
                           },
                           child: const Text("View all"),
                         ),

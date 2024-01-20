@@ -88,45 +88,6 @@ class LiveWellProvider with ChangeNotifier {
     }
   }
 
-  Future<List<ContentModel>> getPlayList(String categoryId) async {
-    String url = '${ApiUrl.hc}get/playlist?categoryId=$categoryId';
-
-    log("live well category $url");
-
-    final List<ContentModel> loadedData = [];
-
-    try {
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {"Content-Type": "application/json"},
-      );
-
-      final responseBody = json.decode(response.body);
-      print(responseBody["status"]);
-      if (response.statusCode >= 400) {
-        throw HttpException(responseBody["message"]);
-      }
-      if (responseBody["status"] == 1) {
-        final responseData = json.decode(response.body)["data"];
-        for (var element in responseData) {
-          loadedData.add(
-            ContentModel(
-              id: element['_id'],
-              description: element['description'],
-              mediaLink: element['mediaLink'],
-              title: element['name'],
-            ),
-          );
-        }
-        return loadedData;
-      } else {
-        throw HttpException(responseBody["message"]);
-      }
-    } catch (e) {
-      throw HttpException('error');
-    }
-  }
-
   Future<List<ContentModel>> fetchPlayList(String playlistId) async {
     String url = '${ApiUrl.hc}fetch/playlist?id=$playlistId';
 
@@ -150,13 +111,12 @@ class LiveWellProvider with ChangeNotifier {
         for (var element in responseData['contents']) {
           loadedData.add(
             ContentModel(
-              id: element['_id'],
-              description: element['description'],
-              mediaLink: element['mediaLink'],
-              title: element['title'],
-              thumbnail: element['thumbnail'],
-              format: element['format']
-            ),
+                id: element['_id'],
+                description: element['description'],
+                mediaLink: element['mediaLink'],
+                title: element['title'],
+                thumbnail: element['thumbnail'],
+                format: element['format']),
           );
         }
 

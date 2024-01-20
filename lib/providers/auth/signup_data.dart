@@ -42,10 +42,6 @@ class SignUpData with ChangeNotifier {
 
       SharedPrefManager pref = SharedPrefManager();
       await pref.saveUserId(data[0]["userId"]);
-
-      // print(data[0]["userId"]);
-
-      // print(_loginData.roles);
       notifyListeners();
     } catch (e) {
       rethrow;
@@ -78,11 +74,6 @@ class SignUpData with ChangeNotifier {
       SharedPrefManager pref = SharedPrefManager();
       await pref.saveUserId(data["userId"]);
       await pref.saveRoles(data['roles'][0]);
-
-      // print(data[0]["userId"]);
-
-      // print(_loginData.roles);
-      // notifyListeners();
     } catch (e) {
       rethrow;
     }
@@ -116,9 +107,6 @@ class SignUpData with ChangeNotifier {
       // SharedPrefManager pref = SharedPrefManager();
       // log(data);
 
-      // print(data[0]["userId"]);
-
-      // print(_loginData.roles);
       // notifyListeners();
     } catch (e) {
       rethrow;

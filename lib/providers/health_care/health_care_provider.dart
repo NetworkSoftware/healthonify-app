@@ -9,33 +9,6 @@ import 'package:http/http.dart' as http;
 class HealthCareProvider with ChangeNotifier {
   Future<void> consultSpecialist(Map<String, dynamic> consultData) async {
     String url = "${ApiUrl.hc}user/consultNow";
-  print("url : $url");
-  print("data : ${json.encode(consultData)}");
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {"Content-Type": "application/json"},
-        body: json.encode(consultData),
-      );
-      final responseData = json.decode(response.body) as Map<String, dynamic>;
-      if (response.statusCode >= 400) {
-        throw HttpException(responseData["message"]);
-      }
-      if (responseData["status"] == 1) {
-        log(responseData['data'].toString());
-      } else {
-        throw HttpException(responseData["message"]);
-      }
-      // notifyListeners();
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> secondOpinion(Map<String, dynamic> consultData) async {
-    String url = "${ApiUrl.url}user/consultNow";
-    print("url : $url");
-    print("data : ${json.encode(consultData)}");
     try {
       final response = await http.post(
         Uri.parse(url),

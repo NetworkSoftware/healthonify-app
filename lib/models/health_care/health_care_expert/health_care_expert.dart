@@ -6,8 +6,6 @@ class HealthCareExpert {
   String? lastName;
   bool? isVerified;
   String? topExpertiseId;
-  String? topExpertiseName;
-  String? topExpertiseFlow;
   String? state;
   String? city;
   String? about;
@@ -22,8 +20,6 @@ class HealthCareExpert {
     this.lastName,
     this.mobileNo,
     this.topExpertiseId,
-    this.topExpertiseName,
-    this.topExpertiseFlow,
     this.city,
     this.state,
     this.about,

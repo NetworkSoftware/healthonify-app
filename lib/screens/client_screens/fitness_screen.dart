@@ -33,7 +33,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'blogs/blogs_widget.dart';
 
 class FitnessScreen extends StatefulWidget {
-  FitnessScreen({Key? key, this.category, this.categoryId, this.topLevelExpertise}) : super(key: key);
+  FitnessScreen(
+      {Key? key, this.category, this.categoryId, this.topLevelExpertise})
+      : super(key: key);
   int? category;
   String? categoryId;
   List<TopLevelExpertise>? topLevelExpertise;
@@ -65,16 +67,13 @@ class _FitnessScreenState extends State<FitnessScreen> {
       if (widget.topLevelExpertise![i].parentExpertiseId != null) {
         if (widget.categoryId ==
             widget.topLevelExpertise![i].parentExpertiseId) {
-          subCategoryData.add(
-              SubCategory(id: widget.topLevelExpertise![i].id!,
-                  name: widget.topLevelExpertise![i].name!,
-                  parentId: widget.topLevelExpertise![i].parentExpertiseId!)
-          );
+          subCategoryData.add(SubCategory(
+              id: widget.topLevelExpertise![i].id!,
+              name: widget.topLevelExpertise![i].name!,
+              parentId: widget.topLevelExpertise![i].parentExpertiseId!));
         }
       }
     }
-
-    print("list1111 : ${subCategoryData.length}");
   }
 
   @override
@@ -135,9 +134,9 @@ class _FitnessScreenState extends State<FitnessScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Theme.of(context).drawerTheme.backgroundColor,
-                 //border: Border.all(color: Colors.black, width: 1)
+                borderRadius: BorderRadius.circular(20),
+                color: Theme.of(context).drawerTheme.backgroundColor,
+                //border: Border.all(color: Colors.black, width: 1)
               ),
               child: DropdownButton2(
                 buttonHeight: 20,
@@ -146,7 +145,7 @@ class _FitnessScreenState extends State<FitnessScreen> {
                 underline: const SizedBox(),
                 dropdownWidth: 240,
                 offset: const Offset(-30, 20),
-                dropdownDecoration:  BoxDecoration(
+                dropdownDecoration: BoxDecoration(
                     color: Theme.of(context).drawerTheme.backgroundColor,
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 alignment: Alignment.topLeft,
@@ -182,7 +181,12 @@ class _FitnessScreenState extends State<FitnessScreen> {
                         ),
                         Text(
                           list.title,
-                          style: Theme.of(context).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.bold,fontSize: 14),),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall!
+                              .copyWith(
+                                  fontWeight: FontWeight.bold, fontSize: 14),
+                        ),
                       ],
                     ),
                   );
@@ -202,7 +206,9 @@ class _FitnessScreenState extends State<FitnessScreen> {
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
                         return HealthCareScreen(
-                            category: 1, categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                            category: 1,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
@@ -218,7 +224,9 @@ class _FitnessScreenState extends State<FitnessScreen> {
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
                         return ManageWeightScreen(
-                            category: 2, categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                            category: 2,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
@@ -234,7 +242,9 @@ class _FitnessScreenState extends State<FitnessScreen> {
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
                         return FitnessScreen(
-                            category: 3, categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                            category: 3,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
@@ -250,7 +260,9 @@ class _FitnessScreenState extends State<FitnessScreen> {
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
                         return PhysiotherapyScreen(
-                            category: 4, categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                            category: 4,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
@@ -276,13 +288,15 @@ class _FitnessScreenState extends State<FitnessScreen> {
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
                         return LiveWellScreen(
-                            category: 6, categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                            category: 6,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
                         selectedValue = null;
                       }
-                    }  else if (selectedValue == 7) {
+                    } else if (selectedValue == 7) {
                       for (int i = 0; i < topLevelExpertise.length; i++) {
                         if (topLevelExpertise[i].name == "Ayurveda") {
                           categoryId = topLevelExpertise[i].id!;
@@ -300,14 +314,11 @@ class _FitnessScreenState extends State<FitnessScreen> {
                       if (result == true) {
                         selectedValue = null;
                       }
-                    }
-
-                    else if (selectedValue == 8) {
+                    } else if (selectedValue == 8) {
                       Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return const ShopScreen(
-                        );
+                        return const ShopScreen();
                       }));
                       //launchUrl(Uri.parse("https://healthonify.com/Shop"));
                     }
@@ -441,7 +452,8 @@ class _FitnessScreenState extends State<FitnessScreen> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) {
-                          return const BrowseFitnessPlans(isExpertCurated: false);
+                          return const BrowseFitnessPlans(
+                              isExpertCurated: false);
                         }),
                       );
                     },
@@ -482,10 +494,7 @@ class _FitnessScreenState extends State<FitnessScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: SizedBox(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.98,
+                width: MediaQuery.of(context).size.width * 0.98,
                 child: Card(
                   elevation: 5,
                   color: const Color(0xFFec6a13),
@@ -493,8 +502,9 @@ class _FitnessScreenState extends State<FitnessScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    child:  Row(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: Row(
                       children: [
                         InkWell(
                           onTap: () {
@@ -523,7 +533,8 @@ class _FitnessScreenState extends State<FitnessScreen> {
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: Colors.white,
-                                        border: Border.all(color: const Color(0xFFec6a13))),
+                                        border: Border.all(
+                                            color: const Color(0xFFec6a13))),
                                     child: const Center(
                                       child: Text(
                                         "View",
@@ -545,18 +556,18 @@ class _FitnessScreenState extends State<FitnessScreen> {
                           children: [
                             Text(
                               "Your Appointments",
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
-                                  .labelLarge!.copyWith(color: Colors.white),
+                                  .labelLarge!
+                                  .copyWith(color: Colors.white),
                             ),
                             const SizedBox(height: 6),
                             Text(
                               'Book and View your appointments here',
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
-                                  .bodySmall!.copyWith(color: Colors.white),
+                                  .bodySmall!
+                                  .copyWith(color: Colors.white),
                             ),
                           ],
                         ),

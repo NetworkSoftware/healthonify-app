@@ -52,7 +52,6 @@ class Enquiry{
   String? flow;
   String? date;
   String? time;
-  String? comments;
 
   Enquiry(
       { this.enquiryId,
@@ -63,6 +62,6 @@ class Enquiry{
         this.ticketNumber,
         this.flow,
         this.date,
-        this.time,this.comments
+        this.time
       });
 }

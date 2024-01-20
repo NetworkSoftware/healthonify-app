@@ -11,7 +11,6 @@ import 'package:http/http.dart' as http;
 class AyurvedaProvider with ChangeNotifier {
   Future<List<AyurvedaConditionsModel>> getAyurvedaConditions() async {
     String url = '${ApiUrl.hc}get/ayurvedaConditions';
-    print("url : $url");
 
     List<AyurvedaConditionsModel> ayurvedaConditions = [];
 

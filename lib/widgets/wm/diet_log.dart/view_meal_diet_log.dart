@@ -9,7 +9,6 @@ import 'package:healthonify_mobile/models/wm/diet_plan_model.dart';
 import 'package:healthonify_mobile/models/wm/dish_model.dart';
 import 'package:healthonify_mobile/providers/trackers/all_tracker_data.dart';
 import 'package:healthonify_mobile/providers/trackers/calorie_tracker_provider.dart';
-import 'package:healthonify_mobile/providers/user_data.dart';
 import 'package:healthonify_mobile/screens/client_screens/add_food_screen.dart';
 import 'package:healthonify_mobile/widgets/wm/viewdietplan/view_diet_plan_meal_widget.dart';
 import 'package:intl/intl.dart';
@@ -57,7 +56,6 @@ class _ViewMealDietLogWidgetState extends State<ViewMealDietLogWidget> {
       var tempQuantity = ele.quantity;
       var baseCalories = ele.dishId!.perUnit!.calories;
 
-      print("ccccccccccccc : ${ele.dishId!.nutrition}");
       totalCalories = totalCalories + tempQuantity! * baseCalories!;
       protiens = 0.0;
       fibers = 0.0;
@@ -151,11 +149,8 @@ class _ViewMealDietLogWidgetState extends State<ViewMealDietLogWidget> {
       }
       calculateCalories.call();
       widget.onDishAdd.call();
-      var userId = Provider.of<UserData>(context, listen: false).userData.id!;
-      await DietLogFunc().postDietLog(context, widget.meal, widget.date).then((value) async {
-        await Provider.of<CalorieTrackerProvider>(context, listen: false).getCalories(
-            "?userId=$userId&date=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
-      });
+
+      await DietLogFunc().postDietLog(context, widget.meal, widget.date);
       setState(() {});
     });
   }

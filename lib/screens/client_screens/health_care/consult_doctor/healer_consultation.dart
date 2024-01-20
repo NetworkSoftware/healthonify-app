@@ -5,9 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:healthonify_mobile/constants/theme_data.dart';
 import 'package:healthonify_mobile/models/http_exception.dart';
 import 'package:healthonify_mobile/providers/physiotherapy/enquiry_form_data.dart';
-import 'package:healthonify_mobile/providers/user_data.dart';
-import 'package:healthonify_mobile/screens/client_screens/all_appointments_screen.dart';
-import 'package:healthonify_mobile/screens/client_screens/expert_screen.dart';
 import 'package:healthonify_mobile/widgets/buttons/custom_buttons.dart';
 import 'package:healthonify_mobile/widgets/cards/custom_appBar.dart';
 import 'package:healthonify_mobile/widgets/other/carousel_slider.dart';
@@ -58,7 +55,6 @@ class _HealerConsultationState extends State<HealerConsultation> {
 
       log("qwee${ymdFormat.toString()}");
       if (ymdFormat.toString() == todayDate[0]) {
-        print("ValueHour : ${value.hour}");
         if (value.hour < (DateTime.now().hour + 3)) {
           Fluttertoast.showToast(
               msg:
@@ -99,7 +95,6 @@ class _HealerConsultationState extends State<HealerConsultation> {
       //
       // log(ymdFormat.toString());
       //
-      //   print("ValueHour : ${value.hour}");
       //   if (value.hour < (DateTime.now().hour + 3)) {
       //     Fluttertoast.showToast(
       //         msg:
@@ -155,14 +150,6 @@ class _HealerConsultationState extends State<HealerConsultation> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    fetchExperts();
-    User userData = Provider.of<UserData>(context, listen: false).userData;
-    setData(userData);
-  }
-
   void setData(User userData) {
     data["name"] = userData.firstName!;
     data["email"] = userData.email!;
@@ -179,7 +166,7 @@ class _HealerConsultationState extends State<HealerConsultation> {
     if (selectedValue == null) {
       Fluttertoast.showToast(msg: "Please choose a value from the dropdown");
     }
-    // data["category"] = selectedValue!;
+    data["category"] = selectedValue!;
     _form.currentState!.save();
     log(data.toString());
     submitForm();
@@ -192,7 +179,6 @@ class _HealerConsultationState extends State<HealerConsultation> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const ExpertsTopList(),
             CustomCarouselSlider(imageUrls: [
@@ -209,205 +195,288 @@ class _HealerConsultationState extends State<HealerConsultation> {
                 'route': () {},
               },
             ]),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.98,
-                  child: Card(
-                    elevation: 5,
-                    color: const Color(0xFFec6a13),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: Row(
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Your Appointments",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Book and view your consultations here',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.of(
-                                context, /*rootnavigator: true*/
-                              ).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      AllAppointmentsScreen(flow: 'liveWell'),
+                          Container(
+                            constraints: const BoxConstraints(
+                                minWidth: 70, minHeight: 40),
+                            decoration: BoxDecoration(
+                              gradient: purpleGradient,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                // Navigator.push(context,
+                                //     MaterialPageRoute(builder: (context) {
+                                //       return const HealthCareAppointmentsScreen();
+                                //     }));
+                              },
+                              borderRadius: BorderRadius.circular(10),
+                              child: Center(
+                                child: Text(
+                                  'View',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium!
+                                      .copyWith(color: whiteColor),
                                 ),
-                              );
-                            },
-                            child: Container(
-                              width: 70,
-                              height: 70,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                              child: Stack(
-                                children: [
-                                  Center(
-                                    child: Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color: const Color(0xFFec6a13))),
-                                      child: const Center(
-                                        child: Text(
-                                          "View",
-                                          style: TextStyle(
-                                              color: Color(0xFFec6a13),
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
                               ),
                             ),
                           ),
-                          const SizedBox(width: 5),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Your Appointments",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge!
-                                    .copyWith(color: Colors.white),
+                          Container(
+                            constraints: const BoxConstraints(
+                                minWidth: 90, minHeight: 40),
+                            decoration: BoxDecoration(
+                              gradient: purpleGradient,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                _showBottomSheet();
+                              },
+                              borderRadius: BorderRadius.circular(10),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                    ),
+                                    Text(
+                                      'Request',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium!
+                                          .copyWith(color: whiteColor),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              const SizedBox(height: 6),
-                              Text(
-                                'Book and View your appointments here',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(color: Colors.white),
-                              ),
-                            ],
+                            ),
                           ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),
             ),
-            isloading == false
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 10),
-                          Text(
-                            "Experts",
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
-                          const SizedBox(height: 10),
-                          liveWellExperts.isNotEmpty
-                              ? SizedBox(
-                                  height: 100,
-                                  child: ListView.separated(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: liveWellExperts.length,
-                                    separatorBuilder: (context, index) {
-                                      return const SizedBox(width: 10);
-                                    },
-                                    itemBuilder:
-                                        (BuildContext context, int index) =>
-                                            Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) {
-                                              return ExpertScreen(
-                                                expertId:
-                                                    liveWellExperts[index].id!,
-                                              );
-                                            }));
-                                          },
-                                          child: liveWellExperts[index]
-                                                          .imageUrl ==
-                                                      null ||
-                                                  liveWellExperts[index]
-                                                          .imageUrl ==
-                                                      ""
-                                              ? const CircleAvatar(
-                                                  radius: 32,
-                                                  backgroundImage: AssetImage(
-                                                      'assets/icons/expert_pfp.png'),
-                                                )
-                                              : CircleAvatar(
-                                                  radius: 32,
-                                                  backgroundImage: NetworkImage(
-                                                    liveWellExperts[index]
-                                                        .imageUrl!,
-                                                  ),
-                                                ),
-                                        ),
-                                        Text(
-                                          liveWellExperts[index].firstName!,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              : const Center(
-                                  child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text("No Experts Available")),
-                                ),
-                        ],
-                      ),
-                    ),
-                  )
-                : const CircularProgressIndicator(),
           ],
         ),
       ),
     );
   }
 
-  List<User> experts = [];
-  List<User> liveWellExperts = [];
-  bool isloading = true;
-
-  Future<void> fetchExperts() async {
-    try {
-      experts =
-          await Provider.of<UserData>(context, listen: false).getExperts();
-
-      for (int i = 0; i < experts.length; i++) {
-        if (experts[i].topExpertise == "Live Well") {
-          liveWellExperts.add(experts[i]);
-        }
-      }
-    } on HttpException catch (e) {
-      log(e.toString());
-      Fluttertoast.showToast(msg: e.message);
-    } catch (e) {
-      log("Error getting user details : $e");
-      Fluttertoast.showToast(msg: "Unable to fetch user details");
-    } finally {
-      setState(() {
-        isloading = false;
-      });
-    }
+  void _showBottomSheet() {
+    showModalBottomSheet(
+        elevation: 10,
+        isScrollControlled: true,
+        context: context,
+        builder: (ctx) => SingleChildScrollView(
+              child: GestureDetector(
+                onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
+                child: Form(
+                  key: _form,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(ctx).viewInsets.bottom + 1),
+                    child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            icon: const Icon(Icons.close),
+                          ),
+                        ],
+                      ),
+                      Center(
+                        child: Text(
+                          "Request Appointment",
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Category : ",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              "Healers",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    datePicker(dateController);
+                                  },
+                                  child: IgnorePointer(
+                                    child: TextFormField(
+                                      controller: dateController,
+                                      decoration: InputDecoration(
+                                        fillColor:
+                                            Theme.of(context).canvasColor,
+                                        filled: true,
+                                        hintText: 'Date',
+                                        hintStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(
+                                              color: const Color(0xFF717579),
+                                            ),
+                                        suffixIcon: TextButton(
+                                          onPressed: () {
+                                            datePicker(dateController);
+                                          },
+                                          child: Text(
+                                            'PICK',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelSmall!
+                                                .copyWith(color: orange),
+                                          ),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 8),
+                                      ),
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                      cursorColor: whiteColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    timePicker(timeController);
+                                  },
+                                  child: IgnorePointer(
+                                    child: TextFormField(
+                                      controller: timeController,
+                                      decoration: InputDecoration(
+                                        fillColor:
+                                            Theme.of(context).canvasColor,
+                                        filled: true,
+                                        hintText: 'Time',
+                                        hintStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(
+                                              color: const Color(0xFF717579),
+                                            ),
+                                        suffixIcon: TextButton(
+                                          onPressed: () {
+                                            timePicker(timeController);
+                                          },
+                                          child: Text(
+                                            'PICK',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelSmall!
+                                                .copyWith(color: orange),
+                                          ),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 8),
+                                      ),
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                      cursorColor: whiteColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Explain your issue",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            IssueField(getValue: (value) {
+                              data["message"] = value;
+                            }),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Center(
+                          child: SaveButton(
+                        isLoading: false,
+                        submit: onSubmit,
+                        title: "Request Now",
+                      )),
+                    ]),
+                  ),
+                ),
+              ),
+            ));
   }
 }

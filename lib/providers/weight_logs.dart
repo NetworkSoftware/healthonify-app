@@ -15,7 +15,6 @@ class WeightLogs with ChangeNotifier {
 
   Future<void> getWeightLogs(String userId) async {
     String url = "${ApiUrl.wm}get/weightLog?userId=$userId";
-    print("Url :$url");
     List<WeightLog> loadedData = [];
     try {
       final response = await http.get(
@@ -56,7 +55,6 @@ class WeightLogs with ChangeNotifier {
   Future<void> postWeightLogs(Map<String, dynamic> data) async {
     String url = '${ApiUrl.wm}store/weightLog';
 
-    print("url : $url");
     log(data.toString());
 
     try {
@@ -85,10 +83,10 @@ class WeightLogs with ChangeNotifier {
     }
   }
 
-  Future updateWeightLogs(String weightLogId, Map<String, dynamic> data,String userId) async {
+  Future updateWeightLogs(
+      String weightLogId, Map<String, dynamic> data, String userId) async {
     String url = '${ApiUrl.wm}put/weightLog?id=$weightLogId&userId=$userId';
 
-    print("url :$url");
     log(data.toString());
 
     try {

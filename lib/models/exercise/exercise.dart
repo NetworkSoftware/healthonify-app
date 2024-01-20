@@ -1,12 +1,11 @@
 class Exercise {
-  int? weightUnit;
+  String? weightUnit;
   List<dynamic>? bodyPartId, bodyPartGroupId;
   String? name;
   String? mediaLink;
   String? id;
   double? calorieFactor;
   String? description;
-  String? status;
   Exercise({
     this.description,
     this.weightUnit,
@@ -16,6 +15,5 @@ class Exercise {
     this.mediaLink,
     this.id,
     this.calorieFactor,
-    this.status
   });
 }

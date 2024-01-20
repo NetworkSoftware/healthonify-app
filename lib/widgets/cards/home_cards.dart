@@ -58,25 +58,26 @@ class HomeCard extends StatelessWidget {
         }
       },
       {
-        "title": 'Chat With Us',
+        "title": 'Chat With Experts',
         "icon": 'assets/images/expert_chat.png',
         "onClick": () {
-          //print("name : ${widget.clientName}");
-         //ZIMKit().showDefaultNewPeerChatDialog(context);
-         //  Navigator.push(context, MaterialPageRoute(builder: (context) {
-         //    return const ZIMKitMessageListPage(
-         //      conversationID: "653ba936d9975f01f93bc011",
-         //      conversationType: ZIMConversationType.peer,
-         //    );
-         //  }));
+          //ZIMKit().showDefaultNewPeerChatDialog(context);
+          //  Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //    return const ZIMKitMessageListPage(
+          //      conversationID: "653ba936d9975f01f93bc011",
+          //      conversationType: ZIMConversationType.peer,
+          //    );
+          //  }));
 
-         //  Navigator.of(
-         //    context, /*rootnavigator: true*/
-         //  ).push(MaterialPageRoute(builder: (context) {
-         //    return const ExpertsChatList();
-         //  }));
+          //  Navigator.of(
+          //    context, /*rootnavigator: true*/
+          //  ).push(MaterialPageRoute(builder: (context) {
+          //    return const ExpertsChatList();
+          //  }));
 
-          launchUrl(Uri.parse('https://api.whatsapp.com/send/?phone=9718297700&text=Hi,&type=phone_number&app_absent=0'),
+          launchUrl(
+              Uri.parse(
+                  'https://api.whatsapp.com/send/?phone=919743474558&text=Hi,&type=phone_number&app_absent=0'),
               mode: LaunchMode.externalApplication);
         }
       }
@@ -118,7 +119,10 @@ class HomeCard extends StatelessWidget {
                                 padding: const EdgeInsets.only(left: 8),
                                 child: Text(
                                   data[index]["title"],
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: orange),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(color: orange),
                                 ),
                               ),
                               const Spacer(),

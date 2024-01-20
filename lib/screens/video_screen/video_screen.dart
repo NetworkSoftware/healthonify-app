@@ -87,7 +87,6 @@ class _VideoScreenState extends State<VideoScreen> {
     super.initState();
     userId = Provider.of<UserData>(context, listen: false).userData.id!;
 
-    print("VideoLink : ${widget.videoLink}");
     fetchJoinedChallenges();
 
     // BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource.network(

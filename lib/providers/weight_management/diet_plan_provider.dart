@@ -38,8 +38,7 @@ class DietPlanProvider with ChangeNotifier {
       } else {
         throw HttpException(responseData["message"]);
       }
-    } catch (e,trace) {
-      print("Trace : $trace");
+    } catch (e) {
       rethrow;
     }
   }
@@ -98,21 +97,20 @@ class DietPlanProvider with ChangeNotifier {
         final data = responseData['data'] as List<dynamic>;
 
         for (var ele in data) {
-          //var dietPlanId = ele["dietPlanId"];
+          var dietPlanId = ele["dietPlanId"];
           dietPlans.add(
             DietPlan(
-              id: ele["dietPlanId"]["_id"],
-              //expertId: ele["dietPlanId"]["expertId"]["_id"],
-              name: ele["dietPlanId"]["name"],
-              type: ele["dietPlanId"]["type"],
-              level: ele["dietPlanId"]["level"],
-              goal: ele["dietPlanId"]["goal"],
-              planType: ele["dietPlanId"]["planType"],
-              validity: ele["dietPlanId"]["validity"],
-              note:ele["dietPlanId"]["note"],
-              createdDate: ele["dietPlanId"]["created_at"],
+              id: dietPlanId["_id"],
+              expertId: dietPlanId["expertId"]["_id"],
+              name: dietPlanId["name"],
+              type: dietPlanId["type"],
+              level: dietPlanId["level"],
+              goal: dietPlanId["goal"],
+              planType: dietPlanId["planType"],
+              validity: dietPlanId["validity"],
+              note: dietPlanId["note"],
               weeklyDetails: List<RegularDetail>.from(
-                ele["dietPlanId"]["weeklyDetails"].map(
+                dietPlanId["weeklyDetails"].map(
                   (x) => RegularDetail.fromJson(x),
                 ),
               ),
@@ -124,48 +122,13 @@ class DietPlanProvider with ChangeNotifier {
       } else {
         throw HttpException(responseData["message"]);
       }
-    } catch (e,trace) {
-      print("Trace : $trace");
+    } catch (e) {
       rethrow;
     }
   }
 
   Future<void> postDietPlan(Map<String, dynamic> data) async {
     String url = '${ApiUrl.wm}post/dietPlan';
-
-    print("Url : $url");
-    print("data : ${json.encode(data)}");
-
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {"Content-Type": "application/json"},
-        body: json.encode(data),
-      );
-
-      final responseData = json.decode(response.body) as Map<String, dynamic>;
-
-      if (response.statusCode >= 400) {
-        throw HttpException(responseData['message']);
-      }
-      if (responseData['status'] == 1) {
-        log(responseData['message']);
-        Fluttertoast.showToast(msg: 'Diet plan saved');
-      } else {
-        log(responseData['error']);
-        throw HttpException(responseData["message"]);
-      }
-    } catch (e) {
-      log(e.toString());
-      rethrow;
-    }
-  }
-
-  Future<void> addDietPlan(Map<String, dynamic> data) async {
-    String url = '${ApiUrl.wm}post/userDietPlan';
-
-    print("Url : $url");
-    print("data : ${json.encode(data)}");
 
     try {
       final response = await http.post(

@@ -1,16 +1,11 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:healthonify_mobile/constants/theme_data.dart';
 import 'package:healthonify_mobile/func/alert_dialog.dart';
 import 'package:healthonify_mobile/func/diet/diet_func.dart';
-import 'package:healthonify_mobile/models/user.dart';
 import 'package:healthonify_mobile/models/wm/diet_plan_model.dart';
-import 'package:healthonify_mobile/providers/user_data.dart';
-import 'package:healthonify_mobile/providers/weight_management/diet_plan_provider.dart';
 import 'package:healthonify_mobile/screens/expert_screens/home/diet/my_diet_plans/expert_diet_meal_plan/view_daily_diet_plan.dart';
 import 'package:healthonify_mobile/widgets/buttons/customappbar_action_btns.dart';
 import 'package:healthonify_mobile/widgets/cards/custom_appbar.dart';
-import 'package:provider/provider.dart';
 
 enum Menu { itemOne, itemTwo, itemThree, itemFour }
 
@@ -18,13 +13,10 @@ class ViewDietMealPlan extends StatefulWidget {
   final DietPlan dietPlan;
   final bool isEdit;
   final bool isEditEnabled;
-  final bool? isFromMain;
-
   const ViewDietMealPlan({
     Key? key,
     required this.dietPlan,
     this.isEdit = false,
-    this.isFromMain,
     this.isEditEnabled = true,
   }) : super(key: key);
 
@@ -71,13 +63,11 @@ class _ViewDietMealPlanState extends State<ViewDietMealPlan> {
         dietPlanModel: widget.dietPlan, dietDays: dietDays);
   }
 
-  String? userId;
-
   @override
   void initState() {
     super.initState();
     // log("len ${json.encode(widget.dietPlan.dietJson())}");
-    userId = Provider.of<UserData>(context, listen: false).userData.id;
+
     dietDays = widget.dietPlan.weeklyDetails!;
     calculate();
     isEdit = widget.isEdit;
@@ -114,86 +104,51 @@ class _ViewDietMealPlanState extends State<ViewDietMealPlan> {
                   },
                   title: isEdit ? "Save Plan" : "Edit Plan")
               : const SizedBox()),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _textFieldBuilder(context,
-                        onSaved: saveDietPlanName,
-                        hint:
-                            "Diet plan name eg fatloss plan, weight gain plan",
-                        initValue: widget.dietPlan.name!,
-                        title: "Diet Plan Name"),
-                    _textFieldBuilder(context,
-                        textInputType: TextInputType.number,
-                        onSaved: saveTotalDietDays,
-                        hint: "Total Diet Days",
-                        initValue: widget.dietPlan.validity.toString(),
-                        title: "Total Diet Days"),
-                    _textFieldBuilder(
-                      context,
-                      initValue: widget.dietPlan.note!,
-                      onSaved: saveNote,
-                      hint: "Add Note ",
-                      title: "Add a note",
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    _daysCard(),
-                  ],
-                ),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // _editNotesCard(),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 12),
+              //   child: CaloriesMealCard(
+              //     proteins: proteins,
+              //     carbs: carbs,
+              //     fats: fats,
+              //     fiber: fibers,
+              //     totalCalories: totalCalories,
+              //   ),
+              // ),
+              _textFieldBuilder(context,
+                  onSaved: saveDietPlanName,
+                  hint: "Diet plan name eg fatloss plan, weight gain plan",
+                  initValue: widget.dietPlan.name!,
+                  title: "Diet Plan Name"),
+
+              _textFieldBuilder(context,
+                  textInputType: TextInputType.number,
+                  onSaved: saveTotalDietDays,
+                  hint: "Total Diet Days",
+                  initValue: widget.dietPlan.validity.toString(),
+                  title: "Total Diet Days"),
+
+              _textFieldBuilder(
+                context,
+                initValue: widget.dietPlan.note!,
+                onSaved: saveNote,
+                hint: "Add Note ",
+                title: "Add a note",
               ),
-            ),
+              const SizedBox(
+                height: 15,
+              ),
+              _daysCard(),
+            ],
           ),
-          widget.isFromMain == true ?
-              const SizedBox() :
-          Container(
-            width: double.infinity,
-            alignment: Alignment.centerLeft,
-            color: whiteColor,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () async {
-                      Map<String, dynamic> payload = {
-                        "userId": userId,
-                        "dietPlanId": widget.dietPlan.id
-                      };
-                      await Provider.of<DietPlanProvider>(context,
-                              listen: false)
-                          .addDietPlan(payload)
-                          .then((value) {
-                        Navigator.pop(context);
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      color: Theme.of(context).colorScheme.primary,
-                      child: Center(
-                        child: Text(
-                          "Add To My Diet Plan",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall!
-                              .copyWith(color: whiteColor),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

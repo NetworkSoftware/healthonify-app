@@ -20,7 +20,6 @@ enum PopUp { edit, delete }
 
 class HealthLockerScreen extends StatefulWidget {
   final String? userId;
-
   const HealthLockerScreen({Key? key, this.userId}) : super(key: key);
 
   @override
@@ -41,10 +40,6 @@ class _HealthLockerScreenState extends State<HealthLockerScreen>
       healthRecords =
           await Provider.of<HealthRecordProvider>(context, listen: false)
               .getHealthRecords(userId);
-
-      healthCarePrescriptions =
-          await Provider.of<HealthRecordProvider>(context, listen: false)
-              .getHealthcarePrescriptions(userId);
 
       log('fetched health records');
     } on HttpException catch (e) {
@@ -129,7 +124,7 @@ class _HealthLockerScreenState extends State<HealthLockerScreen>
                       ),
                     ),
                     bottomNavigationBar:
-                        kSharedPreferences.getString("role") != "ROLE_EXPERT"
+                        preferences.getString("role") != "ROLE_EXPERT"
                             ? Container(
                                 height: 56,
                                 decoration: BoxDecoration(
@@ -324,9 +319,11 @@ class _HealthLockerScreenState extends State<HealthLockerScreen>
   }
 
   Widget build2() {
-    List<HealthCarePrescriptionModel> prescriptionRecords = [];
-    for (var element in healthCarePrescriptions) {
-      prescriptionRecords.add(element);
+    List<HealthRecord> prescriptionRecords = [];
+    for (var element in healthRecords) {
+      if (element.reportType == 'prescription') {
+        prescriptionRecords.add(element);
+      }
     }
     return prescriptionRecords.isEmpty
         ? Center(
@@ -343,15 +340,15 @@ class _HealthLockerScreenState extends State<HealthLockerScreen>
             itemBuilder: (context, index) {
               String formatDate =
                   DateFormat('d MMM').format(prescriptionRecords[index].date!);
-              String formatTime = prescriptionRecords[index].stringTime!;
+              String formatTime = prescriptionRecords[index].time!;
               return ListTile(
                 onTap: () async {
                   await launchUrl(
-                    Uri.parse(prescriptionRecords[index].hcMediaLink!),
+                    Uri.parse(prescriptionRecords[index].mediaLink!),
                     mode: LaunchMode.externalApplication,
                   );
                 },
-                leading: prescriptionRecords[index].hcMediaLink == null
+                leading: prescriptionRecords[index].mediaLink == null
                     ? const SizedBox(width: 40)
                     : Image.asset('assets/icons/pdf.png', width: 40),
                 trailing: SizedBox(
@@ -361,7 +358,7 @@ class _HealthLockerScreenState extends State<HealthLockerScreen>
                     children: [
                       IconButton(
                         onPressed: () {
-                          Share.share(prescriptionRecords[index].hcMediaLink!);
+                          Share.share(prescriptionRecords[index].mediaLink!);
                         },
                         icon: const Icon(
                           Icons.share_rounded,

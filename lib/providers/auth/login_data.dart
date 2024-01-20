@@ -17,10 +17,11 @@ class LoginData with ChangeNotifier {
     return _loginData;
   }
 
-  Future<void> login(String mobile, String password,String fcmToken) async {
+  Future<void> login(String mobile, String password, String fcmToken) async {
     String url = "${ApiUrl.url}login";
-   // String url = "http://192.168.1.10:3000/login";
-    var requestData = json.encode({"mobileNo": mobile, "password": password, "firebaseToken" : fcmToken});
+    // String url = "http://192.168.1.10:3000/login";
+    var requestData = json.encode(
+        {"mobileNo": mobile, "password": password, "firebaseToken": fcmToken});
 
     log("login url $url");
     log("login data $requestData");
@@ -30,7 +31,6 @@ class LoginData with ChangeNotifier {
         headers: {"Content-Type": "application/json"},
         body: requestData,
       );
-      // print(response.statusCode);
 
       final responseData = json.decode(response.body);
       log(json.encode(responseData));
@@ -60,11 +60,11 @@ class LoginData with ChangeNotifier {
           List<String>.from(data["data"]["roles"].map((x) => x));
       _loginData.roles = roles[0];
       SharedPrefManager pref = SharedPrefManager();
-      if(_loginData.message == "User not verified"){
+      if (_loginData.message == "User not verified") {
         localSession = false;
         await pref.saveLoginDetails(_loginData.id, _loginData.mobileNo,
             _loginData.email, "", _loginData.roles);
-      }else{
+      } else {
         localSession = true;
         await pref.saveLoginDetails(_loginData.id, _loginData.mobileNo,
             _loginData.email, _loginData.accessToken, _loginData.roles);
@@ -93,7 +93,6 @@ class LoginData with ChangeNotifier {
         headers: {"Content-Type": "application/json"},
         body: json.encode(apiData),
       );
-      // print(response.statusCode);
 
       final responseData = json.decode(response.body);
       log(json.encode(responseData));
@@ -138,7 +137,6 @@ class LoginData with ChangeNotifier {
 
   Future<void> updatePhone(Map<String, dynamic> apiData) async {
     String url = "${ApiUrl.url}social/updateUser";
-    print("url : $url");
     log(apiData.toString());
 
     try {
@@ -147,7 +145,6 @@ class LoginData with ChangeNotifier {
         headers: {"Content-Type": "application/json"},
         body: json.encode(apiData),
       );
-      // print(response.statusCode);
 
       final responseData = json.decode(response.body);
       log(json.encode(responseData));

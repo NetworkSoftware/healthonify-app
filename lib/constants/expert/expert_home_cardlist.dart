@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:healthonify_mobile/screens/client_screens/custom_ex/add_custom_exercise.dart';
-import 'package:healthonify_mobile/screens/client_screens/view_all_subscription.dart';
 import 'package:healthonify_mobile/screens/expert_screens/appointments/health_care/expert_view_hc_consultations.dart';
 import 'package:healthonify_mobile/screens/expert_screens/body_parts/expert_body_parts_screen.dart';
 import 'package:healthonify_mobile/screens/expert_screens/earnings/expert_earnings.dart';
@@ -67,6 +66,7 @@ List<Map<String, dynamic>> physioCardDetails = [
       );
     },
   },
+
   {
     "title": 'New Exercise',
     "subtitle": 'Create and view your ex',
@@ -81,20 +81,106 @@ List<Map<String, dynamic>> physioCardDetails = [
       );
     },
   },
+  // {
+  //   "title": 'My orders',
+  //   "subtitle": 'Check your orders',
+  //   "icon": 'assets/icons/subscription.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => OrdersScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
+  // {
+  //   "title": 'My Personal Clients',
+  //   "subtitle": 'Dietician Clients',
+  //   "icon": 'assets/icons/doctor.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => MyPersonalClients(),
+  //       ),
+  //     );
+  //   },
+  // },
+  // {
+  //   "title": 'Consultations',
+  //   "subtitle": 'doctor flow',
+  //   "icon": 'assets/icons/doctor.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => const ExpertsConsultationsScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
+  // {
+  //   "title": 'My Patients',
+  //   "subtitle": 'doctor flow',
+  //   "icon": 'assets/icons/doctor.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => const ExpertsPatientsScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
+  // {
+  //   "title": 'Manage Calendar',
+  //   "subtitle": 'doctor flow',
+  //   "icon": 'assets/icons/doctor.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => const ManageCalendarScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
+  // {
+  //   "title": 'Earnings',
+  //   "subtitle": 'doctor flow',
+  //   "icon": 'assets/icons/doctor.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => const ExpertEarningsScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
 ];
 
 List<Map<String, dynamic>> dietCardDetails = [
+  // {
+  //   "title": 'Conditions',
+  //   "subtitle": 'Exercise based on conditions',
+  //   "icon": 'assets/icons/vitals.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => const ConditionsScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
   {
-    "title": 'My Client Subscription',
+    "title": 'My Clients',
     "subtitle": 'Dietician Clients',
     "icon": 'assets/icons/doctor.png',
     "onClick": (context) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => ViewAllSubscriptions(flow: "diet")),
+      Navigator.of(
+        context, /*rootnavigator: true*/
+      ).push(
+        MaterialPageRoute(builder: (context) => const ExpertConnectedClients()),
       );
     },
   },
+
   {
     "title": 'My Appointments',
     "subtitle": '......',
@@ -109,6 +195,19 @@ List<Map<String, dynamic>> dietCardDetails = [
       );
     },
   },
+
+  // {
+  //   "title": 'Templates',
+  //   "subtitle": 'Exercise Templates',
+  //   "icon": 'assets/icons/web-design.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => const ExTemplateScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
   {
     "title": 'Exercise Program',
     "subtitle": 'Home Exercise Program',
@@ -124,6 +223,18 @@ List<Map<String, dynamic>> dietCardDetails = [
       );
     },
   },
+  // {
+  //   "title": 'My orders',
+  //   "subtitle": 'Check your orders',
+  //   "icon": 'assets/icons/subscription.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => OrdersScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
   {
     "title": 'My Diet Plans',
     "subtitle": 'Create and view your diet plans',
@@ -142,14 +253,15 @@ List<Map<String, dynamic>> dietCardDetails = [
 
 List<Map<String, dynamic>> fitnessCardDetails = [
   {
-    "title": 'My Client Subscription',
+    "title": 'My Clients',
     "subtitle": '......',
     "icon": 'assets/icons/doctor.png',
     "onClick": (context) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => ViewAllSubscriptions(flow: "fitness")),
-      );
+      // Navigator.of(context, /*rootnavigator: true*/).push(
+      //   MaterialPageRoute(
+      //     builder: (context) => const ConditionsScreen(),
+      //   ),
+      // );
     },
   },
   {
@@ -195,17 +307,18 @@ List<Map<String, dynamic>> fitnessCardDetails = [
 ];
 
 List<Map<String, dynamic>> healthCareCardDetails = [
-  {
-    "title": 'Client’s Subscription',
-    "subtitle": 'Dietician Clients',
-    "icon": 'assets/icons/doctor.png',
-    "onClick": (context) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => ViewAllSubscriptions(flow: "healthCare")),
-      );
-    },
-  },
+  // {
+  //   "title": 'Consultations',
+  //   "subtitle": 'doctor flow',
+  //   "icon": 'assets/icons/doctor.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => const ExpertsConsultationsScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
   {
     "title": 'My Appointments',
     "subtitle": '......',
@@ -221,6 +334,33 @@ List<Map<String, dynamic>> healthCareCardDetails = [
       );
     },
   },
+
+  {
+    "title": 'Client’s Subscription',
+    "subtitle": 'Dietician Clients',
+    "icon": 'assets/icons/doctor.png',
+    "onClick": (context) {
+      Navigator.of(
+        context, /*rootnavigator: true*/
+      ).push(
+        MaterialPageRoute(
+          builder: (context) => MyPersonalClients(),
+        ),
+      );
+    },
+  },
+  // {
+  //   "title": 'My Patients',
+  //   "subtitle": 'doctor flow',
+  //   "icon": 'assets/icons/doctor.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => const ExpertsPatientsScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
   {
     "title": 'Manage Calendar',
     "subtitle": 'doctor flow',
@@ -253,17 +393,18 @@ List<Map<String, dynamic>> healthCareCardDetails = [
 ];
 
 List<Map<String, dynamic>> manageWeightCardDetails = [
-  {
-    "title": 'Client’s Subscription',
-    "subtitle": 'Dietician Clients',
-    "icon": 'assets/icons/doctor.png',
-    "onClick": (context) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => ViewAllSubscriptions(flow: "manageWeight")),
-      );
-    },
-  },
+  // {
+  //   "title": 'Consultations',
+  //   "subtitle": 'doctor flow',
+  //   "icon": 'assets/icons/doctor.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => const ExpertsConsultationsScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
   {
     "title": 'My Appointments',
     "subtitle": '......',
@@ -279,6 +420,7 @@ List<Map<String, dynamic>> manageWeightCardDetails = [
       );
     },
   },
+
   {
     "title": 'My Patients',
     "subtitle": 'Dietician Clients',
@@ -293,6 +435,18 @@ List<Map<String, dynamic>> manageWeightCardDetails = [
       );
     },
   },
+  // {
+  //   "title": 'My Patients',
+  //   "subtitle": 'doctor flow',
+  //   "icon": 'assets/icons/doctor.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => const ExpertsPatientsScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
   {
     "title": 'Manage Calendar',
     "subtitle": 'doctor flow',
@@ -317,7 +471,7 @@ List<Map<String, dynamic>> manageWeightCardDetails = [
       ).push(
         MaterialPageRoute(
           builder: (context) =>
-              const ExpertEarningsScreen(topLevelExpertise: "Health Care"),
+          const ExpertEarningsScreen(topLevelExpertise: "Health Care"),
         ),
       );
     },
@@ -325,17 +479,18 @@ List<Map<String, dynamic>> manageWeightCardDetails = [
 ];
 
 List<Map<String, dynamic>> liveWellCardDetails = [
-  {
-    "title": 'Client’s Subscription',
-    "subtitle": 'Dietician Clients',
-    "icon": 'assets/icons/doctor.png',
-    "onClick": (context) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => ViewAllSubscriptions(flow: "liveWell")),
-      );
-    },
-  },
+  // {
+  //   "title": 'Consultations',
+  //   "subtitle": 'doctor flow',
+  //   "icon": 'assets/icons/doctor.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => const ExpertsConsultationsScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
   {
     "title": 'My Appointments',
     "subtitle": '......',
@@ -351,6 +506,33 @@ List<Map<String, dynamic>> liveWellCardDetails = [
       );
     },
   },
+
+  {
+    "title": 'My Patients',
+    "subtitle": 'Dietician Clients',
+    "icon": 'assets/icons/doctor.png',
+    "onClick": (context) {
+      Navigator.of(
+        context, /*rootnavigator: true*/
+      ).push(
+        MaterialPageRoute(
+          builder: (context) => MyPersonalClients(),
+        ),
+      );
+    },
+  },
+  // {
+  //   "title": 'My Patients',
+  //   "subtitle": 'doctor flow',
+  //   "icon": 'assets/icons/doctor.png',
+  //   "onClick": (context) {
+  //     Navigator.of(context, /*rootnavigator: true*/).push(
+  //       MaterialPageRoute(
+  //         builder: (context) => const ExpertsPatientsScreen(),
+  //       ),
+  //     );
+  //   },
+  // },
   {
     "title": 'Manage Calendar',
     "subtitle": 'doctor flow',
@@ -375,7 +557,7 @@ List<Map<String, dynamic>> liveWellCardDetails = [
       ).push(
         MaterialPageRoute(
           builder: (context) =>
-              const ExpertEarningsScreen(topLevelExpertise: "Health Care"),
+          const ExpertEarningsScreen(topLevelExpertise: "Health Care"),
         ),
       );
     },

@@ -42,15 +42,12 @@ class _AddNewPostScreenState extends State<AddNewPostScreen> {
           );
       if (image == null) return;
       final tempImg = File(image.path);
-      print("PAth : $tempImg");
       setState(() {
         pickedImage = tempImg;
       });
       if (image.path.contains("mp4")) {
-        print("Video1234567890");
         isMp4 = true;
       } else {
-        print("Image1234567890");
         isMp4 = false;
         _cropImage(pickedImage!.path);
       }

@@ -64,7 +64,6 @@ class SessionsExpertVideoCall extends StatelessWidget {
     //     ),
     //   );
     // } catch (error) {
-    //   debugPrint("error: $error");
     // }
   }
 }

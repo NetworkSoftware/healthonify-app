@@ -41,10 +41,7 @@ class WorkoutProvider with ChangeNotifier {
                   ele["schedule"].map((x) => Schedule.fromJson(x))),
               createdAt: DateTime.parse(ele["created_at"]),
               updatedAt: DateTime.parse(ele["updated_at"]),
-              updatedAtInString: ele["updated_at"],
-              createdAtString:ele["created_at"],
               description: ele['description'],
-              expertId: ele['expertId'],
               goal: ele['goal'],
               level: ele['level'],
               price: ele["price"].toString(),
@@ -61,8 +58,7 @@ class WorkoutProvider with ChangeNotifier {
     }
   }
 
-  Future<List<WorkoutModel>>
-  getUserWorkoutPlan(String userId) async {
+  Future<List<WorkoutModel>> getUserWorkoutPlan(String userId) async {
     String url = '${ApiUrl.wm}fetch/userWorkoutPlan?userId=$userId';
     log("workout get user plan $url");
 
@@ -88,14 +84,14 @@ class WorkoutProvider with ChangeNotifier {
         final d = responseData["data"] as List<dynamic>;
 
         for (var ele in d) {
-          if(ele['workoutPlanId'] != null){
+          if (ele['workoutPlanId'] != null) {
             tempWorkout.add(
               WorkoutModel(
                 id: ele['workoutPlanId']['_id'],
                 name: ele['workoutPlanId']['name'],
                 daysInweek: ele['workoutPlanId']['daysInweek'].toString(),
                 validityInDays:
-                ele['workoutPlanId']['validityInDays'].toString(),
+                    ele['workoutPlanId']['validityInDays'].toString(),
                 schedule: List<Schedule>.from(ele['workoutPlanId']["schedule"]
                     .map((x) => Schedule.fromJson(x))),
                 // createdAt: DateTime.parse(ele['workoutPlanId']["created_at"]),
@@ -104,7 +100,6 @@ class WorkoutProvider with ChangeNotifier {
               ),
             );
           }
-
         }
 //         if (responseData['data'][0]['workoutPlanId'] != null) {
 //           // final data =
@@ -119,8 +114,8 @@ class WorkoutProvider with ChangeNotifier {
       } else {
         throw HttpException(responseData["message"]);
       }
-    } catch (e,trace) {
-      print("Trace : $trace");
+    } catch (e, trace) {
+      log("Trace : $trace");
       rethrow;
     }
   }

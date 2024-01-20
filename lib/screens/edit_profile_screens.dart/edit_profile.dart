@@ -156,8 +156,7 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                                 ),
                               ],
                             ),
-                            kSharedPreferences.getString("role") ==
-                                    "ROLE_EXPERT"
+                            preferences.getString("role") == "ROLE_EXPERT"
                                 ? const SizedBox()
                                 : const Positioned(
                                     top: 100,
@@ -222,7 +221,12 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                               value: value,
                               child: Text(
                                 value,
-                                style: Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 20,fontWeight: FontWeight.w500),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
                                 // style: const TextStyle(
                                 //   color:
                                 //   fontSize: 20,
@@ -238,7 +242,11 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                             });
                           },
                           value: dropdownValue,
-                          style: Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 20,fontWeight: FontWeight.normal),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge!
+                              .copyWith(
+                                  fontSize: 20, fontWeight: FontWeight.normal),
 
                           // TextStyle(
                           //   color:
@@ -268,7 +276,11 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                           borderRadius: BorderRadius.circular(8),
                           hint: Text(
                             data.userData.gender ?? "Gender",
-                            style : Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 20,fontWeight: FontWeight.w500),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(
+                                    fontSize: 20, fontWeight: FontWeight.w500),
                             // style:  TextStyle(
                             //   color:
                             //   fontSize: 20,
@@ -350,59 +362,132 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                       "Enter your Country", "Enter your Country", country),
                   const SizedBox(height: 12),
                   if (data.userData.roles![0]["name"] == "expert")
-                  Column(
-                    children: [
-                      editField(context, "About", data.userData.about ?? "",
-                          "Enter your About", "Enter your About", about),
-                      const SizedBox(height: 12),
-                      editField(
-                          context,
-                          "Consultation Charges",
-                          data.userData.consultationCharge ?? "",
-                          "Enter your Consultation Charges",
-                          "Enter your Consultation Charges",
-                          consultationCharge),
-                      const SizedBox(height: 12),
-                      editField(
-                          context,
-                          "Expertise",
-                          "",
-                          "Enter your Expertise",
-                          "Enter your Expertise",
-                          expertise),
-                      const SizedBox(height: 12),
-                      editField(
-                          context,
-                          "Registration Number",
-                          "",
-                          "Enter your Registration Number",
-                          "Enter your Registration Number",
-                          registrationNumber),
-                      const SizedBox(height: 12),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "Certificate",
-                              style: Theme.of(context).textTheme.labelMedium,
+                    Column(
+                      children: [
+                        editField(context, "About", data.userData.about ?? "",
+                            "Enter your About", "Enter your About", about),
+                        const SizedBox(height: 12),
+                        editField(
+                            context,
+                            "Consultation Charges",
+                            data.userData.consultationCharge ?? "",
+                            "Enter your Consultation Charges",
+                            "Enter your Consultation Charges",
+                            consultationCharge),
+                        const SizedBox(height: 12),
+                        editField(
+                            context,
+                            "Expertise",
+                            "",
+                            "Enter your Expertise",
+                            "Enter your Expertise",
+                            expertise),
+                        const SizedBox(height: 12),
+                        editField(
+                            context,
+                            "Registration Number",
+                            "",
+                            "Enter your Registration Number",
+                            "Enter your Registration Number",
+                            registrationNumber),
+                        const SizedBox(height: 12),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Certificate",
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              height: 50,
-                              child: TextFormField(
-                                controller: certificate,
-                                onTap: () => imagePickerCertificate(ImageSource.gallery),
-                                readOnly: true,
-                                validator: (newValue) {
-                                  if (newValue!.isEmpty) {
-                                    return "Upload your Certificate";
-                                  }
-                                  return null;
+                            const SizedBox(width: 10),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                height: 50,
+                                child: TextFormField(
+                                  controller: certificate,
+                                  onTap: () => imagePickerCertificate(
+                                      ImageSource.gallery),
+                                  readOnly: true,
+                                  validator: (newValue) {
+                                    if (newValue!.isEmpty) {
+                                      return "Upload your Certificate";
+                                    }
+                                    return null;
+                                  },
+                                  decoration: const InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.teal),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.teal),
+                                    ),
+                                    hintText: "Upload your Certificate",
+                                    hintStyle: TextStyle(
+                                      color: Color(0xFF959EAD),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'OpenSans',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        editField(
+                            context,
+                            "ID Number",
+                            "",
+                            "Enter your Id Number",
+                            "Enter your Id Number",
+                            idNumber),
+                        const SizedBox(height: 12),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "ID Type",
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              flex: 3,
+                              child: DropdownButtonFormField(
+                                isDense: true,
+                                items: idTypeDropDownOptions
+                                    .map<DropdownMenuItem<String>>((value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge!
+                                          .copyWith(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    idTypeDropdownValue = newValue!;
+                                  });
                                 },
+                                value: idTypeDropdownValue,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(color: Colors.teal),
@@ -410,138 +495,85 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(color: Colors.teal),
                                   ),
-                                  hintText: "Upload your Certificate",
-                                  hintStyle: TextStyle(
-                                    color: Color(0xFF959EAD),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'OpenSans',
+                                  border: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.teal),
                                   ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      editField(
-                          context,
-                          "ID Number",
-                          "",
-                          "Enter your Id Number",
-                          "Enter your Id Number",
-                          idNumber),
-                      const SizedBox(height: 12),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "ID Type",
-                              style: Theme.of(context).textTheme.labelMedium,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            flex: 3,
-                            child: DropdownButtonFormField(
-                              isDense: true,
-                              items: idTypeDropDownOptions
-                                  .map<DropdownMenuItem<String>>((value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 20,fontWeight: FontWeight.w500),
+                                  constraints: BoxConstraints(
+                                    maxHeight: 56,
                                   ),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  idTypeDropdownValue = newValue!;
-                                });
-                              },
-                              value: idTypeDropdownValue,
-                              style: Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 20,fontWeight: FontWeight.w500),
-                              decoration: const InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.teal),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 8),
                                 ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.teal),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.black,
                                 ),
-                                border: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.teal),
+                                borderRadius: BorderRadius.circular(8),
+                                hint: Text(
+                                  data.userData.gender ?? "Gender",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .copyWith(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500),
                                 ),
-                                constraints: BoxConstraints(
-                                  maxHeight: 56,
-                                ),
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 8),
-                              ),
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                                color: Colors.black,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                              hint: Text(
-                                data.userData.gender ?? "Gender",
-                                style: Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 20,fontWeight: FontWeight.w500),
-                              ),
-                              onSaved: (value) {
-                                getIdTypeValue(idTypeDropdownValue!);
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "ID Proof",
-                              style: Theme.of(context).textTheme.labelMedium,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              height: 50,
-                              child: TextFormField(
-                                controller: idProf,
-                                onTap: () => imagePicker(ImageSource.gallery),
-                                readOnly: true,
-                                validator: (newValue) {
-                                  if (newValue!.isEmpty) {
-                                    return "Upload your ID Proof";
-                                  }
-                                  return null;
+                                onSaved: (value) {
+                                  getIdTypeValue(idTypeDropdownValue!);
                                 },
-                                decoration: const InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.teal),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.teal),
-                                  ),
-                                  hintText: "Upload your ID Proof",
-                                  hintStyle: TextStyle(
-                                    color: Color(0xFF959EAD),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'OpenSans',
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "ID Proof",
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                height: 50,
+                                child: TextFormField(
+                                  controller: idProf,
+                                  onTap: () => imagePicker(ImageSource.gallery),
+                                  readOnly: true,
+                                  validator: (newValue) {
+                                    if (newValue!.isEmpty) {
+                                      return "Upload your ID Proof";
+                                    }
+                                    return null;
+                                  },
+                                  decoration: const InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.teal),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.teal),
+                                    ),
+                                    hintText: "Upload your ID Proof",
+                                    hintStyle: TextStyle(
+                                      color: Color(0xFF959EAD),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'OpenSans',
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                          ],
+                        ),
+                      ],
+                    ),
                   const SizedBox(height: 30),
                   _isLoading == true
                       ? const Center(
@@ -856,9 +888,7 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                     return;
                   }
                   setState(() {
-                    print("value : $value");
                     String date = DateFormat("MM/dd/yyyy").format(value);
-                    print("value 1: $date");
                     controller.text = dateConvertTextFormat(date);
                     log(date);
                     //getDateValue(dob.text);

@@ -11,32 +11,29 @@ class CommunityModel {
   String? description;
   String? date;
   String? userType;
-  String? format;
   bool? isActive;
   bool? isLiked;
-
-  CommunityModel(
-      {this.commentsCount,
-      this.date,
-      this.description,
-      this.id,
-      this.isActive,
-      this.userImage,
-      this.isApproved,
-      this.isLiked,
-      this.likesCount,
-      this.mediaLink,
-      this.userFirstName,
-      this.userId,
-      this.userLastName,
-      this.userType,
-      this.format});
+  CommunityModel({
+    this.commentsCount,
+    this.date,
+    this.description,
+    this.id,
+    this.isActive,
+    this.userImage,
+    this.isApproved,
+    this.isLiked,
+    this.likesCount,
+    this.mediaLink,
+    this.userFirstName,
+    this.userId,
+    this.userLastName,
+    this.userType,
+  });
 }
 
 class Comments {
   String? id, postId, comment;
   Map<String, dynamic>? commentBy;
-
   Comments({
     this.id,
     this.postId,
@@ -47,7 +44,6 @@ class Comments {
 
 class LikesAndComments {
   int? likesCount, commentsCount;
-
   LikesAndComments({
     this.commentsCount,
     this.likesCount,

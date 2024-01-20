@@ -45,8 +45,8 @@ class DishProvider with ChangeNotifier {
       } else {
         throw HttpException(responseData["message"]);
       }
-    } catch (e,trace) {
-      print("Trace : $trace");
+    } catch (e, trace) {
+      log("Trace : $trace");
       rethrow;
     }
   }

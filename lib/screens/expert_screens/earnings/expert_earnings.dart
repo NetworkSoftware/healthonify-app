@@ -67,9 +67,6 @@ class _ExpertEarningsScreenState extends State<ExpertEarningsScreen> {
       earnings =
           await Provider.of<ExpertEarningsProvider>(context, listen: false)
               .getHealthCareExpertEarnings(expertId, dateFilter);
-      print(earnings.data!.revenuesData!.length);
-
-      // print(earnings.data!.revenuesData!.length);
     } on HttpException catch (e) {
       log(e.toString());
     } catch (e) {

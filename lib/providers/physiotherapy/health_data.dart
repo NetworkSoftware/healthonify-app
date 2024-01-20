@@ -59,8 +59,6 @@ class HealthData with ChangeNotifier {
 
   Future<void> getBodyPartGroups() async {
     String url = '${ApiUrl.wm}get/bodyPartGroup';
-
-    print("url : $url");
     final List<HealthModel> bodyPartGroupList = [];
     try {
       final response = await http.get(

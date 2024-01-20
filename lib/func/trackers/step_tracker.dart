@@ -73,23 +73,19 @@ class StepTracker with ChangeNotifier {
 
       log("steps perm : $result");
       if (Platform.isIOS) {
-        var types = [
-          HealthDataType.STEPS
-        ];
+        var types = [HealthDataType.STEPS];
 
-        var permissions = [
-          HealthDataAccess.READ
-        ];
+        var permissions = [HealthDataAccess.READ];
 
         // requesting access to the data types before reading them
-        requested = await health.requestAuthorization(types,permissions: permissions);
+        requested =
+            await health.requestAuthorization(types, permissions: permissions);
 
         if (requested) {
-         // prefManager.saveStepTrackerEnabled(true);
+          // prefManager.saveStepTrackerEnabled(true);
           var distance =
-
               await health.getHealthDataFromTypes(startTime, DateTime.now(), [
-                HealthDataType.STEPS,
+            HealthDataType.STEPS,
           ]);
           double d = 0;
           for (var ele in distance) {
@@ -112,25 +108,21 @@ class StepTracker with ChangeNotifier {
       }
 
       if (result == PermissionStatus.granted) {
-
         if (Platform.isAndroid) {
-
-          print("STEPCOUNT : ${kSharedPreferences.getInt('stepCount')}");
           stepsData.add({
             "date": DateFormat("yyyy-MM-dd").format(DateTime.now()),
             //"stepsCount": ele.value.toString(),
-            "stepsCount":  kSharedPreferences.getInt('stepCount'),
-            "overallStepCount":  kSharedPreferences.getInt("Step") ?? kSharedPreferences.getInt('overAllStepCount'),
+            "stepsCount": preferences.getInt('stepCount'),
+            "overallStepCount": preferences.getInt("Step") ??
+                preferences.getInt('overAllStepCount'),
             "time": DateFormat("hh:mm:ss").format(DateTime.now())
           });
 
-          int steps =
-          kSharedPreferences.getInt('stepCount')!;
-          print("COUNT1111 : ${kSharedPreferences.getInt('stepCount')!}");
+          int steps = preferences.getInt('stepCount')!;
           percent = steps / goal;
-                  stepCount = steps.toString();
+          stepCount = steps.toString();
           log("step count $stepCount");
-          kSharedPreferences.remove("Step");
+          preferences.remove("Step");
 
           // _stepCountStream = Pedometer.stepCountStream;
           // //_stepCountStream.listen(onStepCount).onError(onStepCountError);
@@ -147,7 +139,6 @@ class StepTracker with ChangeNotifier {
           //   // requesting access to the data types before reading them
           //   requested = await health.requestAuthorization(types,permissions: permissions);
           //
-          //   print("REQQQQQUEST12 : $requested");
           //   if (requested) {
           //     kSharedPreferences.setBool("isGoogleRequest", true);
           //     prefManager.saveStepTrackerEnabled(true);
@@ -182,7 +173,6 @@ class StepTracker with ChangeNotifier {
           //   // requesting access to the data types before reading them
           //   requested = await health.requestAuthorization(types,permissions: permissions);
           //
-          //   print("REQQQQQUEST12 : $requested");
           //   if (requested) {
           //     kSharedPreferences.setBool("isGoogleRequest", true);
           //     prefManager.saveStepTrackerEnabled(true);
@@ -270,10 +260,8 @@ class StepTracker with ChangeNotifier {
   }
 
   Future<void> updateSteps(Map<String, dynamic> data) async {
+    debugPrint('data============${data.toString()}');
     String url = '${ApiUrl.wm}storeStepCount';
-    log("steps update url $url");
-    log("steps update data ${json.encode(data)}");
-
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -281,12 +269,13 @@ class StepTracker with ChangeNotifier {
         body: json.encode(data),
       );
       final responseData = json.decode(response.body) as Map<String, dynamic>;
-      log(responseData.toString());
+      debugPrint("storeStepCount-result");
+      debugPrint(responseData.toString());
       if (response.statusCode >= 400) {
         throw HttpException(responseData["message"]);
       }
       if (responseData["status"] == 1) {
-        log(responseData.toString());
+        debugPrint(responseData.toString());
         // _waterData[0].goalCount = goal;
         // notifyListeners();
       } else {
@@ -341,7 +330,7 @@ class HeartRateTracker with ChangeNotifier {
           HealthDataType.HEART_RATE,
         ];
         // requesting access to the data types before reading them
-      //  requested = await health.requestAuthorization(types);
+        //  requested = await health.requestAuthorization(types);
         var now = DateTime.now();
 
         if (requested) {

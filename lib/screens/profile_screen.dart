@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:healthonify_mobile/providers/user_data.dart';
-import 'package:healthonify_mobile/widgets/cards/custom_appBar.dart';
 import 'package:healthonify_mobile/widgets/cards/logout_card.dart';
 import 'package:healthonify_mobile/widgets/cards/profile_options_card.dart';
 import 'package:healthonify_mobile/widgets/cards/profile_details.dart';
@@ -42,13 +41,12 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(
-      //     'Profile',
-      //     style: Theme.of(context).textTheme.headlineMedium,
-      //   ),
-      // ),
-        appBar: const CustomAppBar(appBarTitle: 'Profile'),
+      appBar: AppBar(
+        title: Text(
+          'Profile',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+      ),
        body: Consumer<UserData>(
           builder: (context, data, _) => SingleChildScrollView(
             physics: const BouncingScrollPhysics(),

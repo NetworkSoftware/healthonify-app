@@ -21,11 +21,77 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:zego_zimkit/zego_zimkit.dart';
 
+import 'service/back_service.dart';
+
 /// Instance/Object of shared pref to store data
-late SharedPreferences kSharedPreferences;
+late SharedPreferences preferences;
+late Stream<StepCount> _stepCountStream;
+int _steps = 0;
+
+fireAlarm() async {
+  String formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(DateTime.now());
+  SharedPreferences sharedPref = await SharedPreferences.getInstance();
+  sharedPref.setString('TodayDate', formattedDate);
+  initPlatformState();
+}
+
+Future<void> onStepCount(StepCount event) async {
+  _steps = event.steps;
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  preferences.remove('Step');
+  preferences.setInt('Step', _steps);
+  var startTime = DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
+  var currentTime = DateTime.now();
+  var diff = currentTime.difference(startTime).inMinutes;
+  try {
+    if (!preferences.containsKey("totalCountVal") ||
+        !preferences.containsKey('updateDate') ||
+        preferences.getInt("totalCountVal") == null ||
+        preferences.getInt("totalCountVal") == 0) {
+      preferences.setInt("totalCountVal", event.steps);
+      preferences.setString(
+          "updateDate", DateFormat("MM/dd/yyyy").format(DateTime.now()));
+      preferences.setInt("todayCountVal",
+          (event.steps - (preferences.getInt("totalCountVal") ?? 0)));
+
+      debugPrint(
+          "111111TODAY_CC=======${event.steps - (preferences.getInt("totalCountVal") ?? 0)}");
+    } else {
+      if ((preferences.getString('updateDate').toString() !=
+              DateFormat("MM/dd/yyyy").format(DateTime.now())) ||
+          (diff > 0 && diff < 10)) {
+        preferences.setInt("todayCountVal", 0);
+        preferences.setInt("totalCountVal", event.steps);
+        preferences.setString(
+            "updateDate", DateFormat("MM/dd/yyyy").format(DateTime.now()));
+      } else {
+        debugPrint(
+            "1112222TODAY_CC=======${event.steps - (preferences.getInt("totalCountVal") ?? 0)}");
+        preferences.setInt("todayCountVal",
+            (event.steps - (preferences.getInt("totalCountVal") ?? 0)));
+        preferences.setString(
+            "updateDate", DateFormat("MM/dd/yyyy").format(DateTime.now()));
+      }
+    }
+  } catch (e) {
+    //
+  }
+}
+
+void onStepCountError(error) {
+  _steps = 0;
+}
+
+void initPlatformState() {
+  _stepCountStream = Pedometer.stepCountStream;
+  _stepCountStream.listen(onStepCount).onError(onStepCountError);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AndroidAlarmManager.initialize();
+  await initializeService();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -49,13 +115,17 @@ void main() async {
   _configureLocalTimeZone().then((value) {
     // getLocationAccess();
   });
-  kSharedPreferences = await SharedPreferences.getInstance();
+  preferences = await SharedPreferences.getInstance();
 
   ZIMKit().init(
     appID: 2035107149, // your appid
-    appSign: "bb7969f743c64b31c89db3bd1291db584eb89cbb3bf5fa11a1f3e3cffd6b55cc", // your appSign
+    appSign:
+        "bb7969f743c64b31c89db3bd1291db584eb89cbb3bf5fa11a1f3e3cffd6b55cc", // your appSign
   );
   runApp(const MyApp());
+  var now = DateTime.now();
+  AndroidAlarmManager.oneShotAt(
+      DateTime(now.year, now.month, now.day, 14, 40), 1, fireAlarm);
 }
 
 PermissionStatus? permissionStatus;
@@ -154,7 +224,6 @@ class _MyHomePageState extends State<MyHomePage> {
   //   });
   //   SharedPrefManager pref = SharedPrefManager();
   //   session = await pref.getSession();
-  //   // print(session);
   //   setState(() {
   //     isLoading == false;
   //   });

@@ -109,11 +109,9 @@ class _ExpertAssignedWorkoutPlansState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Text(
-                        model.name!,
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
+                    Text(
+                      model.name!,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     PopupMenuButton(
                       color: Theme.of(context).canvasColor,

@@ -5,7 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:healthonify_mobile/constants/theme_data.dart';
 import 'package:healthonify_mobile/models/http_exception.dart';
 import 'package:healthonify_mobile/providers/physiotherapy/enquiry_form_data.dart';
-import 'package:healthonify_mobile/providers/user_data.dart';
 import 'package:healthonify_mobile/widgets/buttons/custom_buttons.dart';
 import 'package:healthonify_mobile/widgets/cards/custom_appBar.dart';
 import 'package:healthonify_mobile/widgets/other/carousel_slider.dart';
@@ -20,10 +19,12 @@ class PhysicalTrainerConsultation extends StatefulWidget {
   const PhysicalTrainerConsultation({Key? key}) : super(key: key);
 
   @override
-  State<PhysicalTrainerConsultation> createState() => _PhysicalTrainerConsultationState();
+  State<PhysicalTrainerConsultation> createState() =>
+      _PhysicalTrainerConsultationState();
 }
 
-class _PhysicalTrainerConsultationState extends State<PhysicalTrainerConsultation> {
+class _PhysicalTrainerConsultationState
+    extends State<PhysicalTrainerConsultation> {
   final _form = GlobalKey<FormState>();
   String? startTime;
   DateTime? _selectedDate;
@@ -56,11 +57,10 @@ class _PhysicalTrainerConsultationState extends State<PhysicalTrainerConsultatio
 
       log("qwee${ymdFormat.toString()}");
       if (ymdFormat.toString() == todayDate[0]) {
-        print("ValueHour : ${value.hour}");
         if (value.hour < (DateTime.now().hour + 3)) {
           Fluttertoast.showToast(
               msg:
-              'Consultation time must be atleast 3 hours after current time');
+                  'Consultation time must be atleast 3 hours after current time');
 
           return;
         }
@@ -97,7 +97,6 @@ class _PhysicalTrainerConsultationState extends State<PhysicalTrainerConsultatio
       //
       // log(ymdFormat.toString());
       //
-      //   print("ValueHour : ${value.hour}");
       //   if (value.hour < (DateTime.now().hour + 3)) {
       //     Fluttertoast.showToast(
       //         msg:
@@ -125,14 +124,6 @@ class _PhysicalTrainerConsultationState extends State<PhysicalTrainerConsultatio
       });
     });
   }
-
-  @override
-  void initState() {
-    super.initState();
-    User userData = Provider.of<UserData>(context, listen: false).userData;
-    setData(userData);
-  }
-
 
   final Map<String, String> data = {
     "name": "",
@@ -183,6 +174,7 @@ class _PhysicalTrainerConsultationState extends State<PhysicalTrainerConsultatio
     log(data.toString());
     submitForm();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -229,12 +221,12 @@ class _PhysicalTrainerConsultationState extends State<PhysicalTrainerConsultatio
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            constraints:
-                            const BoxConstraints(minWidth: 70, minHeight: 40),
+                            constraints: const BoxConstraints(
+                                minWidth: 70, minHeight: 40),
                             decoration: BoxDecoration(
                               gradient: purpleGradient,
                               borderRadius:
-                              const BorderRadius.all(Radius.circular(10.0)),
+                                  const BorderRadius.all(Radius.circular(10.0)),
                             ),
                             child: InkWell(
                               onTap: () {
@@ -256,12 +248,12 @@ class _PhysicalTrainerConsultationState extends State<PhysicalTrainerConsultatio
                             ),
                           ),
                           Container(
-                            constraints:
-                            const BoxConstraints(minWidth: 90, minHeight: 40),
+                            constraints: const BoxConstraints(
+                                minWidth: 90, minHeight: 40),
                             decoration: BoxDecoration(
                               gradient: purpleGradient,
                               borderRadius:
-                              const BorderRadius.all(Radius.circular(10.0)),
+                                  const BorderRadius.all(Radius.circular(10.0)),
                             ),
                             child: InkWell(
                               onTap: () {
@@ -269,8 +261,8 @@ class _PhysicalTrainerConsultationState extends State<PhysicalTrainerConsultatio
                               },
                               borderRadius: BorderRadius.circular(10),
                               child: Padding(
-                                padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
                                 child: Row(
                                   children: [
                                     const Icon(
@@ -308,181 +300,186 @@ class _PhysicalTrainerConsultationState extends State<PhysicalTrainerConsultatio
         isScrollControlled: true,
         context: context,
         builder: (ctx) => SingleChildScrollView(
-          child: GestureDetector(
-            onTap: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            child: Form(
-              key: _form,
-              child: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(ctx).viewInsets.bottom + 1),
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: const Icon(Icons.close),
+              child: GestureDetector(
+                onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
+                child: Form(
+                  key: _form,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(ctx).viewInsets.bottom + 1),
+                    child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ],
-                  ),
-                  Center(
-                    child: Text(
-                      "Request Appointment",
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Category : ",
-                          style: Theme.of(context).textTheme.bodyMedium,
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            icon: const Icon(Icons.close),
+                          ),
+                        ],
+                      ),
+                      Center(
+                        child: Text(
+                          "Request Appointment",
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
-                        const SizedBox(
-                            width: 10
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Category : ",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              "Physical Trainer",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ],
                         ),
-                        Text(
-                          "Physical Trainer",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                datePicker(dateController);
-                              },
-                              child: IgnorePointer(
-                                child: TextFormField(
-                                  controller: dateController,
-                                  decoration: InputDecoration(
-                                    fillColor: Theme.of(context).canvasColor,
-                                    filled: true,
-                                    hintText: 'Date',
-                                    hintStyle: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(
-                                      color: const Color(0xFF717579),
-                                    ),
-                                    suffixIcon: TextButton(
-                                      onPressed: () {
-                                        datePicker(dateController);
-                                      },
-                                      child: Text(
-                                        'PICK',
-                                        style: Theme.of(context)
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    datePicker(dateController);
+                                  },
+                                  child: IgnorePointer(
+                                    child: TextFormField(
+                                      controller: dateController,
+                                      decoration: InputDecoration(
+                                        fillColor:
+                                            Theme.of(context).canvasColor,
+                                        filled: true,
+                                        hintText: 'Date',
+                                        hintStyle: Theme.of(context)
                                             .textTheme
-                                            .labelSmall!
-                                            .copyWith(color: orange),
+                                            .bodySmall!
+                                            .copyWith(
+                                              color: const Color(0xFF717579),
+                                            ),
+                                        suffixIcon: TextButton(
+                                          onPressed: () {
+                                            datePicker(dateController);
+                                          },
+                                          child: Text(
+                                            'PICK',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelSmall!
+                                                .copyWith(color: orange),
+                                          ),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 8),
                                       ),
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                      cursorColor: whiteColor,
                                     ),
-                                    contentPadding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
                                   ),
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                  cursorColor: whiteColor,
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                timePicker(timeController);
-                              },
-                              child: IgnorePointer(
-                                child: TextFormField(
-                                  controller: timeController,
-                                  decoration: InputDecoration(
-                                    fillColor: Theme.of(context).canvasColor,
-                                    filled: true,
-                                    hintText: 'Time',
-                                    hintStyle: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(
-                                      color: const Color(0xFF717579),
-                                    ),
-                                    suffixIcon: TextButton(
-                                      onPressed: () {
-                                        timePicker(timeController);
-                                      },
-                                      child: Text(
-                                        'PICK',
-                                        style: Theme.of(context)
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    timePicker(timeController);
+                                  },
+                                  child: IgnorePointer(
+                                    child: TextFormField(
+                                      controller: timeController,
+                                      decoration: InputDecoration(
+                                        fillColor:
+                                            Theme.of(context).canvasColor,
+                                        filled: true,
+                                        hintText: 'Time',
+                                        hintStyle: Theme.of(context)
                                             .textTheme
-                                            .labelSmall!
-                                            .copyWith(color: orange),
+                                            .bodySmall!
+                                            .copyWith(
+                                              color: const Color(0xFF717579),
+                                            ),
+                                        suffixIcon: TextButton(
+                                          onPressed: () {
+                                            timePicker(timeController);
+                                          },
+                                          child: Text(
+                                            'PICK',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelSmall!
+                                                .copyWith(color: orange),
+                                          ),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 8),
                                       ),
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                      cursorColor: whiteColor,
                                     ),
-                                    contentPadding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
                                   ),
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                  cursorColor: whiteColor,
                                 ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Explain your issue",
-                          style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Explain your issue",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            IssueField(getValue: (value) {
+                              data["message"] = value;
+                            }),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        IssueField(getValue: (value) {
-                          data["message"] = value;
-                        }),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Center(
-                      child: SaveButton(
+                      ),
+                      Center(
+                          child: SaveButton(
                         isLoading: false,
                         submit: onSubmit,
                         title: "Request Now",
                       )),
-                ]),
+                    ]),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ));
+            ));
   }
 }

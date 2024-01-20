@@ -1,9 +1,7 @@
 import 'dart:developer';
 
 import 'package:healthonify_mobile/constants/theme_data.dart';
-import 'package:healthonify_mobile/models/home_tracker_model/home_tracker_model.dart';
 import 'package:healthonify_mobile/models/shared_pref_manager.dart';
-import 'package:healthonify_mobile/providers/tracker_data/home_tracker_data.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:healthonify_mobile/func/trackers/step_tracker.dart';
@@ -32,21 +30,7 @@ class _CaloriesTrackerCardState extends State<CaloriesTrackerCard> {
   int baseGoal = 0;
   int remainingCals = 0;
   int stepsCals = 0;
-  HomeTrackerModel trackerData = HomeTrackerModel();
 
-  Future<void> fetchHomeTrackerData() async {
-    String userId =
-    Provider.of<UserData>(context, listen: false).userData.id!;
-    try {
-      trackerData =
-      await Provider.of<HomeTrackerProvider>(context, listen: false)
-          .getHomeTrackerData(userId);
-    } on HttpException catch (e) {
-      log(e.toString());
-    } catch (e) {
-      log('Error fetching tracker logs');
-    }
-  }
   Future<void> fetchWeightLogs() async {
     try {
       String userId =
@@ -54,6 +38,16 @@ class _CaloriesTrackerCardState extends State<CaloriesTrackerCard> {
 
       await Provider.of<CalorieTrackerProvider>(context, listen: false).getCalories(
           "?userId=$userId&date=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
+
+      // setState(() {
+      //   totalBurntCalories = data.totalBurntCalories ?? "0";
+      //   totalConsumedCalories = data.totalConsumedCalories ?? "0";
+      //   baseGoal = data.caloriesConsumptionGoal ?? "0";
+      //   remainingCals =
+      //       ((double.parse(baseGoal) - double.parse(totalConsumedCalories))
+      //               .round())
+      //           .toString();
+      // });
     } on HttpException catch (e) {
       log('Error fetching calories data http $e');
     } catch (e) {
@@ -70,7 +64,6 @@ class _CaloriesTrackerCardState extends State<CaloriesTrackerCard> {
           DateTime.now().year, DateTime.now().month, DateTime.now().day);
       stepsData = await StepTracker().initHealth(goal, startDate);
 
-      print("stepDAtaaa : $stepsData");
       if (stepsData.stepCount != null) {
         log(stepsData.stepCount.runtimeType.toString());
         log("step data ${stepsData.stepCount}");
@@ -107,21 +100,21 @@ class _CaloriesTrackerCardState extends State<CaloriesTrackerCard> {
     } on HttpException catch (e) {
       log(e.toString());
       // Fluttertoast.showToast(msg: e.message);
-     // onLoadFail = true;
+      // onLoadFail = true;
     } catch (e) {
       log("Error something went wrong $e");
-    //  onLoadFail = true;
+      //  onLoadFail = true;
 
       // Fluttertoast.showToast(msg: "Unable to fetch water intake data");
     } finally {
-     // flag = true;
+      // flag = true;
     }
   }
 
   @override
   void initState() {
     super.initState();
-    fetchHomeTrackerData();
+    // fetchWeightLogs();
     getSteps(
       context,
       widget.stepsGoal,
@@ -139,204 +132,213 @@ class _CaloriesTrackerCardState extends State<CaloriesTrackerCard> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: fetchWeightLogs(),
-      builder: (context, snapshot) =>
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Consumer<CalorieTrackerProvider>(
-                builder: (context, value, child) {
-
-                  totalBurntCalories =
-                      double.parse(value.calorieData.totalBurntCalories ?? "0")
-                          .round();
-                  print("total burnt ${value.calorieData.totalBurntCalories}");
-
-                  if(trackerData.calorieProgress != null){
-                    totalConsumedCalories = trackerData.calorieProgress!.totalDietAnalysisData!.totalCalories!.round();
-                    print("totalConsumedCalories : $totalConsumedCalories");
-                  }
-
-
-                  baseGoal = double.parse(
-                      value.calorieData.caloriesConsumptionGoal ?? "0")
+      builder: (context, snapshot) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          child: Consumer<CalorieTrackerProvider>(
+            builder: (context, value, child) {
+              totalBurntCalories =
+                  double.parse(value.calorieData.totalBurntCalories ?? "0")
+                      .round();
+              totalConsumedCalories =
+                  double.parse(value.calorieData.totalConsumedCalories ?? "0")
                       .round();
 
-                  stepsCals = double.parse(
-                      value.calorieData.stepsCalorie ?? "0")
+              baseGoal =
+                  double.parse(value.calorieData.caloriesConsumptionGoal ?? "0")
                       .round();
 
-                  print("baseGoal : $baseGoal");
+              stepsCals =
+                  double.parse(value.calorieData.stepsCalorie ?? "0").round();
 
-                  remainingCals = baseGoal +
-                      (totalConsumedCalories - totalBurntCalories - stepsCals);
-                  log("remaining calories = $remainingCals and base goal = $baseGoal");
-                  log("percentage = ${remainingCals / baseGoal}");
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Card(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(
-                            context, /*rootnavigator: true*/
-                          ).push(MaterialPageRoute(builder: (context) {
-                            return const CalorieDetailScreen();
-                          }));
-                        },
-                        borderRadius: BorderRadius.circular(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              decoration: const BoxDecoration(
-                                color: orange,
-                                borderRadius: BorderRadius
-                                    .only(
-                                    topLeft: Radius.circular(10),
-                                    topRight:
-                                    Radius.circular(10)),
-                              ),
-                              child: Column(
-                                //crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'CALORIES',
-                                    style: Theme.of(context).textTheme.labelLarge!.copyWith(color: whiteColor,fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    'Remaining = Goal + Food - Exercise - Steps',
-                                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.black),
-                                  ),
-                                  const SizedBox(height: 5),
-                                ],
-                              ),
-                            ),
+              // stepsCals = double.parse(stepsToCalConsumption(stepsData.stepCount!) ?? "0").round();
+              // stepsCals = double.parse(
+              //     stepsToCalConsumption(trackerData["stepsCount"]) ?? "0")
+              //     .round();
 
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Column(
-                                      children: [
-                                        CircularPercentIndicator(
-                                          radius: 70,
-                                          animation: true,
-                                          animationDuration: 2000,
-                                          progressColor: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                          backgroundColor: Colors.grey[200]!,
-                                          lineWidth: 12,
-                                          percent: baseGoal == 0
-                                              ? 0
-                                              : remainingCals.isNegative
+              remainingCals = baseGoal +
+                  (totalConsumedCalories - totalBurntCalories - stepsCals);
+              log("remaining calories = $remainingCals and base goal = $baseGoal");
+              log("percentage = ${remainingCals / baseGoal}");
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Card(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(
+                        context, /*rootnavigator: true*/
+                      ).push(MaterialPageRoute(builder: (context) {
+                        return const CalorieDetailScreen();
+                      }));
+                    },
+                    borderRadius: BorderRadius.circular(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            color: orange,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10)),
+                          ),
+                          child: Column(
+                            //crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'CALORIES',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(
+                                        color: whiteColor,
+                                        fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                'Remaining = Goal + Food - Exercise - Steps',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(color: Colors.black),
+                              ),
+                              const SizedBox(height: 5),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  children: [
+                                    CircularPercentIndicator(
+                                      radius: 70,
+                                      animation: true,
+                                      animationDuration: 2000,
+                                      progressColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      backgroundColor: Colors.grey[200]!,
+                                      lineWidth: 12,
+                                      percent: baseGoal == 0
+                                          ? 0
+                                          : remainingCals.isNegative
                                               ? 1
                                               : remainingCals > baseGoal
-                                              ? 1
-                                              : remainingCals / baseGoal,
-                                          circularStrokeCap:
+                                                  ? 1
+                                                  : remainingCals / baseGoal,
+                                      circularStrokeCap:
                                           CircularStrokeCap.round,
-                                          center: Column(
-                                            mainAxisAlignment:
+                                      center: Column(
+                                        mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                remainingCals.isNegative
-                                                    ? "${remainingCals.abs()}"
-                                                    : "$remainingCals",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineSmall,
-                                              ),
-                                              Text(
-                                                remainingCals.isNegative
-                                                    ? 'Exceeded'
-                                                    : 'Remaining',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                      flex: 1,
-                                      child: Column(
                                         children: [
-                                          categories(
-                                            context,
-                                            'Base Goal',
-                                            "$baseGoal kcal",
-                                            Image.asset(
-                                              'assets/icons/goal.png',
-                                              height: 24,
-                                              width: 24,
-                                            ),
+                                          Text(
+                                            remainingCals.isNegative
+                                                ? "${remainingCals.abs()}"
+                                                : "$remainingCals",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineSmall,
                                           ),
-                                          const SizedBox(height: 3),
-                                          const Divider(thickness: 2),
-                                          const SizedBox(height: 3),
-                                          categories(
-                                            context,
-                                            'Food',
-                                            "$totalConsumedCalories kcal",
-                                            Image.asset(
-                                              'assets/icons/food.png',
-                                              height: 24,
-                                              width: 24,
-                                            ),
+                                          Text(
+                                            remainingCals.isNegative
+                                                ? 'Exceeded'
+                                                : 'Remaining',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
                                           ),
-                                          const SizedBox(height: 3),
-                                          const Divider(thickness: 2),
-                                          const SizedBox(height: 3),
-                                          categories(
-                                            context,
-                                            'Exercise',
-                                            "$totalBurntCalories kcal",
-                                            Image.asset(
-                                              'assets/icons/fire.png',
-                                              height: 24,
-                                              width: 24,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 3),
-                                          const Divider(thickness: 2),
-                                          const SizedBox(height: 3),
-                                          Consumer<AllTrackersData>(builder: (context, data, child) {
-                                            Map<String, dynamic> trackerData = {};
-                                            Future.delayed(const Duration(seconds: 2)).then((value) {
-                                              trackerData = setData(snapshot, data);
-                                            });
-
-                                            return categories(
-                                              context,
-                                              'Steps',
-                                              "${stepsCals.toStringAsFixed(0)} Kcal",
-                                              Image.asset(
-                                                'assets/icons/walk.png',
-                                                height: 24,
-                                                width: 24,
-                                              ),
-                                            );
-                                          }),
-
                                         ],
-                                      )),
-                                ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                              Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      categories(
+                                        context,
+                                        'Base Goal',
+                                        "$baseGoal kcal",
+                                        Image.asset(
+                                          'assets/icons/goal.png',
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 3),
+                                      const Divider(thickness: 2),
+                                      const SizedBox(height: 3),
+                                      categories(
+                                        context,
+                                        'Food',
+                                        "$totalConsumedCalories kcal",
+                                        Image.asset(
+                                          'assets/icons/food.png',
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 3),
+                                      const Divider(thickness: 2),
+                                      const SizedBox(height: 3),
+                                      categories(
+                                        context,
+                                        'Exercise',
+                                        "$totalBurntCalories kcal",
+                                        Image.asset(
+                                          'assets/icons/fire.png',
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 3),
+                                      const Divider(thickness: 2),
+                                      const SizedBox(height: 3),
+                                      Consumer<AllTrackersData>(
+                                          builder: (context, data, child) {
+                                        Map<String, dynamic> trackerData = {};
+                                        Future.delayed(
+                                                const Duration(seconds: 2))
+                                            .then((value) {
+                                          trackerData = setData(snapshot, data);
+                                          debugPrint(trackerData.toString());
+                                        });
+
+                                        return categories(
+                                          context,
+                                          'Steps',
+                                          "${double.parse(value.calorieData.stepsCalorie!).toStringAsFixed(0)} Kcal",
+                                          // trackerData["stepsCount"] != null &&
+                                          //     trackerData["stepsCount"] !=
+                                          //         "null"
+                                          //     ? stepsToCal(
+                                          //     trackerData["stepsCount"])
+                                          //     : "0 Kcal",
+                                          Image.asset(
+                                            'assets/icons/walk.png',
+                                            height: 24,
+                                            width: 24,
+                                          ),
+                                        );
+                                      }),
+                                    ],
+                                  )),
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  );
-                },
-              ))
-         ,
+                  ),
+                ),
+              );
+            },
+          )),
     );
   }
 
@@ -349,16 +351,15 @@ class _CaloriesTrackerCardState extends State<CaloriesTrackerCard> {
     if (snapshot.connectionState == ConnectionState.waiting) {
       waterGoal = glasses = 0;
       waterPercentage = sleepPercentage = 0;
-    }
-    else {
+    } else {
       //set water data
       waterGoal = data.allTrackersData.totalWaterGoal ?? 0;
       glasses = data.allTrackersData.userWaterGlassCount ?? 0;
       waterPercentage = glasses == 0
           ? 0
           : glasses > waterGoal
-          ? 1
-          : glasses / waterGoal;
+              ? 1
+              : glasses / waterGoal;
 
       totalStepsGoal = data.allTrackersData.totalStepsGoal!.toString();
       stepsCount = data.allTrackersData.userStepsCount!.toString();
@@ -366,10 +367,10 @@ class _CaloriesTrackerCardState extends State<CaloriesTrackerCard> {
       stepsPercentage = data.allTrackersData.userStepsCount == 0
           ? 0
           : data.allTrackersData.userStepsCount! >
-          data.allTrackersData.totalStepsGoal!
-          ? 1
-          : data.allTrackersData.userStepsCount! /
-          data.allTrackersData.totalStepsGoal!;
+                  data.allTrackersData.totalStepsGoal!
+              ? 1
+              : data.allTrackersData.userStepsCount! /
+                  data.allTrackersData.totalStepsGoal!;
 
       // log("steps percentage " + stepsPercentage.toString());
 
@@ -377,7 +378,7 @@ class _CaloriesTrackerCardState extends State<CaloriesTrackerCard> {
 
       int totalSleepHrs = (data.allTrackersData.totalSleepGoal! ~/ 3600);
       int totalSleepMins =
-      (data.allTrackersData.totalSleepGoal!.remainder(3600) ~/ 60);
+          (data.allTrackersData.totalSleepGoal!.remainder(3600) ~/ 60);
       if (totalSleepMins != 0 && totalSleepHrs != 0) {
         totalSleepGoal = "${totalSleepHrs}h ${totalSleepMins}m";
       } else if (totalSleepMins != 0 && totalSleepHrs == 0) {
@@ -403,10 +404,10 @@ class _CaloriesTrackerCardState extends State<CaloriesTrackerCard> {
       sleepPercentage = data.allTrackersData.userSleepCount == 0
           ? 0
           : data.allTrackersData.userSleepCount! >
-          data.allTrackersData.totalSleepGoal!
-          ? 1
-          : data.allTrackersData.userSleepCount! /
-          data.allTrackersData.totalSleepGoal!;
+                  data.allTrackersData.totalSleepGoal!
+              ? 1
+              : data.allTrackersData.userSleepCount! /
+                  data.allTrackersData.totalSleepGoal!;
       // log("sleep " + sleepPercentage.toString());
       // setState(() {});
     }

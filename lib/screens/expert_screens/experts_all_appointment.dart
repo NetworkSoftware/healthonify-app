@@ -30,7 +30,7 @@ class _ExpertsAllAppointmentState extends State<ExpertsAllAppointment> {
   Future<void> _getFunc(BuildContext context) async {
     String id = Provider.of<UserData>(context, listen: false).userData.id!;
     String flow =
-    Provider.of<UserData>(context, listen: false).userData.topLevelExpName!;
+        Provider.of<UserData>(context, listen: false).userData.topLevelExpName!;
     log(flow);
 
     try {
@@ -52,6 +52,7 @@ class _ExpertsAllAppointmentState extends State<ExpertsAllAppointment> {
       _noContent = true;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,28 +60,27 @@ class _ExpertsAllAppointmentState extends State<ExpertsAllAppointment> {
         appBarTitle: "Appointments",
       ),
       body: FutureBuilder(
-        future: _getFunc(
-            context),
-        builder: (context, snapshot) => snapshot.connectionState ==
-            ConnectionState.waiting
-            ? const Center(
-          child: CircularProgressIndicator(),
-        )
-            : ListView.builder(
-          padding: const EdgeInsets.only(top: 10),
-          physics: const BouncingScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: resultData.length,
-          itemBuilder: (context, index) {
-            if (resultData[index].status == "initiated") {
-              // return expertCardFree(context, data[index]);
-              return expertCardPaid(context, resultData[index]);
-            }
-            return expertCardPaid(context, resultData[index]);
+        future: _getFunc(context),
+        builder: (context, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.only(top: 10),
+                    physics: const BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: resultData.length,
+                    itemBuilder: (context, index) {
+                      if (resultData[index].status == "initiated") {
+                        // return expertCardFree(context, data[index]);
+                        return expertCardPaid(context, resultData[index]);
+                      }
+                      return expertCardPaid(context, resultData[index]);
 
-            // return expertCardPaid(context, data[index]);
-          },
-        ),
+                      // return expertCardPaid(context, data[index]);
+                    },
+                  ),
       ),
     );
   }
@@ -90,7 +90,7 @@ class _ExpertsAllAppointmentState extends State<ExpertsAllAppointment> {
     // final date =
     // StringDateTimeFormat().stringtDateFormatLogWeight(consultationData.startDate!);
     final time =
-    StringDateTimeFormat().stringToTimeOfDay(consultationData.startTime!);
+        StringDateTimeFormat().stringToTimeOfDay(consultationData.startTime!);
 
     String status = "";
     if (consultationData.status == "Interested") {
@@ -106,8 +106,6 @@ class _ExpertsAllAppointmentState extends State<ExpertsAllAppointment> {
     } else {
       status = "Consultation completed";
     }
-
-    print("lengtgh : ${consultationData.comment!}");
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -134,7 +132,7 @@ class _ExpertsAllAppointmentState extends State<ExpertsAllAppointment> {
                                 .textTheme
                                 .bodyMedium!
                                 .copyWith(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                    fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(width: 10),
                           Text(
@@ -151,7 +149,7 @@ class _ExpertsAllAppointmentState extends State<ExpertsAllAppointment> {
                                 .textTheme
                                 .bodyMedium!
                                 .copyWith(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                    fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(width: 10),
                           Text(
@@ -217,7 +215,7 @@ class _ExpertsAllAppointmentState extends State<ExpertsAllAppointment> {
                                 .textTheme
                                 .bodyMedium!
                                 .copyWith(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                    fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(width: 10),
                           Text(
@@ -232,14 +230,14 @@ class _ExpertsAllAppointmentState extends State<ExpertsAllAppointment> {
                     backgroundColor: Colors.blue,
                     radius: 36,
                     backgroundImage:
-                    !consultationData.expert![0].containsKey("imageUrl") ||
-                        consultationData.expert![0]["imageUrl"] == ""
-                        ? const AssetImage(
-                      "assets/icons/user.png",
-                    ) as ImageProvider
-                        : NetworkImage(
-                      consultationData.expert![0]["imageUrl"]!,
-                    ),
+                        !consultationData.expert![0].containsKey("imageUrl") ||
+                                consultationData.expert![0]["imageUrl"] == ""
+                            ? const AssetImage(
+                                "assets/icons/user.png",
+                              ) as ImageProvider
+                            : NetworkImage(
+                                consultationData.expert![0]["imageUrl"]!,
+                              ),
                   ),
                 ],
               ),
@@ -249,250 +247,261 @@ class _ExpertsAllAppointmentState extends State<ExpertsAllAppointment> {
               children: [
                 consultationData.status == "consultationScheduled"
                     ? Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                      onTap: StringDateTimeFormat()
-                          .checkForVideoCallSessionValidation(
-                          consultationData.startTime!,
-                          consultationData.startDate!)
-                          ? () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => VideoCall1(
-                              meetingId: consultationData.id,
-                              onVideoCallEnds: () {},
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: StringDateTimeFormat()
+                                    .checkForVideoCallSessionValidation(
+                                        consultationData.startTime!,
+                                        consultationData.startDate!)
+                                ? () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => VideoCall1(
+                                          meetingId: consultationData.id,
+                                          onVideoCallEnds: () {},
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                : () {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            "Video call will be available 15 mins before and till 1 hour after the assigned time ",
+                                        toastLength: Toast.LENGTH_LONG);
+                                  },
+                            borderRadius: BorderRadius.circular(10),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    'assets/icons/video_meeting.png',
+                                    height: 46,
+                                    width: 46,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        );
-                      }
-                          : () {
-                        Fluttertoast.showToast(
-                            msg:
-                            "Video call will be available 15 mins before and till 1 hour after the assigned time ",
-                            toastLength: Toast.LENGTH_LONG);
-                      },
-                      borderRadius: BorderRadius.circular(10),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              'assets/icons/video_meeting.png',
-                              height: 46,
-                              width: 46,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () async {
-                        bool result = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ConsultationComment(
-                              ticketNumber:
-                              consultationData.ticketNumber!,
-                              flow: consultationData.flow!,
-                              comment: consultationData.comment!,
-                            ),
-                          ),
-                        );
+                          const SizedBox(width: 10),
+                          GestureDetector(
+                            onTap: () async {
+                              bool result = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ConsultationComment(
+                                    ticketNumber:
+                                        consultationData.ticketNumber!,
+                                    flow: consultationData.flow!,
+                                    comment: consultationData.comment!,
+                                  ),
+                                ),
+                              );
 
-                        if (result == true) {
-                          _getFunc(
-                              context);
-                          setState(() {});
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: orange,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        child: const Text(
-                          'Comment/Close',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    )
-                  ],
-                )
+                              if (result == true) {
+                                _getFunc(context);
+                                setState(() {});
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: orange,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 5,
+                              ),
+                              child: const Text(
+                                'Comment/Close',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
                     : consultationData.status == "consulationCompleted"
-                    ? Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) {
-                              return PrescriptionScreen(
-                                consultationId: consultationData.id!,
-                                expertId: consultationData.expert!.first["_id"],
-                                userId: consultationData.userId!.first["_id"],
-                                ticketNumber: consultationData.ticketNumber!,
-                              );
-                            }));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: orange,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        child: const Text(
-                          'Prescription',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () async {
-                        bool result = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ConsultationComment(
-                              ticketNumber:
-                              consultationData.ticketNumber!,
-                              flow: consultationData.flow!,
-                              comment: consultationData.comment!,
-                            ),
-                          ),
-                        );
+                        ? Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return PrescriptionScreen(
+                                      consultationId: consultationData.id!,
+                                      expertId:
+                                          consultationData.expert!.first["_id"],
+                                      userId:
+                                          consultationData.userId!.first["_id"],
+                                      ticketNumber:
+                                          consultationData.ticketNumber!,
+                                    );
+                                  }));
+                                  // Navigator.of(context).push(
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) =>
+                                  //         const PrescriptionScreen(),
+                                  //   ),
+                                  // );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: orange,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 5,
+                                  ),
+                                  child: const Text(
+                                    'Prescription',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              GestureDetector(
+                                onTap: () async {
+                                  bool result =
+                                      await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => ConsultationComment(
+                                        ticketNumber:
+                                            consultationData.ticketNumber!,
+                                        flow: consultationData.flow!,
+                                        comment: consultationData.comment!,
+                                      ),
+                                    ),
+                                  );
 
-                        if (result == true) {
-                          _getFunc(
-                              context);
-                          setState(() {});
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: orange,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        child: const Text(
-                          'Comment/Close',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-                    : consultationData.status == "closed"
-                    ? Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) {
-                              return PrescriptionScreen(
-                                consultationId: consultationData.id!,
-                                expertId: consultationData.expert!.first["_id"],
-                                userId: consultationData.userId!.first["_id"],
-                                ticketNumber: consultationData.ticketNumber!,
-                              );
-                            }));
-                        // Navigator.of(context).push(
-                        //   MaterialPageRoute(
-                        //     builder: (context) =>
-                        //         const PrescriptionScreen(),
-                        //   ),
-                        // );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: orange,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        child: const Text(
-                          'Prescription',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () async {
-                        bool result = await Navigator.of(context)
-                            .push(MaterialPageRoute(
-                            builder: (context) =>
-                                PackageListScreen(
-                                  flowName:
-                                  consultationData.flow!,
-                                  expertId: consultationData
-                                      .expert![0]["_id"],
-                                  userId: consultationData
-                                      .userId![0]["_id"],
-                                  ticketNumber: consultationData
-                                      .ticketNumber!,
-                                )));
+                                  if (result == true) {
+                                    _getFunc(context);
+                                    setState(() {});
+                                  }
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: orange,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 5,
+                                  ),
+                                  child: const Text(
+                                    'Comment/Close',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : consultationData.status == "closed"
+                            ? Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) {
+                                        return PrescriptionScreen(
+                                          consultationId: consultationData.id!,
+                                          expertId: consultationData
+                                              .expert!.first["_id"],
+                                          userId: consultationData
+                                              .userId!.first["_id"],
+                                          ticketNumber:
+                                              consultationData.ticketNumber!,
+                                        );
+                                      }));
+                                      // Navigator.of(context).push(
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) =>
+                                      //         const PrescriptionScreen(),
+                                      //   ),
+                                      // );
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: orange,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 5,
+                                      ),
+                                      child: const Text(
+                                        'Prescription',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      bool result = await Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PackageListScreen(
+                                                    flowName:
+                                                        consultationData.flow!,
+                                                    expertId: consultationData
+                                                        .expert![0]["_id"],
+                                                    userId: consultationData
+                                                        .userId![0]["_id"],
+                                                    ticketNumber:
+                                                        consultationData
+                                                            .ticketNumber!,
+                                                  )));
 
-                        if (result == true) {
-                          _getFunc(
-                              context);
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: orange,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        child: const Text(
-                          'Assign Package',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-                    : consultationData.status == "packageSubscribed"
-                    ? GestureDetector(
-                  onTap: () async {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                          return ExpertAppointmentViewSessionByEnquiry(
-                            ticketNumber:
-                            consultationData.ticketNumber!,
-                            flow:consultationData.flow!,
-                          );
-                        }));
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: orange,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
-                    ),
-                    child: const Text(
-                      'View Sessions',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                )
-                    : const SizedBox(), // An empty space for other cases
+                                      if (result == true) {
+                                        _getFunc(context);
+                                      }
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: orange,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 5,
+                                      ),
+                                      child: const Text(
+                                        'Assign Package',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : consultationData.status == "packageSubscribed"
+                                ? GestureDetector(
+                                    onTap: () async {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return ExpertAppointmentViewSessionByEnquiry(
+                                          ticketNumber:
+                                              consultationData.ticketNumber!,
+                                          flow: consultationData.flow!,
+                                        );
+                                      }));
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: orange,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 5,
+                                      ),
+                                      child: const Text(
+                                        'View Sessions',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(), // An empty space for other cases
               ],
             ),
             const SizedBox(height: 10),

@@ -81,9 +81,13 @@ class _HraScreenState extends State<HraScreen> {
                         children: <TextSpan>[
                           TextSpan(
                               text: '\n\nSource',
-                              style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: Colors.red),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.red),
                               recognizer: TapGestureRecognizer()
-                                ..onTap = () => launchUrl(Uri.parse("https://www.calculator.net/bmi-calculator.html"))),
+                                ..onTap = () => launchUrl(Uri.parse(
+                                    "https://www.calculator.net/bmi-calculator.html"))),
                         ],
                       ),
                     ),
@@ -189,8 +193,6 @@ class _HraScreenState extends State<HraScreen> {
                                       ElevatedButton(
                                         onPressed: () {
                                           if (hraAnswers.isNotEmpty) {
-                                            print(
-                                                "QW : ${hraAnswers[index].reportUrl}");
                                             createFileOfPdfUrl(hraAnswers[index]
                                                     .reportUrl!)
                                                 .then((f) {
@@ -255,7 +257,6 @@ class _HraScreenState extends State<HraScreen> {
 
   Future<File> createFileOfPdfUrl(String pdfUrl) async {
     Completer<File> completer = Completer();
-    print("Start download file from internet!");
     try {
       final url = pdfUrl;
       final filename = url.substring(url.lastIndexOf("/") + 1);
@@ -263,8 +264,6 @@ class _HraScreenState extends State<HraScreen> {
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
       var dir = await getApplicationDocumentsDirectory();
-      print("Download files");
-      print("${dir.path}/$filename");
       File file = File("${dir.path}/$filename");
 
       await file.writeAsBytes(bytes, flush: true);

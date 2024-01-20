@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 class SubCategoriesScreen extends StatefulWidget {
   final String screenTitle;
   final String parentCategoryId;
-
   const SubCategoriesScreen(
       {required this.screenTitle, required this.parentCategoryId, super.key});
 
@@ -91,32 +90,21 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      subCategories[index].mediaLink != null
-                                          ? ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                              child: Image.network(
-                                                subCategories[index].mediaLink!,
-                                                height: 80,
-                                                width: 100,
-                                                fit: BoxFit.cover,
-                                              ))
-                                          : ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                              child: Image.asset(
-                                                'assets/icons/some.png',
-                                                height: 80,
-                                                width: 100,
-                                                fit: BoxFit.cover,
-                                              ),
-                                              // : Image.network(
-                                              //     data[index].thumbnail!,
-                                              //     height: 65,
-                                              //     width: 100,
-                                              //     fit: BoxFit.cover,
-                                              //   ),
-                                            ),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(6),
+                                        child: Image.asset(
+                                          'assets/icons/some.png',
+                                          height: 80,
+                                          width: 100,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        // : Image.network(
+                                        //     data[index].thumbnail!,
+                                        //     height: 65,
+                                        //     width: 100,
+                                        //     fit: BoxFit.cover,
+                                        //   ),
+                                      ),
                                       Expanded(
                                         child: Padding(
                                           padding:

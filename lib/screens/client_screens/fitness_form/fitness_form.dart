@@ -154,7 +154,7 @@ class _FitnessFormState extends State<FitnessForm> {
                                                     conversion(
                                                         double.parse(value));
                                                   }
-                                                  setState((){});
+                                                  setState(() {});
                                                 },
                                                 onSaved: (value) {},
                                                 validator: (value) {
@@ -266,7 +266,7 @@ class _FitnessFormState extends State<FitnessForm> {
                                                     conversionToCms(
                                                         double.parse(value));
                                                   }
-                                                  setState((){});
+                                                  setState(() {});
                                                 },
                                                 onSaved: (value) {},
                                                 validator: (value) {
@@ -540,16 +540,12 @@ class _FitnessFormState extends State<FitnessForm> {
   void conversion(double centimeter) {
     double inches = 0.3937 * centimeter;
     double feet = 0.0328 * centimeter;
-
-    print("Inches is: $inches");
-    print("Inches is: $feet");
+    log(inches.toString());
     heightFeetController.text = feet.toStringAsFixed(2);
   }
 
   void conversionToCms(double feet) {
     double cms = feet / 0.0328;
-
-    print("Inches is: $cms");
 
     heightController.text = cms.toStringAsFixed(2);
   }

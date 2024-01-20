@@ -15,8 +15,6 @@ class WmPackagesData with ChangeNotifier {
   Future<List<WmPackage>> getAllPackages(String page) async {
     String url = '${ApiUrl.wm}get/wmPackage?limit=20&page=$page';
 
-
-    print("url : $url");
     final List<WmPackage> loadData = [];
 
     try {
@@ -71,7 +69,6 @@ class WmPackagesData with ChangeNotifier {
 
   // Future<List<WmPackage>> getPackagesByCategory({required String expertiseId}) async {
   //   String url = '${ApiUrl.wm}get/package?expertiseId=$expertiseId';
-  //   print("url : $url");
   //   final List<WmPackage> loadData = [];
   //
   //   try {
@@ -81,8 +78,6 @@ class WmPackagesData with ChangeNotifier {
   //     );
   //
   //     final responseBody = json.decode(response.body);
-  //     print("response : ${responseBody}");
-  //     print("statuscode : ${response.statusCode}");
   //     if (response.statusCode >= 400) {
   //       throw HttpException(responseBody["message"]);
   //     }

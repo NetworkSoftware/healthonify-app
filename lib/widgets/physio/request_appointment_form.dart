@@ -171,7 +171,6 @@ class _RequestAppointmentFormState extends State<RequestAppointmentForm> {
 
       log("qwee${ymdFormat.toString()}");
       if (ymdFormat.toString() == todayDate[0]) {
-        print("ValueHour : ${value.hour}");
         if (value.hour < (DateTime.now().hour + 3)) {
           Fluttertoast.showToast(
               msg:
@@ -212,7 +211,6 @@ class _RequestAppointmentFormState extends State<RequestAppointmentForm> {
       //
       // log(ymdFormat.toString());
       //
-      //   print("ValueHour : ${value.hour}");
       //   if (value.hour < (DateTime.now().hour + 3)) {
       //     Fluttertoast.showToast(
       //         msg:

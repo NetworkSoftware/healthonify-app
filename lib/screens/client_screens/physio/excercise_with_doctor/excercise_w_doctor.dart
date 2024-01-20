@@ -80,7 +80,7 @@ class ExcerciseWithDoctor extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              launchUrl(Uri.parse('https://api.whatsapp.com/send/?phone=9718297700&text=Hi,&type=phone_number&app_absent=0'),
+              launchUrl(Uri.parse('https://api.whatsapp.com/send/?phone=919743474558&text=Hi,&type=phone_number&app_absent=0'),
                   mode: LaunchMode.externalApplication);
             },
             borderRadius: BorderRadius.circular(30),

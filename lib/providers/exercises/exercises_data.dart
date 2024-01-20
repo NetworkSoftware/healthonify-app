@@ -29,28 +29,27 @@ class ExercisesData with ChangeNotifier {
             json.decode(response.body)["data"] as List<dynamic>;
         for (var element in responseData) {
           loadedData.add(Exercise(
-            bodyPartId: element['bodyPartId'],
-            bodyPartGroupId: element['bodyPartGroupId'],
-            mediaLink: element["mediaLink"],
-            name: element["name"],
-            weightUnit: element["weight"],
-            id: element["_id"],
-            calorieFactor: double.parse(element["calorieFactor"].toString()),
-            description: element["description"]
-          ));
-          
+              bodyPartId: element['bodyPartId'],
+              bodyPartGroupId: element['bodyPartGroupId'],
+              mediaLink: element["mediaLink"],
+              name: element["name"],
+              weightUnit: element["weight"],
+              id: element["_id"],
+              calorieFactor: element["calorieFactor"],
+              description: element["description"]));
         }
-        
+
         return loadedData;
       } else {
         throw HttpException(responseMessage["message"]);
       }
-    } catch (e,trace) {
-      print("Trace : $trace");
+    } catch (e) {
       rethrow;
     }
   }
-   Future<List<ExerciseDirection>> fetchExerciseDirection({required String data}) async {
+
+  Future<List<ExerciseDirection>> fetchExerciseDirection(
+      {required String data}) async {
     String url = "${ApiUrl.wm}get/exercise?id=$data";
 
     log("get exercise : $url");
@@ -69,24 +68,22 @@ class ExercisesData with ChangeNotifier {
             json.decode(response.body)["data"] as List<dynamic>;
         for (var element in responseData) {
           loadedData.add(ExerciseDirection(
-            bodyPartId: element['bodyPartId'],
-            bodyPartGroupId: element['bodyPartGroupId'],
-            mediaLink: element["mediaLink"],
-            name: element["name"],
-            weightUnit: element["weight"].toString(),
-            id: element["_id"],
-            calorieFactor: element["calorieFactor"],
-            description: element["description"]
-          ));
-          
+              bodyPartId: element['bodyPartId'],
+              bodyPartGroupId: element['bodyPartGroupId'],
+              mediaLink: element["mediaLink"],
+              name: element["name"],
+              weightUnit: element["weight"].toString(),
+              id: element["_id"],
+              calorieFactor: element["calorieFactor"],
+              description: element["description"]));
         }
-        
+
         return loadedData;
       } else {
         throw HttpException(responseMessage["message"]);
       }
-    } catch (e,trace) {
-      print("Trace : $trace");
+    } catch (e, trace) {
+      log(trace.toString());
       rethrow;
     }
   }
@@ -127,7 +124,7 @@ class ExercisesData with ChangeNotifier {
             bodyPartGroupId: element['bodyPartGroupId'],
             mediaLink: element["mediaLink"],
             name: element["name"],
-            weightUnit: element["weight"],
+            weightUnit: element["weight"].toString(),
             id: element["id"],
           ));
         }
@@ -136,8 +133,8 @@ class ExercisesData with ChangeNotifier {
       } else {
         throw HttpException(responseMessage["message"]);
       }
-    } catch (e,trace) {
-      print("Trace : $trace");
+    } catch (e, trace) {
+      log("Trace : $trace");
       rethrow;
     }
   }
@@ -217,7 +214,7 @@ class ExercisesData with ChangeNotifier {
       } else {
         throw HttpException(responseMessage["message"]);
       }
-    } catch (e,trace) {
+    } catch (e, trace) {
       log("Trace : $trace");
       rethrow;
     }

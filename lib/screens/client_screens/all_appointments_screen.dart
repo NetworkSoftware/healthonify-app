@@ -78,15 +78,12 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
 
   String? selectedValue;
   List treatmentConditions = [];
-  late String userId;
-
   @override
   void initState() {
+    //added the pagination function with listener
+
     super.initState();
-    userId = Provider
-        .of<UserData>(context, listen: false)
-        .userData
-        .id!;
+
     if (widget.flow == '') {
       getConsultations();
     } else {
@@ -94,7 +91,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
     }
 
     fetchAyurvedaConditions().then(
-          (value) {
+      (value) {
         for (var ele in ayurvedaConditions) {
           treatmentConditions.add(ele.name);
         }
@@ -115,13 +112,13 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
     );
   }
 
-  Future<List<HealthCarePrescription>> getHCPrescriptions(String consultationId,
-      int index) async {
+  Future<List<HealthCarePrescription>> getHCPrescriptions(
+      String consultationId, int index) async {
     LoadingDialog().onLoadingDialog("Please wait", context);
     try {
       List<HealthCarePrescription> prescriptions =
-      await Provider.of<HealthCareProvider>(context, listen: false)
-          .getHealthCarePrescription(consultationId);
+          await Provider.of<HealthCareProvider>(context, listen: false)
+              .getHealthCarePrescription(consultationId);
       log('fetched user hc consultation prescriptions');
       return prescriptions;
     } on HttpException catch (e) {
@@ -143,10 +140,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
     setState(() {
       _isLoading = true;
     });
-    String userId = Provider
-        .of<UserData>(context, listen: false)
-        .userData
-        .id!;
+    String userId = Provider.of<UserData>(context, listen: false).userData.id!;
     try {
       await Provider.of<AllConsultationsData>(context, listen: false)
           .getUserAllEnquiryData(userId, "");
@@ -171,10 +165,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
     setState(() {
       _isLoading = true;
     });
-    String userId = Provider
-        .of<UserData>(context, listen: false)
-        .userData
-        .id!;
+    String userId = Provider.of<UserData>(context, listen: false).userData.id!;
     try {
       await Provider.of<AllConsultationsData>(context, listen: false)
           .getUserAllEnquiryData(userId, widget.flow);
@@ -311,145 +302,188 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    User userData = Provider
-        .of<UserData>(context)
-        .userData;
+    User userData = Provider.of<UserData>(context).userData;
     setData(userData);
     setDataLiveWell(userData);
     return Scaffold(
       appBar: const CustomAppBar(appBarTitle: "My Appointments"),
       body: _isLoading
           ? const Center(
-        child: CircularProgressIndicator(),
-      )
+              child: CircularProgressIndicator(),
+            )
           : Consumer<AllConsultationsData>(
-        builder: (context, value, child) =>
-            ListView(
-              children: [
-                // const Padding(
-                //   padding: EdgeInsets.only(left: 8.0, top: 10),
-                //   child: Text("Enquiries"),
-                // ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: GestureDetector(
-                        onTap: () async {
-                          if (widget.flow == "healthCare") {
-                            bool result = await Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                                  return const DoctorConsultationScreen();
-                                }));
+              builder: (context, value, child) => ListView(
+                children: [
+                  // const Padding(
+                  //   padding: EdgeInsets.only(left: 8.0, top: 10),
+                  //   child: Text("Enquiries"),
+                  // ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: GestureDetector(
+                          onTap: () async {
+                            if (widget.flow == "healthCare") {
+                              bool result = await Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return const DoctorConsultationScreen();
+                              }));
 
-                            if (result == true) {
-                              if (widget.flow == '') {
-                                getConsultations();
-                              } else {
-                                getFlowConsultations();
+                              if (result == true) {
+                                if (widget.flow == '') {
+                                  getConsultations();
+                                } else {
+                                  getFlowConsultations();
+                                }
                               }
-                            }
-                          } else if (widget.flow == "manageWeight") {
-                            bool result = await Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                                  return const WeightLossEnquiry(
-                                      isFitnessFlow: false);
-                                }));
+                            } else if (widget.flow == "manageWeight") {
+                              bool result = await Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return const WeightLossEnquiry(
+                                    isFitnessFlow: false);
+                              }));
 
-                            if (result == true) {
-                              if (widget.flow == '') {
-                                getConsultations();
-                              } else {
-                                getFlowConsultations();
+                              if (result == true) {
+                                if (widget.flow == '') {
+                                  getConsultations();
+                                } else {
+                                  getFlowConsultations();
+                                }
                               }
-                            }
-                          } else if (widget.flow == "fitness") {
-                            bool result = await Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                                  return const FitnessRequestAppointment(
-                                      isFitnessFlow: true);
-                                }));
+                            } else if (widget.flow == "fitness") {
+                              bool result = await Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return const FitnessRequestAppointment(
+                                    isFitnessFlow: true);
+                              }));
 
-                            if (result == true) {
-                              if (widget.flow == '') {
-                                getConsultations();
-                              } else {
-                                getFlowConsultations();
+                              if (result == true) {
+                                if (widget.flow == '') {
+                                  getConsultations();
+                                } else {
+                                  getFlowConsultations();
+                                }
                               }
+                            } else if (widget.flow == "physioTherapy") {
+                              showDatePicker(
+                                context: context,
+                                builder: (context, child) {
+                                  return Theme(
+                                    data: MediaQuery.of(context)
+                                                .platformBrightness ==
+                                            Brightness.dark
+                                        ? datePickerDarkTheme
+                                        : datePickerLightTheme,
+                                    child: child!,
+                                  );
+                                },
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2200),
+                              ).then((value) {
+                                if (widget.flow == '') {
+                                  getConsultations();
+                                } else {
+                                  getFlowConsultations();
+                                }
+                              });
+                            } else if (widget.flow == "consultExpert") {
+                              // bool result = await Navigator.push(context,
+                              //     MaterialPageRoute(builder: (context) {
+                              //       return const FitnessRequestAppointment(
+                              //           isFitnessFlow: true);
+                              //     }));
+                              //
+                              // if (result == true) {
+                              //   if (widget.flow == '') {
+                              //     getConsultations();
+                              //   } else {
+                              //     getFlowConsultations();
+                              //   }
+                              // }
+                            } else if (widget.flow == "liveWell") {
+                              _showBottomSheetLiveWell();
+                            } else if (widget.flow == "ayurveda") {
+                              requestAppointment(context);
+                            } else {
+                              _showBottomSheet();
                             }
-                          } else if (widget.flow == "physioTherapy") {
-                            showDatePicker(
-                              context: context,
-                              builder: (context, child) {
-                                return Theme(
-                                  data: MediaQuery
-                                      .of(context)
-                                      .platformBrightness ==
-                                      Brightness.dark
-                                      ? datePickerDarkTheme
-                                      : datePickerLightTheme,
-                                  child: child!,
-                                );
-                              },
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2200),
-                            ).then((value) {
-                              if (widget.flow == '') {
-                                getConsultations();
-                              } else {
-                                getFlowConsultations();
-                              }
-                            });
-                          } else if (widget.flow == "healer") {
-                            _showBottomSheetLiveWell();
-                          } else if (widget.flow == "liveWell") {
-                            _showBottomSheetLiveWell();
-                          } else if (widget.flow == "ayurveda") {
-                            requestAppointment(context);
-                          }
-                          else {
-                            _showBottomSheet();
-                          }
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: orange,
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            child: const Text(
-                              "+ Request Appointment",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            )),
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: orange,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              child: const Text(
+                                "+ Request Appointment",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              )),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                ListView.builder(
-                    padding: const EdgeInsets.only(top: 10),
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: value.enquiryList.length,
-                    itemBuilder: (context, index) {
-                      return enquiryCard(context, value.enquiryList[index]);
-                    }),
-              ],
+                    ],
+                  ),
+                  ListView.builder(
+                      padding: const EdgeInsets.only(top: 10),
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: value.enquiryList.length,
+                      itemBuilder: (context, index) {
+                        return enquiryCard(context, value.enquiryList[index]);
+                      }),
+                  // const Padding(
+                  //   padding: EdgeInsets.only(left: 8.0, top: 10),
+                  //   child: Text("Manage Weight"),
+                  // ),
+                  // ListView.builder(
+                  //     padding: const EdgeInsets.only(top: 10),
+                  //     physics: const BouncingScrollPhysics(),
+                  //     shrinkWrap: true,
+                  //     itemCount: value.wmConsultation.length,
+                  //     itemBuilder: (context, index) {
+                  //       log(value.wmConsultation.length.toString());
+                  //       if (value.wmConsultation[index].status == "initiated") {
+                  //         // return expertCardFree(context, data[index]);
+                  //         return expertCardPaidWm(
+                  //             context, value.wmConsultation[index]);
+                  //       }
+                  //       return expertCardPaidWm(
+                  //           context, value.wmConsultation[index]);
+                  //
+                  //       // return expertCardPaid(context, data[index]);
+                  //     }),
+                  // const Padding(
+                  //   padding: EdgeInsets.only(left: 8.0, top: 10),
+                  //   child: Text("Health Care"),
+                  // ),
+                  // ListView.builder(
+                  //   physics: const NeverScrollableScrollPhysics(),
+                  //   shrinkWrap: true,
+                  //   itemCount: value.healthCareConsultation.length,
+                  //   itemBuilder: (context, index) {
+                  //     return consultationCard(
+                  //       value.healthCareConsultation[index],
+                  //       index,
+                  //     );
+                  //   },
+                  // ),
+                ],
+              ),
             ),
-      ),
     );
   }
 
   Widget consultationCard(HealthCareConsultations consultation, int index) {
     final date =
-    StringDateTimeFormat().stringtDateFormat(consultation.startDate!);
+        StringDateTimeFormat().stringtDateFormat(consultation.startDate!);
     final time =
-    StringDateTimeFormat().stringToTimeOfDay(consultation.startTime!);
+        StringDateTimeFormat().stringToTimeOfDay(consultation.startTime!);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -478,17 +512,11 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                                 Text(
                                   consultation.expertId![0].firstName!,
                                   style:
-                                  Theme
-                                      .of(context)
-                                      .textTheme
-                                      .headlineSmall,
+                                      Theme.of(context).textTheme.headlineSmall,
                                 ),
                               Text(
                                 consultation.expertiseId![0].name!,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .bodyMedium,
+                                style: Theme.of(context).textTheme.bodyMedium,
                               ),
                               const SizedBox(height: 8),
                               Row(
@@ -501,17 +529,14 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                                   const SizedBox(width: 10),
                                   Text(
                                     consultation.status ==
-                                        "meetingLinkGenerated" ||
-                                        consultation.status ==
-                                            "expertAssigned" ||
-                                        consultation.status == "scheduled"
+                                                "meetingLinkGenerated" ||
+                                            consultation.status ==
+                                                "expertAssigned" ||
+                                            consultation.status == "scheduled"
                                         ? "Scheduled"
                                         : 'Meeting yet to schedule',
                                     style:
-                                    Theme
-                                        .of(context)
-                                        .textTheme
-                                        .bodySmall,
+                                        Theme.of(context).textTheme.bodySmall,
                                   ),
                                 ],
                               ),
@@ -527,10 +552,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                                   Text(
                                     date,
                                     style:
-                                    Theme
-                                        .of(context)
-                                        .textTheme
-                                        .bodySmall,
+                                        Theme.of(context).textTheme.bodySmall,
                                   ),
                                   const SizedBox(width: 10),
                                   const Icon(
@@ -542,10 +564,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                                   Text(
                                     time,
                                     style:
-                                    Theme
-                                        .of(context)
-                                        .textTheme
-                                        .bodySmall,
+                                        Theme.of(context).textTheme.bodySmall,
                                   ),
                                 ],
                               ),
@@ -582,13 +601,13 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                       backgroundColor: Colors.blue,
                       radius: 36,
                       backgroundImage:
-                      consultation.expertId![0].imageUrl == null
-                          ? const AssetImage(
-                        "assets/icons/user.png",
-                      ) as ImageProvider
-                          : NetworkImage(
-                        consultation.expertId![0].imageUrl!,
-                      ),
+                          consultation.expertId![0].imageUrl == null
+                              ? const AssetImage(
+                                  "assets/icons/user.png",
+                                ) as ImageProvider
+                              : NetworkImage(
+                                  consultation.expertId![0].imageUrl!,
+                                ),
                     ),
                   ),
               ],
@@ -617,44 +636,43 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                 const SizedBox(width: 30),
                 InkWell(
                   onTap: StringDateTimeFormat().checkForVideoCallValidation(
-                      consultation.startTime!, consultation.startDate!)
+                          consultation.startTime!, consultation.startDate!)
                       ? () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            VideoCall1(
-                              meetingId: consultation.id,
-                              onVideoCallEnds: () {},
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => VideoCall1(
+                                meetingId: consultation.id,
+                                onVideoCallEnds: () {},
+                              ),
                             ),
-                      ),
-                    );
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => VideoCall1(
-                    //       meetingId: consultation.id,
-                    //       meetingPassword: "",
-                    //       onVideoCallEnds: () {},
-                    //     ),
-                    //   ),
-                    // );
-                  }
+                          );
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) => VideoCall1(
+                          //       meetingId: consultation.id,
+                          //       meetingPassword: "",
+                          //       onVideoCallEnds: () {},
+                          //     ),
+                          //   ),
+                          // );
+                        }
                       : () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => VideoCall(
-                    //       meetingId: consultation.id,
-                    //       onVideoCallEnds: () {
-                    //         showRatingSheet(consultation.id!);
-                    //       },
-                    //     ),
-                    //   ),
-                    // );
-                    Fluttertoast.showToast(
-                      msg:
-                      "Video call will be available 15 mins before and till 1 hour after the assigned time ",
-                      toastLength: Toast.LENGTH_LONG,
-                    );
-                  },
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) => VideoCall(
+                          //       meetingId: consultation.id,
+                          //       onVideoCallEnds: () {
+                          //         showRatingSheet(consultation.id!);
+                          //       },
+                          //     ),
+                          //   ),
+                          // );
+                          Fluttertoast.showToast(
+                            msg:
+                                "Video call will be available 15 mins before and till 1 hour after the assigned time ",
+                            toastLength: Toast.LENGTH_LONG,
+                          );
+                        },
                   borderRadius: BorderRadius.circular(10),
                   child: Padding(
                     padding: const EdgeInsets.all(4),
@@ -676,7 +694,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                   onTap: () async {
                     // log("${consultation.}");
                     var prescription =
-                    await getHCPrescriptions(consultation.id!, index);
+                        await getHCPrescriptions(consultation.id!, index);
 
                     if (prescription.isNotEmpty) {
                       launchUrl(
@@ -714,12 +732,12 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
     );
   }
 
-  Widget expertCardPaidWm(BuildContext context,
-      WmConsultation consultationData) {
+  Widget expertCardPaidWm(
+      BuildContext context, WmConsultation consultationData) {
     final date =
-    StringDateTimeFormat().stringtDateFormat(consultationData.startDate!);
+        StringDateTimeFormat().stringtDateFormat(consultationData.startDate!);
     final time =
-    StringDateTimeFormat().stringToTimeOfDay(consultationData.startTime!);
+        StringDateTimeFormat().stringToTimeOfDay(consultationData.startTime!);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -739,14 +757,10 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                     children: [
                       Text(
                         consultationData.expert != null &&
-                            consultationData.expert!.isNotEmpty
-                            ? " ${consultationData.expert![0]["firstName"] ??
-                            ""}"
+                                consultationData.expert!.isNotEmpty
+                            ? " ${consultationData.expert![0]["firstName"] ?? ""}"
                             : "",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headlineSmall,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       const SizedBox(height: 8),
                       Row(
@@ -759,13 +773,10 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                           const SizedBox(width: 10),
                           Text(
                             consultationData.status == "meetingLinkGenerated" ||
-                                consultationData.status == "expertAssigned"
+                                    consultationData.status == "expertAssigned"
                                 ? "Scheduled"
                                 : 'Meeting yet to schedule',
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
                       ),
@@ -780,10 +791,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                           const SizedBox(width: 10),
                           Text(
                             date,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           const SizedBox(width: 10),
                           const Icon(
@@ -794,10 +802,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                           const SizedBox(width: 10),
                           Text(
                             time,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
                       ),
@@ -807,16 +812,16 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                     backgroundColor: Colors.blue,
                     radius: 36,
                     backgroundImage: consultationData.expert == null ||
-                        consultationData.expert!.isEmpty ||
-                        !consultationData.expert![0]
-                            .containsKey("imageUrl") ||
-                        consultationData.expert![0]["imageUrl"] == ""
+                            consultationData.expert!.isEmpty ||
+                            !consultationData.expert![0]
+                                .containsKey("imageUrl") ||
+                            consultationData.expert![0]["imageUrl"] == ""
                         ? const AssetImage(
-                      "assets/icons/user.png",
-                    ) as ImageProvider
+                            "assets/icons/user.png",
+                          ) as ImageProvider
                         : NetworkImage(
-                      consultationData.expert![0]["imageUrl"]!,
-                    ),
+                            consultationData.expert![0]["imageUrl"]!,
+                          ),
                   ),
                 ],
               ),
@@ -828,10 +833,10 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                          return WmConsultationDetailsScreen(
-                            consultationData: consultationData,
-                          );
-                        }));
+                      return WmConsultationDetailsScreen(
+                        consultationData: consultationData,
+                      );
+                    }));
                   },
                   child: const Text('View details'),
                 ),
@@ -845,7 +850,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
 
   Widget enquiryCard(BuildContext context, Enquiry enquiries) {
     final date =
-    StringDateTimeFormat().stringtDateFormatLogWeight(enquiries.date!);
+        StringDateTimeFormat().stringtDateFormatLogWeight(enquiries.date!);
     final time = StringDateTimeFormat().stringToTimeOfDay(enquiries.time!);
 
     String status = "";
@@ -886,169 +891,163 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
               infoRow(title: 'Date', value: date ?? ""),
               const SizedBox(height: 10),
               infoRow(title: 'Time', value: time ?? ""),
-              // const SizedBox(height: 10),
-              // infoRow(title: 'Status', value: enquiries.status! ?? ""),
               const SizedBox(height: 10),
-              enquiries.comments != null
-                  ?
-              infoRow(title: 'Status', value: enquiries.comments!)
-                  : const SizedBox(),
+              infoRow(title: 'Status', value: enquiries.status! ?? ""),
               const SizedBox(height: 20),
               status == "View Details"
                   ? Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  enquiries.flow == "healthCare"
-                      ? GestureDetector(
-                    onTap: () async {
-                      bool result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                            return PrescriptionUserScreen(
-                              ticketNumber: enquiries.ticketNumber!,
-                            );
-                          }));
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        enquiries.flow == "healthCare"
+                            ? GestureDetector(
+                                onTap: () async {
+                                  bool result = await Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return PrescriptionUserScreen(
+                                      ticketNumber: enquiries.ticketNumber!,
+                                    );
+                                  }));
 
-                      if (result == true) {
-                        if (widget.flow == '') {
-                          getConsultations();
-                        } else {
-                          getFlowConsultations();
-                        }
-                      }
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: orange,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        child: const Text(
-                          "Prescription",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        )),
-                  )
-                      : const SizedBox(),
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () async {
-                      bool result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                            return AppointmentViewByEnquiry(
-                              flow: enquiries.flow!,
-                              ticketNumber: enquiries.ticketNumber!,
-                            );
-                          }));
+                                  if (result == true) {
+                                    if (widget.flow == '') {
+                                      getConsultations();
+                                    } else {
+                                      getFlowConsultations();
+                                    }
+                                  }
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: orange,
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    child: const Text(
+                                      "Prescription",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                              )
+                            : const SizedBox(),
+                        const SizedBox(width: 10),
+                        GestureDetector(
+                          onTap: () async {
+                            bool result = await Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return AppointmentViewByEnquiry(
+                                flow: enquiries.flow!,
+                                ticketNumber: enquiries.ticketNumber!,
+                              );
+                            }));
 
-                      if (result == true) {
-                        if (widget.flow == '') {
-                          getConsultations();
-                        } else {
-                          getFlowConsultations();
-                        }
-                      }
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: orange,
+                            if (result == true) {
+                              if (widget.flow == '') {
+                                getConsultations();
+                              } else {
+                                getFlowConsultations();
+                              }
+                            }
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: orange,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              child: Text(
+                                status,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              )),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        child: Text(
-                          status,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        )),
-                  ),
-                ],
-              )
+                      ],
+                    )
                   : status == "View Package Details"
-                  ? Align(
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                  onTap: () async {
-                    bool result = await Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                          return AppointmentViewPackageByEnquiry(
-                            flow: enquiries.flow!,
-                            ticketNumber: enquiries.ticketNumber!,
-                          );
-                        }));
+                      ? Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            onTap: () async {
+                              bool result = await Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return AppointmentViewPackageByEnquiry(
+                                  flow: enquiries.flow!,
+                                  ticketNumber: enquiries.ticketNumber!,
+                                );
+                              }));
 
-                    if (result == true) {
-                      if (widget.flow == '') {
-                        getConsultations();
-                      } else {
-                        getFlowConsultations();
-                      }
-                    }
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: orange,
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      child: Text(
-                        status,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      )),
-                ),
-              )
-                  : status == "View Subscription"
-                  ? Align(
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                  onTap: () async {
-                    bool result = await Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                          return AppointmentViewPackageByEnquiry(
-                            flow: enquiries.flow!,
-                            ticketNumber: enquiries.ticketNumber!,
-                          );
-                        }));
+                              if (result == true) {
+                                if (widget.flow == '') {
+                                  getConsultations();
+                                } else {
+                                  getFlowConsultations();
+                                }
+                              }
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: orange,
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                child: Text(
+                                  status,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                          ),
+                        )
+                      : status == "View Subscription"
+                          ? Align(
+                              alignment: Alignment.centerRight,
+                              child: GestureDetector(
+                                onTap: () async {
+                                  bool result = await Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return AppointmentViewPackageByEnquiry(
+                                      flow: enquiries.flow!,
+                                      ticketNumber: enquiries.ticketNumber!,
+                                    );
+                                  }));
 
-                    if (result == true) {
-                      if (widget.flow == '') {
-                        getConsultations();
-                      } else {
-                        getFlowConsultations();
-                      }
-                    }
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: orange,
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      child: Text(
-                        status,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      )),
-                ),
-              )
-                  : Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  status ?? "",
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: Colors.grey),
-                ),
-              ),
+                                  if (result == true) {
+                                    if (widget.flow == '') {
+                                      getConsultations();
+                                    } else {
+                                      getFlowConsultations();
+                                    }
+                                  }
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: orange,
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    child: Text(
+                                      status,
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                              ),
+                            )
+                          : Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                status ?? "",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(color: Colors.grey),
+                              ),
+                            ),
             ],
           ),
         ),
@@ -1062,8 +1061,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
         Expanded(
           child: Text(
             title,
-            style: Theme
-                .of(context)
+            style: Theme.of(context)
                 .textTheme
                 .bodyMedium!
                 .copyWith(fontSize: 16, fontWeight: FontWeight.bold),
@@ -1072,22 +1070,19 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
         Expanded(
           child: Text(
             value ?? "",
-            style: Theme
-                .of(context)
-                .textTheme
-                .bodyMedium,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
       ],
     );
   }
 
-  Widget expertCardFreePhysio(BuildContext context,
-      Consultation consultationData) {
+  Widget expertCardFreePhysio(
+      BuildContext context, Consultation consultationData) {
     final date =
-    StringDateTimeFormat().stringtDateFormat(consultationData.startDate!);
+        StringDateTimeFormat().stringtDateFormat(consultationData.startDate!);
     final time =
-    StringDateTimeFormat().stringToTimeOfDay(consultationData.startTime!);
+        StringDateTimeFormat().stringToTimeOfDay(consultationData.startTime!);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -1107,10 +1102,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                     children: [
                       Text(
                         "Free Consultation",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headlineSmall,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       const SizedBox(height: 8),
                       Row(
@@ -1123,10 +1115,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                           const SizedBox(width: 10),
                           Text(
                             date,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           const SizedBox(width: 10),
                           const Icon(
@@ -1137,10 +1126,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                           const SizedBox(width: 10),
                           Text(
                             time,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
                       ),
@@ -1156,10 +1142,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                   padding: const EdgeInsets.all(15),
                   child: Text(
                     "Expert will be assigned soon",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .labelMedium,
+                    style: Theme.of(context).textTheme.labelMedium,
                   ),
                 )
                 // TextButton(
@@ -1181,12 +1164,12 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
     );
   }
 
-  Widget expertCardPaidPhysio(BuildContext context,
-      Consultation consultationData) {
+  Widget expertCardPaidPhysio(
+      BuildContext context, Consultation consultationData) {
     final date =
-    StringDateTimeFormat().stringtDateFormat(consultationData.startDate!);
+        StringDateTimeFormat().stringtDateFormat(consultationData.startDate!);
     final time =
-    StringDateTimeFormat().stringToTimeOfDay(consultationData.startTime!);
+        StringDateTimeFormat().stringToTimeOfDay(consultationData.startTime!);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -1206,19 +1189,13 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                     children: [
                       Text(
                         consultationData.expertId!["firstName"] ?? "",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headlineSmall,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Text(
                         consultationData.expertiseId!.isNotEmpty
                             ? consultationData.expertiseId![0]["name"]
                             : "",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyMedium,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(height: 8),
                       Row(
@@ -1231,13 +1208,10 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                           const SizedBox(width: 10),
                           Text(
                             consultationData.status == "meetingLinkGenerated" ||
-                                consultationData.status == "expertAssigned"
+                                    consultationData.status == "expertAssigned"
                                 ? "Scheduled"
                                 : 'Meeting yet to schedule',
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
                       ),
@@ -1252,10 +1226,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                           const SizedBox(width: 10),
                           Text(
                             date,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           const SizedBox(width: 10),
                           const Icon(
@@ -1266,10 +1237,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                           const SizedBox(width: 10),
                           Text(
                             time,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
                       ),
@@ -1279,14 +1247,14 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                     backgroundColor: Colors.blue,
                     radius: 36,
                     backgroundImage:
-                    !consultationData.expertId!.containsKey("imageUrl") ||
-                        consultationData.expertId!["imageUrl"] == ""
-                        ? const AssetImage(
-                      "assets/icons/user.png",
-                    ) as ImageProvider
-                        : NetworkImage(
-                      consultationData.expertId!["imageUrl"]!,
-                    ),
+                        !consultationData.expertId!.containsKey("imageUrl") ||
+                                consultationData.expertId!["imageUrl"] == ""
+                            ? const AssetImage(
+                                "assets/icons/user.png",
+                              ) as ImageProvider
+                            : NetworkImage(
+                                consultationData.expertId!["imageUrl"]!,
+                              ),
                   ),
                 ],
               ),
@@ -1298,10 +1266,10 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                          return ConsultationDetailsScreen(
-                            consultationData: consultationData,
-                          );
-                        }));
+                      return ConsultationDetailsScreen(
+                        consultationData: consultationData,
+                      );
+                    }));
                   },
                   child: const Text('View details'),
                 ),
@@ -1322,8 +1290,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
         elevation: 10,
         isScrollControlled: true,
         context: context,
-        builder: (ctx) =>
-            SingleChildScrollView(
+        builder: (ctx) => SingleChildScrollView(
               child: GestureDetector(
                 onTap: () {
                   FocusManager.instance.primaryFocus?.unfocus();
@@ -1332,10 +1299,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                   key: _form,
                   child: Padding(
                     padding: EdgeInsets.only(
-                        bottom: MediaQuery
-                            .of(ctx)
-                            .viewInsets
-                            .bottom + 1),
+                        bottom: MediaQuery.of(ctx).viewInsets.bottom + 1),
                     child: Column(mainAxisSize: MainAxisSize.min, children: [
                       const SizedBox(
                         height: 20,
@@ -1353,10 +1317,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                       Center(
                         child: Text(
                           "Request Appointment",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .headlineSmall,
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
                       const SizedBox(
@@ -1369,10 +1330,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                           children: [
                             Text(
                               "Explain your issue",
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .bodyMedium,
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             const SizedBox(
                               height: 10,
@@ -1387,74 +1345,67 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                         ),
                       ),
                       StatefulBuilder(
-                        builder: (context, newState) =>
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16),
-                              child: DropdownButtonFormField(
-                                isDense: true,
-                                items:
+                        builder: (context, newState) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: DropdownButtonFormField(
+                            isDense: true,
+                            items:
                                 options.map<DropdownMenuItem<String>>((value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                      style: Theme
-                                          .of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
                                         color: Colors.grey,
                                       ),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  newState(() {
-                                    selectedValue = newValue!;
-                                  });
-                                },
-                                value: selectedValue,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .bodyMedium,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(
-                                      color: Colors.grey,
-                                      width: 1.25,
-                                    ),
-                                  ),
-                                  constraints: const BoxConstraints(
-                                    maxHeight: 56,
-                                  ),
-                                  contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
                                 ),
-                                icon: const Icon(
-                                  Icons.keyboard_arrow_down_rounded,
-                                  color: Colors.grey,
-                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              newState(() {
+                                selectedValue = newValue!;
+                              });
+                            },
+                            value: selectedValue,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                hint: Text(
-                                  'Select',
-                                  style: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(color: Colors.grey),
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.25,
                                 ),
                               ),
+                              constraints: const BoxConstraints(
+                                maxHeight: 56,
+                              ),
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
                             ),
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: Colors.grey,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                            hint: Text(
+                              'Select',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(color: Colors.grey),
+                            ),
+                          ),
+                        ),
                       ),
                       Center(
                           child: SaveButton(
-                            isLoading: false,
-                            submit: onSubmit,
-                            title: "Request Now",
-                          )),
+                        isLoading: false,
+                        submit: onSubmit,
+                        title: "Request Now",
+                      )),
                     ]),
                   ),
                 ),
@@ -1467,8 +1418,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
         elevation: 10,
         isScrollControlled: true,
         context: context,
-        builder: (ctx) =>
-            SingleChildScrollView(
+        builder: (ctx) => SingleChildScrollView(
               child: GestureDetector(
                 onTap: () {
                   FocusManager.instance.primaryFocus?.unfocus();
@@ -1477,10 +1427,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                   key: _form,
                   child: Padding(
                     padding: EdgeInsets.only(
-                        bottom: MediaQuery
-                            .of(ctx)
-                            .viewInsets
-                            .bottom + 1),
+                        bottom: MediaQuery.of(ctx).viewInsets.bottom + 1),
                     child: Column(mainAxisSize: MainAxisSize.min, children: [
                       const SizedBox(
                         height: 20,
@@ -1498,89 +1445,78 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                       Center(
                         child: Text(
                           "Request Appointment",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .headlineSmall,
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-
                       StatefulBuilder(
-                        builder: (context, newState) =>
-                            Consumer<ExpertiseData>(
-                              builder: (context, data, child) {
-                                List<String> options = [];
-                                List<String> id = [];
-                                for (var element in data.expertise) {
-                                  options.add(element.name!);
-                                  id.add(element.id!);
-                                }
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: DropdownButtonFormField(
-                                    isDense: true,
-                                    items:
-                                    options.map<DropdownMenuItem<String>>((
-                                        value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(
-                                          value,
-                                          style: Theme
-                                              .of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
+                        builder: (context, newState) => Consumer<ExpertiseData>(
+                          builder: (context, data, child) {
+                            List<String> options = [];
+                            List<String> id = [];
+                            for (var element in data.expertise) {
+                              options.add(element.name!);
+                              id.add(element.id!);
+                            }
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: DropdownButtonFormField(
+                                isDense: true,
+                                items: options
+                                    .map<DropdownMenuItem<String>>((value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
                                             color: Colors.grey,
                                           ),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (String? newValue) {
-                                      newState(() {
-                                        selectedValue = newValue!;
-                                      });
-                                    },
-                                    value: selectedValue,
-                                    style: Theme
-                                        .of(context)
-                                        .textTheme
-                                        .bodyMedium,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.25,
-                                        ),
-                                      ),
-                                      constraints: const BoxConstraints(
-                                        maxHeight: 56,
-                                      ),
-                                      contentPadding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
                                     ),
-                                    icon: const Icon(
-                                      Icons.keyboard_arrow_down_rounded,
-                                      color: Colors.grey,
-                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  newState(() {
+                                    selectedValue = newValue!;
+                                  });
+                                },
+                                value: selectedValue,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    hint: Text(
-                                      'Select',
-                                      style: Theme
-                                          .of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(color: Colors.grey),
+                                    borderSide: const BorderSide(
+                                      color: Colors.grey,
+                                      width: 1.25,
                                     ),
                                   ),
-                                );
-                              },
-                            ),
+                                  constraints: const BoxConstraints(
+                                    maxHeight: 56,
+                                  ),
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                ),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.grey,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                                hint: Text(
+                                  'Select',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(color: Colors.grey),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -1588,8 +1524,8 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                           children: [
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 child: GestureDetector(
                                   behavior: HitTestBehavior.opaque,
                                   onTap: () {
@@ -1599,39 +1535,34 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                                     child: TextFormField(
                                       controller: dateController,
                                       decoration: InputDecoration(
-                                        fillColor: Theme
-                                            .of(context)
-                                            .canvasColor,
+                                        fillColor:
+                                            Theme.of(context).canvasColor,
                                         filled: true,
                                         hintText: 'Date',
-                                        hintStyle: Theme
-                                            .of(context)
+                                        hintStyle: Theme.of(context)
                                             .textTheme
                                             .bodySmall!
                                             .copyWith(
-                                          color: const Color(0xFF717579),
-                                        ),
+                                              color: const Color(0xFF717579),
+                                            ),
                                         suffixIcon: TextButton(
                                           onPressed: () {
                                             datePicker(dateController);
                                           },
                                           child: Text(
                                             'PICK',
-                                            style: Theme
-                                                .of(context)
+                                            style: Theme.of(context)
                                                 .textTheme
                                                 .labelSmall!
                                                 .copyWith(color: orange),
                                           ),
                                         ),
                                         contentPadding:
-                                        const EdgeInsets.symmetric(
-                                            horizontal: 8),
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 8),
                                       ),
-                                      style: Theme
-                                          .of(context)
-                                          .textTheme
-                                          .bodySmall,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
                                       cursorColor: whiteColor,
                                     ),
                                   ),
@@ -1640,8 +1571,8 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                             ),
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 child: GestureDetector(
                                   behavior: HitTestBehavior.opaque,
                                   onTap: () {
@@ -1651,39 +1582,34 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                                     child: TextFormField(
                                       controller: timeController,
                                       decoration: InputDecoration(
-                                        fillColor: Theme
-                                            .of(context)
-                                            .canvasColor,
+                                        fillColor:
+                                            Theme.of(context).canvasColor,
                                         filled: true,
                                         hintText: 'Time',
-                                        hintStyle: Theme
-                                            .of(context)
+                                        hintStyle: Theme.of(context)
                                             .textTheme
                                             .bodySmall!
                                             .copyWith(
-                                          color: const Color(0xFF717579),
-                                        ),
+                                              color: const Color(0xFF717579),
+                                            ),
                                         suffixIcon: TextButton(
                                           onPressed: () {
                                             timePicker(timeController);
                                           },
                                           child: Text(
                                             'PICK',
-                                            style: Theme
-                                                .of(context)
+                                            style: Theme.of(context)
                                                 .textTheme
                                                 .labelSmall!
                                                 .copyWith(color: orange),
                                           ),
                                         ),
                                         contentPadding:
-                                        const EdgeInsets.symmetric(
-                                            horizontal: 8),
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 8),
                                       ),
-                                      style: Theme
-                                          .of(context)
-                                          .textTheme
-                                          .bodySmall,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
                                       cursorColor: whiteColor,
                                     ),
                                   ),
@@ -1700,10 +1626,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                           children: [
                             Text(
                               "Explain your issue",
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .bodyMedium,
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             const SizedBox(
                               height: 10,
@@ -1719,10 +1642,10 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                       ),
                       Center(
                           child: SaveButton(
-                            isLoading: false,
-                            submit: onSubmitLiveWell,
-                            title: "Request Now",
-                          )),
+                        isLoading: false,
+                        submit: onSubmitLiveWell,
+                        title: "Request Now",
+                      )),
                     ]),
                   ),
                 ),
@@ -1732,18 +1655,13 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
 
   void requestAppointment(context) {
     showModalBottomSheet(
-      backgroundColor: Theme
-          .of(context)
-          .canvasColor,
+      backgroundColor: Theme.of(context).canvasColor,
       isScrollControlled: true,
       context: context,
       builder: (context) {
         return Padding(
           padding:
-          EdgeInsets.only(bottom: MediaQuery
-              .of(context)
-              .viewInsets
-              .bottom),
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1752,15 +1670,12 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                 padding: const EdgeInsets.all(16),
                 child: Text(
                   'Treatment Condition',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .labelLarge,
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 child: DropdownButtonFormField(
                   isDense: true,
                   items: treatmentConditions
@@ -1769,10 +1684,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                       value: value,
                       child: Text(
                         value,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyMedium,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     );
                   }).toList(),
@@ -1782,10 +1694,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                     });
                   },
                   value: requestCondition,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   decoration: InputDecoration(
                     fillColor: Colors.transparent,
                     enabledBorder: UnderlineInputBorder(
@@ -1814,8 +1723,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                   borderRadius: BorderRadius.circular(8),
                   hint: Text(
                     'Condition',
-                    style: Theme
-                        .of(context)
+                    style: Theme.of(context)
                         .textTheme
                         .bodySmall!
                         .copyWith(color: Colors.grey),
@@ -1838,38 +1746,31 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                             child: TextFormField(
                               controller: dateController,
                               decoration: InputDecoration(
-                                fillColor: Theme
-                                    .of(context)
-                                    .canvasColor,
+                                fillColor: Theme.of(context).canvasColor,
                                 filled: true,
                                 hintText: 'Date',
-                                hintStyle: Theme
-                                    .of(context)
+                                hintStyle: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
                                     .copyWith(
-                                  color: const Color(0xFF717579),
-                                ),
+                                      color: const Color(0xFF717579),
+                                    ),
                                 suffixIcon: TextButton(
                                   onPressed: () {
                                     datePicker(dateController);
                                   },
                                   child: Text(
                                     'PICK',
-                                    style: Theme
-                                        .of(context)
+                                    style: Theme.of(context)
                                         .textTheme
                                         .labelSmall!
                                         .copyWith(color: orange),
                                   ),
                                 ),
                                 contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 8),
+                                    const EdgeInsets.symmetric(horizontal: 8),
                               ),
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .bodySmall,
+                              style: Theme.of(context).textTheme.bodySmall,
                               cursorColor: whiteColor,
                             ),
                           ),
@@ -1888,38 +1789,31 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                             child: TextFormField(
                               controller: timeController,
                               decoration: InputDecoration(
-                                fillColor: Theme
-                                    .of(context)
-                                    .canvasColor,
+                                fillColor: Theme.of(context).canvasColor,
                                 filled: true,
                                 hintText: 'Time',
-                                hintStyle: Theme
-                                    .of(context)
+                                hintStyle: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
                                     .copyWith(
-                                  color: const Color(0xFF717579),
-                                ),
+                                      color: const Color(0xFF717579),
+                                    ),
                                 suffixIcon: TextButton(
                                   onPressed: () {
                                     timePicker(timeController);
                                   },
                                   child: Text(
                                     'PICK',
-                                    style: Theme
-                                        .of(context)
+                                    style: Theme.of(context)
                                         .textTheme
                                         .labelSmall!
                                         .copyWith(color: orange),
                                   ),
                                 ),
                                 contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 8),
+                                    const EdgeInsets.symmetric(horizontal: 8),
                               ),
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .bodySmall,
+                              style: Theme.of(context).textTheme.bodySmall,
                               cursorColor: whiteColor,
                             ),
                           ),
@@ -1931,15 +1825,13 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 child: SizedBox(
                   child: TextFormField(
                     maxLines: 5,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
-                      fillColor: Theme
-                          .of(context)
-                          .canvasColor,
+                      fillColor: Theme.of(context).canvasColor,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -1947,16 +1839,12 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       hintText: 'Describe your issue',
-                      hintStyle: Theme
-                          .of(context)
+                      hintStyle: Theme.of(context)
                           .textTheme
                           .bodySmall!
                           .copyWith(color: Colors.grey),
                     ),
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall,
                     onChanged: (value) {
                       setState(() {
                         description = value;
@@ -1971,14 +1859,11 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      onAyurvedaSubmit();
+                      onSubmit();
                     },
                     child: Text(
                       'Request Appointment',
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .labelSmall,
+                      style: Theme.of(context).textTheme.labelSmall,
                     ),
                   ),
                 ],
@@ -1996,7 +1881,6 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
   String? requestCondition;
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
-
   void timePicker(TextEditingController controller) {
     showTimePicker(
       context: context,
@@ -2018,23 +1902,18 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
 
       log(ymdFormat.toString());
       if (ymdFormat.toString() == todayDate[0]) {
-        print("ValueHour : ${value.hour}");
-        if (value.hour < (DateTime
-            .now()
-            .hour + 3)) {
+        if (value.hour < (DateTime.now().hour + 3)) {
           Fluttertoast.showToast(
               msg:
-              'Consultation time must be atleast 3 hours after current time');
+                  'Consultation time must be atleast 3 hours after current time');
 
           return;
         }
       }
       setState(() {
         var format24hrTime =
-            '${value.hour.toString().padLeft(2, "0")}:${value.minute.toString()
-            .padLeft(2, "0")}:00';
+            '${value.hour.toString().padLeft(2, "0")}:${value.minute.toString().padLeft(2, "0")}:00';
         selectedTime = format24hrTime;
-        startTime = format24hrTime;
         log('24h time: $selectedTime');
         controller.text = value.format(context);
       });
@@ -2051,9 +1930,7 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
       context: context,
       builder: (context, child) {
         return Theme(
-          data: MediaQuery
-              .of(context)
-              .platformBrightness == Brightness.dark
+          data: MediaQuery.of(context).platformBrightness == Brightness.dark
               ? datePickerDarkTheme
               : datePickerLightTheme,
           child: child!,
@@ -2073,7 +1950,6 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
         DateTime temp = DateFormat('MM/dd/yyyy').parse(tempDate);
         ymdFormat = DateFormat('yyyy-MM-dd').format(temp);
         // log(ymdFormat!);
-        startDate = DateFormat('yyyy/MM/dd').format(temp);
         formattedDate = DateFormat('d MMM yyyy').format(temp);
         log(formattedDate!);
         controller.text = formattedDate!;
@@ -2084,8 +1960,8 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
   Future<void> fetchAyurvedaConditions() async {
     try {
       ayurvedaConditions =
-      await Provider.of<AyurvedaProvider>(context, listen: false)
-          .getAyurvedaConditions();
+          await Provider.of<AyurvedaProvider>(context, listen: false)
+              .getAyurvedaConditions();
 
       log('fetched ayurveda conditions');
     } on HttpException catch (e) {
@@ -2096,54 +1972,6 @@ class _AllAppointmentsScreenState extends State<AllAppointmentsScreen> {
       // setState(() {
       //   isLoading = false;
       // });
-    }
-  }
-
-  Map<String, dynamic> consultationData = {};
-
-  void onAyurvedaSubmit() {
-    consultationData['userId'] = userId;
-    if (selectedTime != null) {
-      consultationData['startTime'] = selectedTime;
-    } else {
-      Fluttertoast.showToast(msg: 'Please select a consultation time');
-      return;
-    }
-    if (ymdFormat != null) {
-      consultationData['startDate'] = ymdFormat;
-    } else {
-      Fluttertoast.showToast(msg: 'Please select a consultation date');
-      return;
-    }
-    consultationData['expertiseId'] = '6368b1870a7fad5713edb4b4';
-
-    if (description != null) {
-      consultationData['description'] = description;
-    } else {
-      Fluttertoast.showToast(
-          msg: 'Please enter a brief description for your consultation');
-      return;
-    }
-
-    log(consultationData.toString());
-    submitAyurvedaForm();
-  }
-
-  Future<void> submitAyurvedaForm() async {
-    LoadingDialog().onLoadingDialog("Please wait....", context);
-    try {
-      await Provider.of<HealthCareProvider>(context, listen: false)
-          .consultSpecialist(consultationData);
-      Navigator.pop(context);
-      Fluttertoast.showToast(msg: 'Consultation scheduled successfully');
-    } on HttpException catch (e) {
-      log(e.toString());
-      Fluttertoast.showToast(msg: e.message);
-    } catch (e) {
-      log("Error request appointment $e");
-      Fluttertoast.showToast(msg: "Not able to submit your request");
-    } finally {
-      Navigator.pop(context);
     }
   }
 }

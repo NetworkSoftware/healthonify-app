@@ -37,8 +37,8 @@ List<Map<String, dynamic>> homeQuickActionsList = [
   },
   {
     "title": 'My Diet Plans',
-    "onClick": (context) async {
-    Navigator.of(
+    "onClick": (context) {
+      Navigator.of(
         context, /*rootnavigator: true*/
       ).push(MaterialPageRoute(builder: (context) {
         return const MyDietPlans();

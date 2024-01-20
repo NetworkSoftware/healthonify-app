@@ -83,7 +83,7 @@ class WmHomeCard extends StatelessWidget {
         }
       },
       {
-        "title": 'Medical Form',
+        "title": 'Medical History',
         "icon": 'assets/icons/measure.png',
         "onClick": () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {

@@ -39,18 +39,13 @@ class _SyncHealthAppCardState extends State<SyncHealthAppCard> {
                       ),
                       IconButton(
                         onPressed: () async {
-                          kSharedPreferences.setBool(
-                              "isGoogleRequest", true);
-                          DateTime startDate = DateTime(
-                              DateTime.now().year,
-                              DateTime.now().month,
-                              DateTime.now().day);
-                          stepsData = await StepTracker()
-                              .initHealth(1, startDate);
+                          preferences.setBool("isGoogleRequest", true);
+                          DateTime startDate = DateTime(DateTime.now().year,
+                              DateTime.now().month, DateTime.now().day);
+                          stepsData =
+                              await StepTracker().initHealth(1, startDate);
 
                           setState(() {});
-                          print(
-                              "IS GOOGLE REQUEST :${kSharedPreferences.getBool("isGoogleRequest")}");
                         },
                         icon: const Icon(
                           Icons.sync,

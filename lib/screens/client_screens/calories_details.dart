@@ -43,9 +43,6 @@ class _CalorieDetailScreenState extends State<CalorieDetailScreen>
       baseGoal =
           double.parse(data.calorieProgress!["caloriesGoal"] ?? "0").round();
 
-      print("baseGoal : $baseGoal");
-      print("totalConsumedCalories : $totalConsumedCalories");
-
       remainingCals = baseGoal - totalConsumedCalories;
     } on HttpException catch (e) {
       log(e.toString());

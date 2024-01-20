@@ -20,8 +20,6 @@ class MedicalFormScreen extends StatelessWidget {
   Future<void> getMedicalFormQuestions(BuildContext context) async {
     try {
       medicalForm = await MedicalFormFunc().fetchUserMedicalForm(clientId);
-
-      print("Medical Form1 : $medicalForm");
     } on HttpException catch (e) {
       log(e.toString());
       Fluttertoast.showToast(msg: e.message);
@@ -47,44 +45,25 @@ class MedicalFormScreen extends StatelessWidget {
                         padding: EdgeInsets.only(top: 15.0, left: 8, right: 8),
                         child: Center(child: Text("No details available")),
                       )
-                    : Column(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: medicalForm.length -1,
-                              itemBuilder: (context, index) =>
-                                  Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text("Q : ${medicalForm[index].question}"),
-                                        Text("A : ${medicalForm[index].answer}")
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ),
-                        Padding(
+                    : ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: medicalForm.length,
+                        itemBuilder: (context, index) => Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Card(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 10),
-                                child: Text("Note : ${medicalForm.last.notes}"),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Q : ${medicalForm[index].question}"),
+                                  Text("A : ${medicalForm[index].answer}")
+                                ],
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
       ),
     );
   }

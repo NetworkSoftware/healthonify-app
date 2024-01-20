@@ -41,7 +41,6 @@ class _SleepDetailsCardState extends State<SleepDetailsCard> {
         value = "0";
       }
       // log("Hello 3");
-
     }
     return value;
   }
@@ -74,11 +73,8 @@ class _SleepDetailsCardState extends State<SleepDetailsCard> {
   String temp(AsyncSnapshot snapshot, AllTrackers data) {
     String totalSleepGoal = "0h", goalSleep = "0h";
 
-    print("............... : ${data.userSleepCount}");
-
     if (snapshot.connectionState == ConnectionState.waiting) {
     } else {
-
       // set sleep data
       int totalSleepHrs = (data.totalSleepGoal! ~/ 3600);
       int totalSleepMins = (data.totalSleepGoal!.remainder(3600) ~/ 60);
@@ -92,7 +88,6 @@ class _SleepDetailsCardState extends State<SleepDetailsCard> {
       sleepGoal = totalSleepGoal;
       // log(totalSleepMins.toString());
 
-      print("data.totalSleepGoal : ${data.userSleepCount}");
       int goalSleepMins = data.userSleepCount!.remainder(3600) ~/ 60;
       int goalSleepHrs = (data.userSleepCount! ~/ 3600);
 
@@ -104,7 +99,6 @@ class _SleepDetailsCardState extends State<SleepDetailsCard> {
         goalSleep = "${goalSleepHrs}h";
       }
     }
-   
 
     return goalSleep;
   }
@@ -124,8 +118,6 @@ class _SleepDetailsCardState extends State<SleepDetailsCard> {
             builder: (context, snapshot) {
               String todaySlept = setData(snapshot, data);
               String todaySleptFormatted = temp(snapshot, data);
-
-              print("todaySleptFormatted : $todaySleptFormatted");
 
               String totalSleepGoal =
                   StringDateTimeFormat().subtractTime(sleepTime, wakeupTime);

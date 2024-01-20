@@ -4,6 +4,9 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:healthonify_mobile/constants/theme_data.dart';
+import 'package:healthonify_mobile/func/trackers/step_tracker.dart';
+import 'package:healthonify_mobile/func/trackers/steps_tracker_func.dart';
+import 'package:healthonify_mobile/main.dart';
 import 'package:healthonify_mobile/models/expertise/expertise.dart';
 import 'package:healthonify_mobile/models/http_exception.dart';
 import 'package:healthonify_mobile/models/tracker_models/steps_model.dart';
@@ -17,11 +20,8 @@ import 'package:healthonify_mobile/screens/client_screens/fitness_screen.dart';
 import 'package:healthonify_mobile/screens/client_screens/health_care/ayurveda/ayurveda.dart';
 import 'package:healthonify_mobile/screens/client_screens/health_care/health_care.dart';
 import 'package:healthonify_mobile/screens/client_screens/health_meter/HRA/hra_screen.dart';
-import 'package:healthonify_mobile/screens/client_screens/live_fitness.dart';
 import 'package:healthonify_mobile/screens/client_screens/live_well/live_well_screen.dart';
-import 'package:healthonify_mobile/screens/client_screens/live_well/sub_categories.dart';
 import 'package:healthonify_mobile/screens/client_screens/my_workout/current_workout_plan.dart';
-import 'package:healthonify_mobile/screens/client_screens/my_workout/free_workout_plan_screen.dart';
 import 'package:healthonify_mobile/screens/client_screens/physio/physiotherapy_screen.dart';
 import 'package:healthonify_mobile/screens/client_screens/reminders/reminders_screen.dart';
 import 'package:healthonify_mobile/screens/client_screens/weight_management/manage_weight_screen.dart';
@@ -39,10 +39,8 @@ import 'package:healthonify_mobile/widgets/other/scrollers/adventure_scroller.da
 import 'package:healthonify_mobile/widgets/other/horiz_list_view/home_top_list_buttons.dart';
 import 'package:healthonify_mobile/widgets/other/live_well_list.dart';
 import 'package:healthonify_mobile/widgets/other/navigation_drawer.dart';
-
-import 'package:healthonify_mobile/widgets/other/scrollers/educate_scroll/educate_scroller.dart';
+import 'package:intl/intl.dart';
 import 'package:pedometer/pedometer.dart';
-
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
@@ -82,10 +80,11 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       lastStep = await Provider.of<StepTrackerProvider>(context, listen: false)
           .getLastStepsCounter(userId!);
-
-      if(lastStep.isNotEmpty){
+      if (lastStep.isNotEmpty) {
         lastStepCount = lastStep.first.overallStepCounter!;
       }
+
+      initPlatformState();
       return lastStep;
     } on HttpException catch (e) {
       log(e.toString());
@@ -97,17 +96,119 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   @override
   void initState() {
     super.initState();
+    // StepTrackerData stepsData = StepTrackerData();
+    // stepsData.stepCount = '0';
+    // stepsData.stepsData = [
+    //   {
+    //     "date": DateFormat("yyyy-MM-dd").format(DateTime.now()),
+    //     "stepsCount": '0',
+    //     "overallStepCount": preferences.getInt('stepCount').toString(),
+    //     "time": DateFormat("hh:mm:ss").format(DateTime.now())
+    //   }
+    // ];
+    // StepsTrackerFunc()
+    //     .updateStepsService(stepsData.stepsData!, SharedPrefManager().userId);
+
+    preferences.setInt('stepCount', _todaysStepCount);
+    preferences.setInt('overAllStepCount', _steps);
+    getLastSteps(context);
+    //initPlatformState();
     setState(() {
       categoryData = homeTopList;
     });
     String userId = Provider.of<UserData>(context, listen: false).userData.id!;
     String userName =
         Provider.of<UserData>(context, listen: false).userData.firstName!;
+
     ZIMKit().connectUser(id: userId, name: userName);
+  }
+
+  late Stream<StepCount> _stepCountStream;
+  int _steps = 0;
+  int _todaysStepCount = 0;
+
+  void onStepCount(StepCount event) {
+    var startTime = DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
+    var currentTime = DateTime.now();
+    var diff = currentTime.difference(startTime).inMinutes;
+    setState(() {
+      _steps = event.steps;
+      try {
+        if (!preferences.containsKey("totalCountVal") ||
+            !preferences.containsKey('updateDate') ||
+            preferences.getInt("totalCountVal") == null ||
+            preferences.getInt("totalCountVal") == 0) {
+          preferences.setInt("totalCountVal", event.steps);
+          preferences.setString(
+              "updateDate", DateFormat("MM/dd/yyyy").format(DateTime.now()));
+          debugPrint(
+              "HH==TODAY_CC=======${event.steps - (preferences.getInt("totalCountVal") ?? 0)}");
+          preferences.setInt("todayCountVal",
+              (event.steps - (preferences.getInt("totalCountVal") ?? 0)));
+        } else {
+          if ((preferences.getString('updateDate').toString() !=
+                  DateFormat("MM/dd/yyyy").format(DateTime.now())) ||
+              (diff > 0 && diff < 10)) {
+            StepTrackerData stepsData = StepTrackerData();
+            stepsData.stepCount =
+                (event.steps - (preferences.getInt("totalCountVal") ?? 0))
+                    .toString();
+            stepsData.stepsData = [
+              {
+                "date": DateFormat("yyyy-MM-dd").format(DateTime.now()),
+                "stepsCount":
+                    (event.steps - (preferences.getInt("totalCountVal") ?? 0))
+                        .toString(),
+                "time": DateFormat("hh:mm:ss").format(DateTime.now())
+              }
+            ];
+            StepsTrackerFunc().updateSteps(
+                context,
+                stepsData.stepsData!,
+                () => Provider.of<AllTrackersData>(context, listen: false)
+                    .localUpdateSteps((event.steps -
+                        (preferences.getInt("totalCountVal") ?? 0))));
+            preferences.setInt("todayCountVal", 0);
+            preferences.setInt("totalCountVal", event.steps);
+            preferences.setString(
+                "updateDate", DateFormat("MM/dd/yyyy").format(DateTime.now()));
+          } else {
+            debugPrint(
+                "1111HH==TODAY_CC=======${event.steps - (preferences.getInt("totalCountVal") ?? 0)}");
+            preferences.setInt("todayCountVal",
+                (event.steps - (preferences.getInt("totalCountVal") ?? 0)));
+            preferences.setString(
+                "updateDate", DateFormat("MM/dd/yyyy").format(DateTime.now()));
+          }
+        }
+      } catch (e) {
+        //
+      }
+
+      _todaysStepCount = event.steps - lastStepCount;
+      preferences.remove('stepCount');
+      preferences.remove('overallStepCount');
+      preferences.setInt('stepCount', _todaysStepCount);
+      preferences.setInt('overAllStepCount', _steps);
+      // kSharedPreferences.setInt('stepCount', _steps);
+    });
+  }
+
+  void onStepCountError(error) {
+    setState(() {
+      _steps = 0;
+    });
+  }
+
+  void initPlatformState() {
+    _stepCountStream = Pedometer.stepCountStream;
+    _stepCountStream.listen(onStepCount).onError(onStepCountError);
+
+    if (!mounted) return;
   }
 
   @override
@@ -120,8 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (context, snapshot) => snapshot.connectionState ==
                       ConnectionState.waiting
                   ? Scaffold(
-                      backgroundColor:
-                          Colors.white,
+                      backgroundColor: Colors.white,
                       body: Center(
                         child: Image.asset('assets/logo/splash.gif'),
                         // child: Text('Gathering all of your data'),
@@ -213,10 +313,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.of(
             context, /*rootnavigator: true*/
           ).push(MaterialPageRoute(builder: (context) {
-            return const ShopScreen(
-                );
+            return const ShopScreen();
           }));
-         // launchUrl(Uri.parse('https://healthonify.com/travelonify/'));
+          // launchUrl(Uri.parse('https://healthonify.com/travelonify/'));
         },
       },
     ];
@@ -233,11 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'image': 'assets/images/features/features1.jpg',
         'route': () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const SubCategoriesScreen(
-              screenTitle:
-              "Meditation",
-              parentCategoryId: "634fce63829e8806d2fe2c30",
-            );
+            return LiveWellScreen(category: 6);
           }));
         },
       },
@@ -246,11 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'image': 'assets/images/features/features2.jpg',
         'route': () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const SubCategoriesScreen(
-          screenTitle:
-          "Dailies",
-          parentCategoryId: "634cf2cf15b9ccbb6cacb3c3",
-          );
+            return LiveWellScreen(category: 6);
           }));
         },
       },
@@ -277,7 +368,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'image': 'assets/images/features/features5.jpg',
         'route': () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const LiveFitnessScreen();
+            return CurrentWorkoutPlan();
           }));
         },
       },
@@ -286,7 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'image': 'assets/images/features/features6.jpg',
         'route': () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const FreeWorkoutPlan();
+            return CurrentWorkoutPlan();
           }));
         },
       },
@@ -297,6 +388,10 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // const SizedBox(height: 10),
+          // Center(child: Text("STEP CHECK DATE: ${kSharedPreferences.getString('TodayDate')}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+          // Center(child: Text("STEP CHECK : ${kSharedPreferences.getInt('Step')}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+          // const SizedBox(height: 10),
           const SizedBox(height: 5),
           CustomCarouselSlider(imageUrls: imgs),
           takeHraCard(context),
@@ -321,15 +416,63 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 15),
           const FitnessToolsCard(),
           const SizedBox(height: 15),
-          const EducateScroller(
-            cardTitle: 'Educate',
-            imgUrl:
-            'https://images.unsplash.com/photo-1594103057001-d3635a7e6b88?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OTF8fGZlYXR1cmVkfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-            scrollerTitle: 'Educate',
-          ),
+          // GestureDetector(
+          //   onTap: () {
+          //     launchUrl(Uri.parse("https://healthonify.com/travelonify/"));
+          //   },
+          //   child: CustomCarouselSlider(
+          //     imageUrls: [
+          //       {
+          //         'image': 'assets/images/homebanner1.jpg',
+          //         'route': () async {
+          //           await launchUrl(
+          //             Uri.parse(
+          //               'https://healthonify.com/Shop',
+          //             ),
+          //           );
+          //           // Navigator.of(context).push(MaterialPageRoute(
+          //           //   builder: (context) => const AyurvedaScreen(),
+          //           // ));
+          //         },
+          //       },
+          //       {
+          //         'image': 'assets/images/homebanner2.jpg',
+          //         'route': () async {
+          //           await launchUrl(
+          //             Uri.parse(
+          //               'https://healthonify.com/travelonify',
+          //             ),
+          //           );
+          //         },
+          //       },
+          //       {
+          //         'image': 'assets/images/homebanner3.jpg',
+          //         'route': () async {
+          //           await launchUrl(
+          //             Uri.parse(
+          //               'https://healthonify.com/corporate',
+          //             ),
+          //           );
+          //           // Navigator.of(context).push(MaterialPageRoute(
+          //           //   builder: (context) => const FitnessScreen(),
+          //           // ));
+          //         },
+          //       },
+          //       {
+          //         'image': 'assets/images/homebanner4.jpg',
+          //         'route': () {
+          //           launchUrl(Uri.parse("https://healthonify.com/Shop"));
+          //         },
+          //       },
+          //     ],
+          //   ),
+          // ),
+          // const SizedBox(height: 15),
+          // const SyncHealthAppCard(),
           const SizedBox(height: 15),
           const HomeCard(),
           const SizedBox(height: 15),
+
           Padding(
             padding: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
             child: Text(
@@ -379,6 +522,10 @@ class _HomeScreenState extends State<HomeScreen> {
             scrollerTitle: 'Adventures',
           ),
           LiveWellList(),
+          // const ShopList(
+          //   image:
+          //       "https://images.unsplash.com/photo-1527156231393-7023794f363c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=411&q=80",
+          // ),
           ExpertsHorizontalList(
             title: 'Our Experts',
           ),
@@ -427,7 +574,7 @@ class _HomeScreenState extends State<HomeScreen> {
               underline: const SizedBox(),
               dropdownWidth: 240,
               //offset: const Offset(-30, 20),
-              dropdownDecoration:  BoxDecoration(
+              dropdownDecoration: BoxDecoration(
                   color: Theme.of(context).drawerTheme.backgroundColor,
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
               alignment: Alignment.center,
@@ -454,7 +601,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Text(
                         list.title,
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.bold,fontSize: 14),
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                            fontWeight: FontWeight.bold, fontSize: 14),
                       )
                     ],
                   ),
@@ -565,7 +713,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (result == true) {
                       selectedValue = null;
                     }
-                  }  else if (selectedValue == 7) {
+                  } else if (selectedValue == 7) {
                     for (int i = 0; i < topLevelExpertise.length; i++) {
                       if (topLevelExpertise[i].name == "Ayurveda") {
                         categoryId = topLevelExpertise[i].id!;
@@ -583,14 +731,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (result == true) {
                       selectedValue = null;
                     }
-                  }
-
-                  else if (selectedValue == 8) {
+                  } else if (selectedValue == 8) {
                     Navigator.of(
                       context, /*rootnavigator: true*/
                     ).push(MaterialPageRoute(builder: (context) {
-                      return const ShopScreen(
-                      );
+                      return const ShopScreen();
                     }));
                     //launchUrl(Uri.parse("https://healthonify.com/Shop"));
                   }

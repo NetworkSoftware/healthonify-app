@@ -550,6 +550,7 @@ class _CommunityPostState extends State<CommunityPost> {
                         isActive = !isActive;
                       });
                     },
+                    // fetchPostData: widget.passDataToScreen(),
                   );
                 }));
               },

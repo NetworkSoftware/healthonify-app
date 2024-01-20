@@ -13,7 +13,6 @@ class WorkoutModel {
     this.goal,
     this.level,
     this.price,
-    this.createdAtString,this.updatedAtInString,this.expertId
   });
 
   String? id;
@@ -23,15 +22,12 @@ class WorkoutModel {
   List<Schedule>? schedule;
   DateTime? createdAt;
   DateTime? updatedAt;
-  String? createdAtString;
-  String? updatedAtInString;
   String? v;
   String? datumId;
   String? description;
   String? goal;
   String? level;
   String? price;
-  String? expertId;
 }
 
 class Schedule {
@@ -102,7 +98,7 @@ class ExerciseWorkoutModel {
         setTypeId: exerciseData["setTypeId"],
         group: exerciseData["group"],
         bodyPartGroupId: exerciseData["bodyPartGroupId"],
-        bodyPartId: exerciseData["bodyPartId"],
+        //bodyPartId: exerciseData["bodyPartId"],
         setType: exerciseData["setType"],
         note: exerciseData["note"],
         sets: List<Set>.from(exerciseData["sets"].map((x) => Set.fromJson(x))),
@@ -147,7 +143,6 @@ class Set {
   String? speed;
   String? name;
   String? set;
-  String? status;
 
   factory Set.fromJson(Map<String, dynamic> setData) => Set(
         id: setData["_id"],

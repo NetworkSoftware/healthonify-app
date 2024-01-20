@@ -111,7 +111,6 @@ class HealthRecordProvider with ChangeNotifier {
               userId: ele["userId"],
               date: DateFormat("MM/dd/yyyy").parse(ele["date"]),
               time: DateFormat("HH:mm").parse(ele["time"]),
-              stringTime: ele["time"],
             ),
           );
         }

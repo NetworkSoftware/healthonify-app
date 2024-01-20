@@ -62,11 +62,6 @@ class _ExpertScreenState extends State<ExpertScreen> {
     try {
       expertData = await Provider.of<ExpertsData>(context, listen: false)
           .fetchHealthCareExpertsData(widget.expertId!);
-
-      if (expertData.isNotEmpty) {
-        await Provider.of<ExpertiseData>(context, listen: false)
-            .fetchExpertise(expertData[0].topExpertiseId!);
-      }
     } on HttpException catch (e) {
       log(e.toString());
     } catch (e) {
@@ -78,16 +73,6 @@ class _ExpertScreenState extends State<ExpertScreen> {
     }
   }
 
-  Future<void> getSpeciality() async {
-    try {} on HttpException catch (e) {
-      log(e.toString());
-      Fluttertoast.showToast(msg: e.message);
-    } catch (e) {
-      log("Error get fetch speciality $e");
-      Fluttertoast.showToast(msg: "Unable to fetch speciality");
-    }
-  }
-
   late String userId;
   String? topLevelExpertise;
   List<TopLevelExpertise> expertiseList = [];
@@ -96,7 +81,16 @@ class _ExpertScreenState extends State<ExpertScreen> {
   @override
   void initState() {
     super.initState();
+
     userId = Provider.of<UserData>(context, listen: false).userData.id!;
+
+    // topLevelExpertise = Provider.of<ExpertiseData>(context, listen: false)
+    //     .topLevelExpertiseData[0]
+    //     .name!;
+
+    expertiseList = Provider.of<ExpertiseData>(context, listen: false)
+        .topLevelExpertiseData;
+
     expertise = Provider.of<ExpertiseData>(context, listen: false)
             .expertise
             .isEmpty
@@ -117,7 +111,20 @@ class _ExpertScreenState extends State<ExpertScreen> {
     requestAppointment['email'] = expertData[0].email;
     requestAppointment['enquiryFor'] = 'generalEnquiry';
     requestAppointment['category'] = topLevelExpertise;
-    requestAppointment['flow'] = expertData[0].topExpertiseFlow!;
+    requestAppointment['flow'] = "healthCare";
+
+    // if (startTime != null) {
+    //   requestAppointment['startTime'] = startTime;
+    // } else {
+    //   Fluttertoast.showToast(msg: 'Please select a consultation time');
+    //   return;
+    // }
+    // if (startDate != null) {
+    //   requestAppointment['startDate'] = startDate;
+    // } else {
+    //   Fluttertoast.showToast(msg: 'Please select a consultation date');
+    //   return;
+    // }
     if (descController.text != null) {
       requestAppointment['message'] = descController.text;
     } else {
@@ -200,11 +207,19 @@ class _ExpertScreenState extends State<ExpertScreen> {
                       ),
                     ),
                   ),
+                  // Center(
+                  //     child: Padding(
+                  //   padding: const EdgeInsets.symmetric(vertical: 4),
+                  //   child: Text(
+                  //     topLevelExpertise,
+                  //     style: Theme.of(context).textTheme.bodyLarge,
+                  //   ),
+                  // )),
                   Center(
                       child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text(
-                      expertData[0].topExpertiseName!,
+                      expertise,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   )),
@@ -269,8 +284,6 @@ class _ExpertScreenState extends State<ExpertScreen> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () async {
-                                        print(expertData[0].certificates![0]);
-
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -301,108 +314,113 @@ class _ExpertScreenState extends State<ExpertScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Consumer<ExpertiseData>(builder: (context, data, child) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            height: 45,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                                border: Border.all(color: Colors.grey)),
-                            child: DropdownButton<String>(
-                              isExpanded: true,
-                              icon: const Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                                child: Icon(Icons.keyboard_arrow_down_rounded,
-                                    color: Colors.black, size: 26),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 45,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              border: Border.all(color: Colors.grey)),
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            icon: const Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Icon(Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.black, size: 26),
+                            ),
+                            hint: const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                "Select Category",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 14),
                               ),
-                              hint: const Padding(
-                                padding: EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                  "Select Category",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 14),
+                            ),
+                            underline: const SizedBox(),
+                            items: expertiseList.map((category) {
+                              return DropdownMenuItem<String>(
+                                value: category.name,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Text(category.name!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium),
                                 ),
-                              ),
-                              underline: const SizedBox(),
-                              items: data.expertise.map((category) {
-                                return DropdownMenuItem<String>(
-                                  value: category.name,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Text(category.name!,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (dynamic newValue) {
-                                setState(() {
-                                  topLevelExpertise = newValue;
-                                });
-                              },
-                              value: topLevelExpertise,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            maxLines: 5,
-                            textCapitalization: TextCapitalization.words,
-                            decoration: InputDecoration(
-                              fillColor: Theme.of(context).canvasColor,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              hintText: 'Describe your issue',
-                              hintStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(color: Colors.grey),
-                            ),
-                            style: Theme.of(context).textTheme.bodySmall,
-                            controller: descController,
-                            onChanged: (value) {
+                              );
+                            }).toList(),
+                            onChanged: (dynamic newValue) {
                               setState(() {
-                                description = value;
+                                topLevelExpertise = newValue;
                               });
                             },
+                            value: topLevelExpertise,
                           ),
-                          const SizedBox(height: 30),
-                          GestureDetector(
-                            onTap: () {
-                              onRequestAppointment();
-                              //_showBottomSheet();
-                            },
-                            child: Container(
-                              height: 45,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: orange,
-                                  border: Border.all(color: Colors.grey)),
-                              child: const Center(
-                                child: Text(
-                                  "Book Appointment",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Text(
+                        //   "Please enter a description for your enquiry",
+                        //   style: Theme.of(context).textTheme.bodyMedium,
+                        // ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                        TextFormField(
+                          maxLines: 5,
+                          textCapitalization: TextCapitalization.words,
+                          decoration: InputDecoration(
+                            fillColor: Theme.of(context).canvasColor,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            hintText: 'Describe your issue',
+                            hintStyle: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(color: Colors.grey),
+                          ),
+                          style: Theme.of(context).textTheme.bodySmall,
+                          controller: descController,
+                          onChanged: (value) {
+                            setState(() {
+                              description = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        GestureDetector(
+                          onTap: () {
+                            onRequestAppointment();
+                            //_showBottomSheet();
+                          },
+                          child: Container(
+                            height: 45,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: orange,
+                                border: Border.all(color: Colors.grey)),
+                            child: const Center(
+                              child: Text(
+                                "Book Appointment",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 10),
-                        ],
-                      ),
-                    );
-                  }),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

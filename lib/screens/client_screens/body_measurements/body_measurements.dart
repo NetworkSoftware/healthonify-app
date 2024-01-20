@@ -94,7 +94,7 @@ class _BodyMeasurementsScreenState extends State<BodyMeasurementsScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         appBarTitle: 'Body Measurements',
-        actionWIdget2: kSharedPreferences.getString("role") == "ROLE_EXPERT"
+        actionWIdget2: preferences.getString("role") == "ROLE_EXPERT"
             ? const SizedBox()
             : IconButton(
                 onPressed: () {
@@ -129,69 +129,69 @@ class _BodyMeasurementsScreenState extends State<BodyMeasurementsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // if (kSharedPreferences.getString("role") != "ROLE_EXPERT")
-                      //   Card(
-                      //     color: Colors.blue,
-                      //     shape: RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(10),
-                      //     ),
-                      //     child: Column(
-                      //       children: [
-                      //         if (!widget.isFromClient)
-                      //           Padding(
-                      //             padding: const EdgeInsets.symmetric(
-                      //               vertical: 12,
-                      //               horizontal: 12,
-                      //             ),
-                      //             child: Row(
-                      //               mainAxisAlignment:
-                      //                   MainAxisAlignment.spaceBetween,
-                      //               children: [
-                      //                 Text(
-                      //                   'Enable weight log reminders',
-                      //                   style: Theme.of(context)
-                      //                       .textTheme
-                      //                       .labelMedium!
-                      //                       .copyWith(color: whiteColor),
-                      //                 ),
-                      //                 StatefulBuilder(
-                      //                   builder: (context, state) =>
-                      //                       FlutterSwitch(
-                      //                     width: 38,
-                      //                     height: 18,
-                      //                     valueFontSize: 10,
-                      //                     toggleSize: 12,
-                      //                     inactiveColor: Colors.white,
-                      //                     inactiveToggleColor: Colors.blue,
-                      //                     activeColor: const Color(0xFFff7f3f),
-                      //                     activeToggleColor: Colors.white,
-                      //                     value: status,
-                      //                     onToggle: (val) {
-                      //                       state(() {
-                      //                         status = val;
-                      //                       });
-                      //                     },
-                      //                   ),
-                      //                 ),
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         Padding(
-                      //           padding: const EdgeInsets.only(
-                      //               bottom: 12, left: 10, right: 10),
-                      //           child: Text(
-                      //             'You will be notified your chosen day & time every week',
-                      //             style: Theme.of(context)
-                      //                 .textTheme
-                      //                 .labelLarge!
-                      //                 .copyWith(
-                      //                   color: whiteColor,
-                      //                 ),
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
+                      if (preferences.getString("role") != "ROLE_EXPERT")
+                        Card(
+                          color: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            children: [
+                              if (!widget.isFromClient)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                    horizontal: 12,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Enable weight log reminders',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium!
+                                            .copyWith(color: whiteColor),
+                                      ),
+                                      StatefulBuilder(
+                                        builder: (context, state) =>
+                                            FlutterSwitch(
+                                          width: 38,
+                                          height: 18,
+                                          valueFontSize: 10,
+                                          toggleSize: 12,
+                                          inactiveColor: Colors.white,
+                                          inactiveToggleColor: Colors.blue,
+                                          activeColor: const Color(0xFFff7f3f),
+                                          activeToggleColor: Colors.white,
+                                          value: status,
+                                          onToggle: (val) {
+                                            state(() {
+                                              status = val;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 12, left: 10, right: 10),
+                                child: Text(
+                                  'You will be notified your chosen day & time every week',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .copyWith(
+                                        color: whiteColor,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       SizedBox(
                         height: 160,
                         child: ListView(

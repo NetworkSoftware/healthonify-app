@@ -37,7 +37,9 @@ import '../../../widgets/buttons/custom_buttons.dart';
 import '../../../widgets/text fields/support_text_fields.dart';
 
 class LiveWellScreen extends StatefulWidget {
-  LiveWellScreen({Key? key, this.category,this.categoryId, this.topLevelExpertise}) : super(key: key);
+  LiveWellScreen(
+      {Key? key, this.category, this.categoryId, this.topLevelExpertise})
+      : super(key: key);
   int? category;
   String? categoryId;
   List<TopLevelExpertise>? topLevelExpertise;
@@ -80,16 +82,13 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
       if (widget.topLevelExpertise![i].parentExpertiseId != null) {
         if (widget.categoryId ==
             widget.topLevelExpertise![i].parentExpertiseId) {
-          subCategoryData.add(
-              SubCategory(id: widget.topLevelExpertise![i].id!,
-                  name: widget.topLevelExpertise![i].name!,
-                  parentId: widget.topLevelExpertise![i].parentExpertiseId!)
-          );
+          subCategoryData.add(SubCategory(
+              id: widget.topLevelExpertise![i].id!,
+              name: widget.topLevelExpertise![i].name!,
+              parentId: widget.topLevelExpertise![i].parentExpertiseId!));
         }
       }
     }
-
-    print("list1111 : ${subCategoryData.length}");
   }
 
   String? startTime;
@@ -114,11 +113,10 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
 
       log("qwee${ymdFormat.toString()}");
       if (ymdFormat.toString() == todayDate[0]) {
-        print("ValueHour : ${value.hour}");
         if (value.hour < (DateTime.now().hour + 3)) {
           Fluttertoast.showToast(
               msg:
-              'Consultation time must be atleast 3 hours after current time');
+                  'Consultation time must be atleast 3 hours after current time');
 
           return;
         }
@@ -250,30 +248,25 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
   Widget build(BuildContext context) {
     User userData = Provider.of<UserData>(context).userData;
     setData(userData);
-    return WillPopScope(
-      onWillPop: ()async{
-        Navigator.pop(context,true);
-        return true;
-      },
-      child: Consumer<ExpertiseData>(
-          builder: (context, categoryData, child) {
-            return Scaffold(
-              body: NestedScrollView(
-                headerSliverBuilder: (context, value) {
-                  return [
-                    flexibleAppBar(context,categoryData.topLevelExpertiseData),
-                  ];
-                },
-                body: liveWellContent(context),
-              ),
-            );
-          })
-
-
-    );
+    return WillPopScope(onWillPop: () async {
+      Navigator.pop(context, true);
+      return true;
+    }, child: Consumer<ExpertiseData>(builder: (context, categoryData, child) {
+      return Scaffold(
+        body: NestedScrollView(
+          headerSliverBuilder: (context, value) {
+            return [
+              flexibleAppBar(context, categoryData.topLevelExpertiseData),
+            ];
+          },
+          body: liveWellContent(context),
+        ),
+      );
+    }));
   }
 
-  PreferredSizeWidget flexibleAppBar(context, List<TopLevelExpertise> topLevelExpertise) {
+  PreferredSizeWidget flexibleAppBar(
+      context, List<TopLevelExpertise> topLevelExpertise) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(56),
       child: SliverAppBar(
@@ -283,7 +276,7 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
         backgroundColor: orange,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context,true);
+            Navigator.pop(context, true);
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -296,11 +289,11 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
           child: Padding(
             padding: const EdgeInsets.only(right: 10),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Theme.of(context).drawerTheme.backgroundColor,
-                  //border: Border.all(color: Colors.black,width: 1)
+                borderRadius: BorderRadius.circular(20),
+                color: Theme.of(context).drawerTheme.backgroundColor,
+                //border: Border.all(color: Colors.black,width: 1)
               ),
               child: DropdownButton2(
                 buttonHeight: 20,
@@ -345,7 +338,12 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                         ),
                         Text(
                           list.title,
-                          style: Theme.of(context).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.bold,fontSize: 14),),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall!
+                              .copyWith(
+                                  fontWeight: FontWeight.bold, fontSize: 14),
+                        ),
                       ],
                     ),
                   );
@@ -356,61 +354,72 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                     selectedCategoryValue = value as int;
                     String categoryId = "";
                     if (selectedCategoryValue == 1) {
-
-                      for(int i =0 ; i< topLevelExpertise.length ; i++){
-                        if(topLevelExpertise[i].name == "Health Care"){
+                      for (int i = 0; i < topLevelExpertise.length; i++) {
+                        if (topLevelExpertise[i].name == "Health Care") {
                           categoryId = topLevelExpertise[i].id!;
                         }
                       }
                       bool result = await Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return HealthCareScreen(category: 1,categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                        return HealthCareScreen(
+                            category: 1,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
                         selectedCategoryValue = null;
                       }
                     } else if (selectedCategoryValue == 2) {
-                      for(int i =0 ; i< topLevelExpertise.length ; i++){
-                        if(topLevelExpertise[i].name == "Weight Management"){
+                      for (int i = 0; i < topLevelExpertise.length; i++) {
+                        if (topLevelExpertise[i].name == "Weight Management") {
                           categoryId = topLevelExpertise[i].id!;
                         }
                       }
                       bool result = await Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return ManageWeightScreen(category: 2,categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                        return ManageWeightScreen(
+                            category: 2,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
                         selectedCategoryValue = null;
                       }
                     } else if (selectedCategoryValue == 3) {
-                      for(int i =0 ; i< topLevelExpertise.length ; i++){
-                        if(topLevelExpertise[i].name == "Fitness"){
+                      for (int i = 0; i < topLevelExpertise.length; i++) {
+                        if (topLevelExpertise[i].name == "Fitness") {
                           categoryId = topLevelExpertise[i].id!;
                         }
                       }
                       bool result = await Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return FitnessScreen(category: 3,categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                        return FitnessScreen(
+                            category: 3,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
                         selectedCategoryValue = null;
                       }
                     } else if (selectedCategoryValue == 4) {
-                      for(int i =0 ; i< topLevelExpertise.length ; i++){
-                        if(topLevelExpertise[i].name == "Physiotherapy"){
+                      for (int i = 0; i < topLevelExpertise.length; i++) {
+                        if (topLevelExpertise[i].name == "Physiotherapy") {
                           categoryId = topLevelExpertise[i].id!;
                         }
                       }
                       bool result = await Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return PhysiotherapyScreen(category: 4,categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                        return PhysiotherapyScreen(
+                            category: 4,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
@@ -427,15 +436,18 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                         selectedCategoryValue = null;
                       }
                     } else if (selectedCategoryValue == 6) {
-                      for(int i =0 ; i< topLevelExpertise.length ; i++){
-                        if(topLevelExpertise[i].name == "Live Well"){
+                      for (int i = 0; i < topLevelExpertise.length; i++) {
+                        if (topLevelExpertise[i].name == "Live Well") {
                           categoryId = topLevelExpertise[i].id!;
                         }
                       }
                       bool result = await Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return LiveWellScreen(category: 6,categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                        return LiveWellScreen(
+                            category: 6,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
@@ -459,14 +471,11 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                       if (result == true) {
                         selectedCategoryValue = null;
                       }
-                    }
-
-                    else if (selectedCategoryValue == 8) {
+                    } else if (selectedCategoryValue == 8) {
                       Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return const ShopScreen(
-                        );
+                        return const ShopScreen();
                       }));
                       //launchUrl(Uri.parse("https://healthonify.com/Shop"));
                     }
@@ -561,14 +570,72 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                     'route': () {},
                   },
                 ]),
+                // Stack(
+                //   children: [
+                //     Container(
+                //       height: 300,
+                //       decoration: const BoxDecoration(
+                //         color: Colors.blueAccent,
+                //         image: DecorationImage(
+                //           image: NetworkImage(
+                //               'https://imgs.search.brave.com/KnYsqVp8kaH7mTNkpOsqZBeUWrL_PFBcd5RlR3lOtwY/rs:fit:509:339:1/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vcGhvdG9z/L25pYWdhcmEtZmFs/bHMtcGljdHVyZS1p/ZDUwODM0NTI1Mj9r/PTYmbT01MDgzNDUy/NTImcz0xNzA2Njdh/Jnc9MCZoPWJmR2FC/c0w4VmZCVExxSnhG/UHdtOGNYR2FaTHNn/TDM0R2E0SlNyaFR0/TjA9'),
+                //           fit: BoxFit.cover,
+                //         ),
+                //       ),
+                //     ),
+                //     Container(
+                //       height: 300,
+                //       decoration: const BoxDecoration(
+                //         gradient: LinearGradient(
+                //           colors: [
+                //             Colors.transparent,
+                //             Colors.black,
+                //           ],
+                //           begin: Alignment.topCenter,
+                //           end: Alignment.bottomCenter,
+                //         ),
+                //       ),
+                //     ),
+                //     Positioned(
+                //       bottom: 70,
+                //       left: 20,
+                //       child: Row(
+                //         children: [
+                //           Text(
+                //             'Welcome $userName',
+                //             style: Theme.of(context).textTheme.headlineSmall,
+                //           ),
+                //           const SizedBox(width: 100),
+                //           SizedBox(
+                //             height: 140,
+                //             width: 90,
+                //             child: Column(
+                //               children: [
+                //                 ClipRRect(
+                //                   borderRadius: BorderRadius.circular(10),
+                //                   child: Image.network(
+                //                     'https://imgs.search.brave.com/I3a3Q76pBHHovEy_O1-BP9Xgeb4TAP2hXh8Aatb0XvQ/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly9iZXN0/cHJvZmlsZXBpY3R1/cmVzLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyMS8wOC9B/bWF6aW5nLVByb2Zp/bGUtUGljdHVyZS1m/b3ItRmFjZWJvb2su/anBn',
+                //                     fit: BoxFit.cover,
+                //                   ),
+                //                 ),
+                //                 Text(
+                //                   'Remember to breathe well',
+                //                   style:
+                //                       Theme.of(context).textTheme.bodySmall,
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: SizedBox(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.98,
+                      width: MediaQuery.of(context).size.width * 0.98,
                       child: Card(
                         elevation: 5,
                         color: const Color(0xFFec6a13),
@@ -576,8 +643,9 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                          child:  Row(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Row(
                             children: [
                               InkWell(
                                 onTap: () {
@@ -586,7 +654,8 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                                   ).push(
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          AllAppointmentsScreen(flow: 'liveWell'),
+                                          AllAppointmentsScreen(
+                                              flow: 'liveWell'),
                                     ),
                                   );
                                 },
@@ -606,7 +675,9 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                                           decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               color: Colors.white,
-                                              border: Border.all(color: const Color(0xFFec6a13))),
+                                              border: Border.all(
+                                                  color:
+                                                      const Color(0xFFec6a13))),
                                           child: const Center(
                                             child: Text(
                                               "View",
@@ -628,18 +699,18 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                                 children: [
                                   Text(
                                     "Your Appointments",
-                                    style: Theme
-                                        .of(context)
+                                    style: Theme.of(context)
                                         .textTheme
-                                        .labelLarge!.copyWith(color: Colors.white),
+                                        .labelLarge!
+                                        .copyWith(color: Colors.white),
                                   ),
                                   const SizedBox(height: 6),
                                   Text(
                                     'Book and View your appointments here',
-                                    style: Theme
-                                        .of(context)
+                                    style: Theme.of(context)
                                         .textTheme
-                                        .bodySmall!.copyWith(color: Colors.white),
+                                        .bodySmall!
+                                        .copyWith(color: Colors.white),
                                   ),
                                 ],
                               ),
@@ -650,6 +721,131 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                     ),
                   ),
                 ),
+                // Padding(
+                //   padding: const EdgeInsets.all(4),
+                //   child: Card(
+                //     child: Padding(
+                //       padding: const EdgeInsets.all(10),
+                //       child: Column(
+                //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //         crossAxisAlignment: CrossAxisAlignment.start,
+                //         children: [
+                //           Text(
+                //             "Your Appointments",
+                //             style: Theme.of(context).textTheme.labelLarge,
+                //           ),
+                //           const SizedBox(height: 6),
+                //           Text(
+                //             'Book and view your consultations here',
+                //             style: Theme.of(context).textTheme.bodySmall,
+                //           ),
+                //           const SizedBox(height: 10),
+                //           Row(
+                //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //             children: [
+                //               Container(
+                //                 constraints:
+                //                 const BoxConstraints(minWidth: 70, minHeight: 40),
+                //                 decoration: BoxDecoration(
+                //                   gradient: purpleGradient,
+                //                   borderRadius:
+                //                   const BorderRadius.all(Radius.circular(10.0)),
+                //                 ),
+                //                 child: InkWell(
+                //                   onTap: () {
+                //                     // Navigator.of(context).push(MaterialPageRoute(
+                //                     //   builder: (context) => const LiveWellConsultations(
+                //                     //   ),
+                //                     // ));
+                //                     Navigator.of(
+                //                       context, /*rootnavigator: true*/
+                //                     ).push(
+                //                       MaterialPageRoute(
+                //                         builder: (context) => AllAppointmentsScreen(flow: 'liveWell'),
+                //                       ),
+                //                     );
+                //                   },
+                //                   borderRadius: BorderRadius.circular(10),
+                //                   child: Center(
+                //                     child: Text(
+                //                       'View',
+                //                       style: Theme.of(context)
+                //                           .textTheme
+                //                           .labelMedium!
+                //                           .copyWith(color: whiteColor),
+                //                     ),
+                //                   ),
+                //                 ),
+                //               ),
+                //               Container(
+                //                 constraints:
+                //                 const BoxConstraints(minWidth: 90, minHeight: 40),
+                //                 decoration: BoxDecoration(
+                //                   gradient: purpleGradient,
+                //                   borderRadius:
+                //                   const BorderRadius.all(Radius.circular(10.0)),
+                //                 ),
+                //                 child: InkWell(
+                //                   onTap: () {
+                //                     _showBottomSheet();
+                //                   },
+                //                   borderRadius: BorderRadius.circular(10),
+                //                   child: Padding(
+                //                     padding:
+                //                     const EdgeInsets.symmetric(horizontal: 10.0),
+                //                     child: Row(
+                //                       children: [
+                //                         const Icon(
+                //                           Icons.add,
+                //                           color: Colors.white,
+                //                         ),
+                //                         Text(
+                //                           'Request',
+                //                           style: Theme.of(context)
+                //                               .textTheme
+                //                               .labelMedium!
+                //                               .copyWith(color: whiteColor),
+                //                         ),
+                //                       ],
+                //                     ),
+                //                   ),
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //   children: [
+                //     SizedBox(
+                //       width: 200,
+                //       child: ElevatedButton(
+                //         onPressed: () {
+                //           Navigator.of(context).push(MaterialPageRoute(
+                //             builder: (context) => const BrowseLiveWellPlans(),
+                //           ));
+                //         },
+                //         child: Text(
+                //           "View Plans",
+                //           style: Theme.of(context).textTheme.labelSmall,
+                //         ),
+                //       ),
+                //     ),
+                //     ElevatedButton(
+                //       onPressed: () {
+                //         _showBottomSheet();
+                //       },
+                //       child: Text(
+                //         'Request Appointment',
+                //         style: Theme.of(context).textTheme.labelSmall,
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -783,7 +979,6 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
       //
       // log(ymdFormat.toString());
       //
-      //   print("ValueHour : ${value.hour}");
       //   if (value.hour < (DateTime.now().hour + 3)) {
       //     Fluttertoast.showToast(
       //         msg:
@@ -850,73 +1045,72 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-
                       StatefulBuilder(
-                        builder: (context, newState) =>
-                            Consumer<ExpertiseData>(
-                              builder: (context, data, child) {
-                                List<String> options = [];
-                                List<String> id = [];
-                                for (var element in data.expertise) {
-                                  options.add(element.name!);
-                                  id.add(element.id!);
-                                }
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                                  child: DropdownButtonFormField(
-                                    isDense: true,
-                                    items:
-                                    options.map<DropdownMenuItem<String>>((value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(
-                                          value,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (String? newValue) {
-                                      newState(() {
-                                        selectedValue = newValue!;
-                                      });
-                                    },
-                                    value: selectedValue,
-                                    style: Theme.of(context).textTheme.bodyMedium,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.25,
-                                        ),
-                                      ),
-                                      constraints: const BoxConstraints(
-                                        maxHeight: 56,
-                                      ),
-                                      contentPadding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                    ),
-                                    icon: const Icon(
-                                      Icons.keyboard_arrow_down_rounded,
-                                      color: Colors.grey,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                    hint: Text(
-                                      'Select',
+                        builder: (context, newState) => Consumer<ExpertiseData>(
+                          builder: (context, data, child) {
+                            List<String> options = [];
+                            List<String> id = [];
+                            for (var element in data.expertise) {
+                              options.add(element.name!);
+                              id.add(element.id!);
+                            }
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: DropdownButtonFormField(
+                                isDense: true,
+                                items: options
+                                    .map<DropdownMenuItem<String>>((value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodySmall!
-                                          .copyWith(color: Colors.grey),
+                                          .bodyMedium!
+                                          .copyWith(
+                                            color: Colors.grey,
+                                          ),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  newState(() {
+                                    selectedValue = newValue!;
+                                  });
+                                },
+                                value: selectedValue,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: const BorderSide(
+                                      color: Colors.grey,
+                                      width: 1.25,
                                     ),
                                   ),
-                                );
-                              },
-                            ),
+                                  constraints: const BoxConstraints(
+                                    maxHeight: 56,
+                                  ),
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                ),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.grey,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                                hint: Text(
+                                  'Select',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(color: Colors.grey),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -924,7 +1118,8 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                           children: [
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 child: GestureDetector(
                                   behavior: HitTestBehavior.opaque,
                                   onTap: () {
@@ -934,15 +1129,16 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                                     child: TextFormField(
                                       controller: dateController,
                                       decoration: InputDecoration(
-                                        fillColor: Theme.of(context).canvasColor,
+                                        fillColor:
+                                            Theme.of(context).canvasColor,
                                         filled: true,
                                         hintText: 'Date',
                                         hintStyle: Theme.of(context)
                                             .textTheme
                                             .bodySmall!
                                             .copyWith(
-                                          color: const Color(0xFF717579),
-                                        ),
+                                              color: const Color(0xFF717579),
+                                            ),
                                         suffixIcon: TextButton(
                                           onPressed: () {
                                             datePicker(dateController);
@@ -956,9 +1152,11 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                                           ),
                                         ),
                                         contentPadding:
-                                        const EdgeInsets.symmetric(horizontal: 8),
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 8),
                                       ),
-                                      style: Theme.of(context).textTheme.bodySmall,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
                                       cursorColor: whiteColor,
                                     ),
                                   ),
@@ -967,7 +1165,8 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                             ),
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 child: GestureDetector(
                                   behavior: HitTestBehavior.opaque,
                                   onTap: () {
@@ -977,15 +1176,16 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                                     child: TextFormField(
                                       controller: timeController,
                                       decoration: InputDecoration(
-                                        fillColor: Theme.of(context).canvasColor,
+                                        fillColor:
+                                            Theme.of(context).canvasColor,
                                         filled: true,
                                         hintText: 'Time',
                                         hintStyle: Theme.of(context)
                                             .textTheme
                                             .bodySmall!
                                             .copyWith(
-                                          color: const Color(0xFF717579),
-                                        ),
+                                              color: const Color(0xFF717579),
+                                            ),
                                         suffixIcon: TextButton(
                                           onPressed: () {
                                             timePicker(timeController);
@@ -999,9 +1199,11 @@ class _LiveWellScreenState extends State<LiveWellScreen> {
                                           ),
                                         ),
                                         contentPadding:
-                                        const EdgeInsets.symmetric(horizontal: 8),
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 8),
                                       ),
-                                      style: Theme.of(context).textTheme.bodySmall,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
                                       cursorColor: whiteColor,
                                     ),
                                   ),

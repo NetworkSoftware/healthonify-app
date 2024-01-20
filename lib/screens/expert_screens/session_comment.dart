@@ -9,9 +9,9 @@ import 'package:provider/provider.dart';
 class SessionComment extends StatefulWidget {
   SessionComment(
       {Key? key,
-        required this.sessionNumber,
-        required this.flow,
-        required this.comment})
+      required this.sessionNumber,
+      required this.flow,
+      required this.comment})
       : super(key: key);
 
   String flow;
@@ -29,8 +29,6 @@ class _SessionCommentState extends State<SessionComment> {
   @override
   void initState() {
     super.initState();
-
-    print("Comment length : ${widget.comment.length}");
   }
 
   Widget checkboxTiles(context, bool check, Function ontap, String title) {
@@ -99,7 +97,7 @@ class _SessionCommentState extends State<SessionComment> {
             checkboxTiles(
               context,
               isChecked1,
-                  () {
+              () {
                 setState(() {
                   isChecked1 = !isChecked1;
                 });
@@ -113,7 +111,7 @@ class _SessionCommentState extends State<SessionComment> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10), color: orange),
                 padding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: const Text(
                   'Submit',
                   style: TextStyle(color: Colors.white),
@@ -132,37 +130,37 @@ class _SessionCommentState extends State<SessionComment> {
             const SizedBox(height: 20),
             widget.comment.isNotEmpty
                 ? Expanded(
-              child: ListView.separated(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.grey,
-                            offset: Offset(0.0, 1.0), //(x,y)
-                            blurRadius: 4.0,
-                          ),
-                        ],
-                      ),
-                      child: Text(widget.comment[index]["message"]),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(height: 5),
-                  itemCount: widget.comment.length),
-            )
+                    child: ListView.separated(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  offset: Offset(0.0, 1.0), //(x,y)
+                                  blurRadius: 4.0,
+                                ),
+                              ],
+                            ),
+                            child: Text(widget.comment[index]["message"]),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const SizedBox(height: 5),
+                        itemCount: widget.comment.length),
+                  )
                 : const Text(
-              "No Comment added yet",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: orange),
-            )
+                    "No Comment added yet",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: orange),
+                  )
           ],
         ),
       ),
@@ -181,8 +179,6 @@ class _SessionCommentState extends State<SessionComment> {
       "closeSession": isChecked1,
       "userEmail": data.email
     };
-
-    print("payload : $payload");
 
     await Provider.of<WmConsultationData>(context, listen: false)
         .postSessionComment(payload)

@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:healthonify_mobile/screens/video_call_1.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -48,7 +47,6 @@ class _JoinBatchScreenState extends State<JoinBatchScreen> {
   }
 
   Map<String, dynamic> joinBatch = {};
-
   void onJoin() {
     joinBatch['userId'] = userId;
     joinBatch['isActive'] = true;
@@ -133,31 +131,18 @@ class _JoinBatchScreenState extends State<JoinBatchScreen> {
                                     ),
                                   ],
                                 ),
-                                batches[index].isActive == true
-                                    ? ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                                            return VideoCall1(
-                                              onVideoCallEnds: () {},
-                                              meetingId: batches[index].id,
-                                            );
-                                          }));
-                                        },
-                                        child: const Text('Join'),
-                                      )
-                                    : ElevatedButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            joinBatch['batchId'] =
-                                                batches[index].id!;
-                                          });
+                                // ElevatedButton(
+                                //   onPressed: () {
+                                //     setState(() {
+                                //       joinBatch['batchId'] = batches[index].id!;
+                                //     });
 
-                                          onJoin();
+                                //     onJoin();
 
-                                          joinBatches(context);
-                                        },
-                                        child: const Text('Enroll'),
-                                      ),
+                                //     joinBatches(context);
+                                //   },
+                                //   child: const Text('Join'),
+                                // ),
                               ],
                             ),
                           );

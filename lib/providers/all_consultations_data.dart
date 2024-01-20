@@ -224,8 +224,7 @@ class AllConsultationsData with ChangeNotifier {
               flow: ele["flow"] ?? "",
               ticketNumber: ele["ticketNumber"],
               date: ele["date"],
-              time: ele["consultationTime"],
-              comments: ele["comments"],
+              time: ele["consultationTime"]
             ),
           );
         }
@@ -348,9 +347,8 @@ class AllConsultationsData with ChangeNotifier {
           AppointmentPackageConsultation(
             id: data["_id"],
             paymentLink: data["paymentLink"],
-            ticketNumber: data["ticketNumber"],
             status: data["status"],
-            expertId: data["expertId"] != null ? data["expertId"] as Map<String, dynamic> : null,
+            expertId: data["expertId"] as Map<String, dynamic>,
             userId: data["userId"] as Map<String, dynamic>,
             packageId: data["packageId"] as Map<String, dynamic>,
             serviceDetails: data["serviceDetails"] != null

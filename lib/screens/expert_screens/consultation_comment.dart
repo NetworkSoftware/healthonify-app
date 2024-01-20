@@ -29,8 +29,6 @@ class _ConsultationCommentState extends State<ConsultationComment> {
   @override
   void initState() {
     super.initState();
-
-    print("Comment length : ${widget.comment.length}");
   }
 
   Widget checkboxTiles(context, bool check, Function ontap, String title) {
@@ -181,8 +179,6 @@ class _ConsultationCommentState extends State<ConsultationComment> {
       "closeConsultation": isChecked1,
       "userEmail": data.email
     };
-
-    print("payload : $payload");
 
     await Provider.of<WmConsultationData>(context, listen: false)
         .postComment(payload)

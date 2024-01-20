@@ -50,34 +50,37 @@ class CurrentWorkoutPlan extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                padding: const EdgeInsets.all(10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: GradientButton(
-                        title: 'My Workout Plans',
-                        func: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                                return const MyWorkouts();
-                              }));
-                        },
-                        gradient: orangeGradient,
-                      ),
+                    GradientButton(
+                      title: 'My Workout Plans',
+                      func: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const MyWorkouts();
+                        }));
+                      },
+                      gradient: orangeGradient,
                     ),
-                    const SizedBox(width: 5),
-                    Expanded(
-                      child: GradientButton(
-                        title: 'Expert assigned Plans',
-                        func: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                                return const ExpertAssignedWorkoutPlans();
-                              }));
-                        },
-                        gradient: orangeGradient,
-                      ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GradientButton(
+                      title: 'Expert assigned Plans',
+                      func: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const ExpertAssignedWorkoutPlans();
+                        }));
+                      },
+                      gradient: orangeGradient,
                     ),
                   ],
                 ),
@@ -151,39 +154,11 @@ class CurrentWorkoutPlan extends StatelessWidget {
                             },
                           ),
               ),
-
               Padding(
-                padding: const EdgeInsets.only(left: 10,top: 10,bottom: 10),
-                child: GestureDetector(
-                  onTap: (){
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const BrowseFitnessPlans(isExpertCurated: true),
-                      ),
-                    );
-                  },
-                  child: Center(
-                    child: Container(
-                      constraints: const BoxConstraints(minWidth: 70, minHeight: 40),
-                      decoration: BoxDecoration(
-                          gradient: orangeGradient,
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Try our Expert Plans',
-                            style: Theme.of(context).textTheme.labelLarge!.copyWith(color: whiteColor),
-                          ),
-                          const SizedBox(width: 10),
-                          Image.asset("assets/images/expert_plans.png",color: whiteColor,height: 20,width:20),
-                        ],
-                      ),
-                    ),
-                  ),
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  'Try our Expert Plans',
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
               ),
               Text(
@@ -191,73 +166,61 @@ class CurrentWorkoutPlan extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       GradientButton(
-              //         title: 'Expert Curated Plans',
-              //         func: () {
-              //           Navigator.of(context).push(
-              //             MaterialPageRoute(
-              //               builder: (context) => const BrowseFitnessPlans(isExpertCurated: true),
-              //             ),
-              //           );
-              //           // Navigator.push(context,
-              //           //     MaterialPageRoute(builder: (context) {
-              //           //   return const PlanDetailsScreen();
-              //           // }));
-              //         },
-              //         gradient: orangeGradient,
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: Divider(color: Colors.grey,),
-              ),
               Padding(
-                padding: const EdgeInsets.only(left: 10,top: 10,bottom: 10),
-                child: GestureDetector(
-                  onTap: (){
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const BrowseFitnessPlans(isPersonalTrainer: true),
-                      ),
-                    );
-                  },
-                  child: Center(
-                    child: Container(
-                      constraints: const BoxConstraints(minWidth: 70, minHeight: 40),
-                      decoration: BoxDecoration(
-                          gradient: orangeGradient,
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Personal Trainer Plans',
-                            style: Theme.of(context).textTheme.labelLarge!.copyWith(color: whiteColor),
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GradientButton(
+                      title: 'Expert Curated Plans',
+                      func: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const BrowseFitnessPlans(isExpertCurated: true),
                           ),
-                          const SizedBox(width: 10),
-                          Image.asset("assets/images/expert_plans.png",color: whiteColor,height: 20,width:20),
-                        ],
-                      ),
+                        );
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return const PlanDetailsScreen();
+                        // }));
+                      },
+                      gradient: orangeGradient,
                     ),
-                  ),
+                  ],
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Text(
                   'For great results try our Personal Trainers',
                   style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GradientButton(
+                      title: 'Personal Trainer Plans',
+                      func: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const BrowseFitnessPlans(isPersonalTrainer: true),
+                          ),
+                        );
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return const PlansScreen();
+                        // }));
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return const PlanDetailsScreen();
+                        // }));
+                      },
+                      gradient: orangeGradient,
+                    ),
+                  ],
                 ),
               ),
             ],

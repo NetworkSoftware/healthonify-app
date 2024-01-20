@@ -226,8 +226,7 @@ class HealthCarePlansProvider with ChangeNotifier {
 
   Future<PaymentModel> purchaseHealthCarePackage(
       Map<String, dynamic> data) async {
-   // String url = '${ApiUrl.url}hc/subscribeHcPackage';
-    String url = '${ApiUrl.url}v2/subscribePackage';
+    String url = '${ApiUrl.url}hc/subscribeHcPackage';
     log(url);
     log(data.toString());
 
@@ -247,27 +246,21 @@ class HealthCarePlansProvider with ChangeNotifier {
         throw HttpException(responseData['message']);
       }
       if (responseData['status'] == 1) {
-        print("Message : ${responseData['message']}");
+        log(responseData['message']);
         final payData =
             responseData['data']['paymentData'] as Map<String, dynamic>;
 
-
-        print("PAY DATA : $payData");
-        paymentData.amountDue = payData['amountDue'];
+        paymentData.amountDue = payData['amoundDue'];
         paymentData.amountPaid = payData['amountPaid'];
-        paymentData.subscriptionId = responseData['data']['subscriptionData']['_id'];
-         paymentData.razorpayOrderId = payData['rzpOrderId'];
         paymentData.currency = payData['currency'];
         paymentData.discount = payData['discount'];
         paymentData.grossAmount = payData['grossAmount'];
         paymentData.gstAmount = payData['gstAmount'];
         paymentData.id = payData['id'];
-        paymentData.flow = payData['flow'];
-        paymentData.ticketNumber = payData['ticketNumber'];
-
-       // paymentData.invoiceNumber = payData['invoiceNumber'];
+        paymentData.subscriptionId = payData['subscriptionId'];
+        paymentData.invoiceNumber = payData['invoiceNumber'];
         paymentData.netAmount = payData['netAmount'];
-
+        paymentData.razorpayOrderId = payData['rzpOrderId'];
         paymentData.status = payData['status'];
         paymentData.userId = payData['userId'];
       } else {
@@ -275,8 +268,7 @@ class HealthCarePlansProvider with ChangeNotifier {
         throw HttpException(responseData["message"]);
       }
       return paymentData;
-    } catch (e,trace) {
-      print("Trace : $trace");
+    } catch (e) {
       rethrow;
     }
   }

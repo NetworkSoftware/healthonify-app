@@ -75,7 +75,6 @@ class MedicalHistoryProvider with ChangeNotifier {
   Future<void> postAllergicHistory(Map<String, dynamic> data) async {
     String url = '${ApiUrl.hc}/post/userAllergyLogs';
 
-    print("url : $url");
     try {
       final response = await http.post(
         Uri.parse(url),

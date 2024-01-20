@@ -30,7 +30,7 @@ class TabAppBar extends StatelessWidget implements PreferredSizeWidget {
       ],
       leading: IconButton(
         onPressed: () {
-          Navigator.pop(context,true);
+          Navigator.pop(context);
         },
         icon: const Icon(
           Icons.chevron_left_rounded,

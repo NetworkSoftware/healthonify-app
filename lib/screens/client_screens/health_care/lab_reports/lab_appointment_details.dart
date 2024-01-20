@@ -28,8 +28,6 @@ class _MyLabAppointmentScreenState extends State<MyLabAppointmentScreen> {
     try {
       myLabReports = await Provider.of<LabsProvider>(context, listen: false)
           .getLabAppointmentStatus(userId);
-
-      print("REEESPONSE = $myLabReports");
     } on HttpException catch (e) {
       log(e.toString());
     } catch (e) {
@@ -65,49 +63,48 @@ class _MyLabAppointmentScreenState extends State<MyLabAppointmentScreen> {
                   child: Text('No Lab Appointments available'),
                 )
               : ListView.builder(
-          shrinkWrap: true,
-          // physics: const NeverScrollableScrollPhysics(),
-          itemCount: myLabReports!.data!.length,
-          itemBuilder: (context, index) {
-            String reportDate = myLabReports!
-                .data![index].createdAt
-                .toString()
-                .split("T")[0];
-            return Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: Text(
-                    //     myLabReports!.data![index].labId!
-                    //         .vendorId!.firstName
-                    //         .toString(),
-                    //     style: Theme.of(context)
-                    //         .textTheme
-                    //         .labelLarge,
-                    //   ),
-                    // ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(reportDate),
-                          Text(myLabReports!.data![index].status
-                              .toString()),
-                        ],
+                  shrinkWrap: true,
+                  // physics: const NeverScrollableScrollPhysics(),
+                  itemCount: myLabReports!.data!.length,
+                  itemBuilder: (context, index) {
+                    String reportDate = myLabReports!.data![index].createdAt
+                        .toString()
+                        .split("T")[0];
+                    return Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Padding(
+                            //   padding: const EdgeInsets.all(8.0),
+                            //   child: Text(
+                            //     myLabReports!.data![index].labId!
+                            //         .vendorId!.firstName
+                            //         .toString(),
+                            //     style: Theme.of(context)
+                            //         .textTheme
+                            //         .labelLarge,
+                            //   ),
+                            // ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(reportDate),
+                                  Text(myLabReports!.data![index].status
+                                      .toString()),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
+                    );
+                  }),
     );
   }
 }

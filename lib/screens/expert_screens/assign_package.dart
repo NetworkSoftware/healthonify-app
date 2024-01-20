@@ -16,7 +16,12 @@ class PackageListScreen extends StatefulWidget {
   final String userId;
   final String ticketNumber;
 
-  const PackageListScreen({super.key, required this.flowName,required this.expertId,required this.ticketNumber,required this.userId});
+  const PackageListScreen(
+      {super.key,
+      required this.flowName,
+      required this.expertId,
+      required this.ticketNumber,
+      required this.userId});
 
   @override
   _PackageListScreenState createState() => _PackageListScreenState();
@@ -29,8 +34,6 @@ class _PackageListScreenState extends State<PackageListScreen> {
 
   Future<List<PackagesModel>> getAllChallenges() async {
     String url = '${ApiUrl.url}get/package?flow=${widget.flowName}';
-
-    print("url : $url");
 
     List<PackagesModel> packages = [];
 
@@ -99,8 +102,6 @@ class _PackageListScreenState extends State<PackageListScreen> {
   @override
   void initState() {
     super.initState();
-    print("ExpertId : ${widget.expertId}");
-    print("UserId : ${widget.userId}");
     getAllChallenges().then((challenges) {
       setState(() {
         product = challenges;
@@ -126,23 +127,20 @@ class _PackageListScreenState extends State<PackageListScreen> {
         title: const Text("Package List"),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: ListView.builder(
           itemCount: product.length,
           itemBuilder: (context, index) {
             return Card(
               elevation: 1,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    infoRow(title: 'Package Name', value: product[index].name),
                     infoRow(
-                        title: 'Package Name', value: product[index].name),
-                    infoRow(
-                        title: 'Price',
-                        value: product[index].price.toString()),
+                        title: 'Price', value: product[index].price.toString()),
                     infoRow(
                         title: 'Category',
                         value: product[index].expertiseId!['name']),
@@ -211,8 +209,6 @@ class _PackageListScreenState extends State<PackageListScreen> {
       "userId": widget.userId,
       "packageId": package.packageId
     };
-
-    print("payload : $payload");
 
     await Provider.of<WmConsultationData>(context, listen: false)
         .assignPackage(payload)

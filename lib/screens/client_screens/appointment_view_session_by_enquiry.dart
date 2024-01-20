@@ -142,7 +142,7 @@ class _AppointmentViewSessionByEnquiryState extends State<AppointmentViewSession
                       const SizedBox(width: 10),
                       InkWell(
                         onTap: StringDateTimeFormat()
-                            .checkForVideoCallSessionValidation(
+                            .checkForVideoCallValidation(
                             consult.startTime!,
                             consult.startDate!)
                             ? () {

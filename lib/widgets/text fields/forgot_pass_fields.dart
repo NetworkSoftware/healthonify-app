@@ -52,7 +52,6 @@ class ForgotPassEmail extends StatelessWidget {
           validator: (value) {
             // String pattern = r'(^[0-9]{10}$)';
             // RegExp regExp = RegExp(pattern);
-            // print(regExp.hasMatch(value!));
 
             if (value!.isEmpty) {
               return 'Please enter your email id';

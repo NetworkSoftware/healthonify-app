@@ -392,18 +392,11 @@ class _HealthMeterScreenState extends State<HealthMeterScreen> {
                           SizedBox(
                             width: double.infinity,
                             child: GestureDetector(
-                              onTap: () async {
-                                bool result = await Navigator.push(context,
+                              onTap: () {
+                                Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return const BloodGlucoseScreen();
                                 }));
-
-                                print("result : $result");
-
-                                if (result == true) {
-                                  getBloodGlucose();
-                                  setState(() {});
-                                }
                               },
                               child: Card(
                                 elevation: 5,

@@ -103,7 +103,6 @@ class _BloodGlucoseTabScreenState extends State<BloodGlucoseTabScreen>
   @override
   void initState() {
     super.initState();
-    print("TAb1 : ${widget.tabName}");
     userId = Provider.of<UserData>(context, listen: false).userData.id!;
   }
 
@@ -291,20 +290,19 @@ class _BloodGlucoseTabScreenState extends State<BloodGlucoseTabScreen>
                                                             126
                                                     ? 'Early Diabetes'
                                                     : 'Established Diabetes',
-                                        style: double.parse(
-                                                        averagePPRandomBloodGlucose) >
+                                        style: double.parse(averagePPRandomBloodGlucose) >
                                                     70 &&
-                                                double.parse(averagePPRandomBloodGlucose) <
+                                                double.parse(
+                                                        averagePPRandomBloodGlucose) <
                                                     100
                                             ? Theme.of(context)
                                                 .textTheme
                                                 .bodySmall!
-                                                .copyWith(
-                                                    color:
-                                                        const Color(0xFF4599d9))
+                                                .copyWith(color: const Color(0xFF4599d9))
                                             : double.parse(averagePPRandomBloodGlucose) >
                                                         100 &&
-                                                    double.parse(averagePPRandomBloodGlucose) <
+                                                    double.parse(
+                                                            averagePPRandomBloodGlucose) <
                                                         126
                                                 ? Theme.of(context)
                                                     .textTheme
@@ -414,19 +412,6 @@ class _BloodGlucoseTabScreenState extends State<BloodGlucoseTabScreen>
                                   ),
                                   IconButton(
                                     onPressed: () {
-                                      print("stringDateBloodGlucoseFormat");
-                                      dateController.text =
-                                          StringDateTimeFormat()
-                                              .stringDateBloodGlucoseFormat(
-                                                  recentLogs[index].date!);
-                                      timeController.text =
-                                          recentLogs[index].time!;
-                                      dropDownValue = type != "fasting"
-                                          ? recentLogs[index].mealType!
-                                          : "beforebreakfast";
-                                      levelController.text =
-                                          recentLogs[index].bloodGlucoseLevel!;
-
                                       editBloodGlucoseRecord(
                                           recentLogs[index].id!);
                                     },
@@ -490,7 +475,6 @@ class _BloodGlucoseTabScreenState extends State<BloodGlucoseTabScreen>
 
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
-  TextEditingController levelController = TextEditingController();
 
   Map<String, dynamic> editBloodGlucoseMap = {"set": {}};
 
@@ -520,19 +504,18 @@ class _BloodGlucoseTabScreenState extends State<BloodGlucoseTabScreen>
     editBloodGlucose(bgId);
   }
 
-  // String date,String time,String level,String meal
+ // String date,String time,String level,String meal
   void editBloodGlucoseRecord(String bloodGlucoseId) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      //backgroundColor: Colors.black,
+      backgroundColor: Colors.black,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, sheetState) {
             return Form(
               key: formKey,
               child: Column(
-                //mainAxisSize : MainAxisSize.min,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -794,7 +777,6 @@ class _BloodGlucoseTabScreenState extends State<BloodGlucoseTabScreen>
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
                 ],
               ),
             );
@@ -863,7 +845,6 @@ class _BloodGlucoseTabScreenState extends State<BloodGlucoseTabScreen>
   Widget inputFields(String glucoseLevel) {
     return TextFormField(
       keyboardType: TextInputType.phone,
-      controller: levelController,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),

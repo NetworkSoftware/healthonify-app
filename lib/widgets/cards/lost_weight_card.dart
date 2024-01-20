@@ -43,10 +43,6 @@ class _WeightLostCardState extends State<WeightLostCard> {
       return;
     }
 
-    print("Starting : ${widget.weightGoalData.startingWeight}");
-    print("goalWeight : ${widget.weightGoalData.goalWeight}");
-    print("currentWeight : ${widget.weightGoalData.currentWeight}");
-
     if (double.parse(widget.weightGoalData.goalWeight!) >
         double.parse(widget.weightGoalData.startingWeight!)) {
       double gainGoal = double.parse(widget.weightGoalData.goalWeight!) -
@@ -65,14 +61,6 @@ class _WeightLostCardState extends State<WeightLostCard> {
         weightDesc = "out of $gainGoal kg";
         weightValue = "$weight kg gained";
         weightPercent = weight! / gainGoal;
-        double weightCalculate = weight! / gainGoal;
-        if(weightCalculate >= 1.0){
-          weightPercent = 1.0;
-        }else if(weightCalculate <= 0.0){
-          weightPercent = 0.0;
-        }else{
-          weightPercent = weightCalculate;
-        }
       }
     } else {
       double gainGoal = double.parse(widget.weightGoalData.startingWeight!) -
@@ -90,15 +78,7 @@ class _WeightLostCardState extends State<WeightLostCard> {
             double.parse(widget.weightGoalData.currentWeight ?? "0");
         weightValue = "$weight kg lost";
         weightDesc = "out of $gainGoal kg";
-
-        double weightCalculate = weight! / gainGoal;
-        if(weightCalculate >= 1.0){
-          weightPercent = 1.0;
-        }else if(weightCalculate <= 0.0){
-          weightPercent = 0.0;
-        }else{
-          weightPercent = weightCalculate;
-        }
+        weightPercent = weight! / gainGoal;
       }
     }
   }
@@ -205,9 +185,7 @@ class _WeightLostCardState extends State<WeightLostCard> {
             child: Container(
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: orange
-              ),
+                  borderRadius: BorderRadius.circular(10), color: orange),
               child: const Icon(
                 Icons.edit,
                 size: 25,

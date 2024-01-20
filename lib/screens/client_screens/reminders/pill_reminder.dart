@@ -38,8 +38,6 @@ class _PillReminderScreenState extends State<PillReminderScreen> {
   int dosageCount = 1;
   bool isModify = false;
   bool isModifyFirstTime = true;
-  String? _selectedTime;
-  String? time24hrs;
 
   List setTake = [
     "before breakfast",
@@ -60,12 +58,10 @@ class _PillReminderScreenState extends State<PillReminderScreen> {
     for (int index = 0; index < tempList.length; index++) {
       notifList.insert(index, tempList[index]);
     }
-    print("NotifyLIst2 : ${notifList.length}");
     setState(() {});
   }
 
   void savePillReminders() {
-    print(notifList);
     reminderPreferences.savePillReminder(reminders: notifList);
     isModify = false;
   }
@@ -92,7 +88,6 @@ class _PillReminderScreenState extends State<PillReminderScreen> {
     //   }
     //   isModifyFirstTime = false;
     // }
-
 
     if (notifList.isEmpty) {
       for (int index = 0; index < pillReminderModel.length; index++) {
@@ -208,14 +203,14 @@ class _PillReminderScreenState extends State<PillReminderScreen> {
       appBar: CustomAppBar(
         appBarTitle: 'Medicine Reminder',
         widgetRight: IconButton(
-          onPressed: () async{
-           bool result =  await showBottomSheet();
+          onPressed: () async {
+            bool result = await showBottomSheet();
 
-           if(result == true){
-             setState(() {
-               isModify == true;
-             });
-           }
+            if (result == true) {
+              setState(() {
+                isModify == true;
+              });
+            }
           },
           icon: const Icon(
             Icons.add,
@@ -264,7 +259,8 @@ class _PillReminderScreenState extends State<PillReminderScreen> {
                           return ListTile(
                             leading: IconButton(
                               onPressed: () {
-                                deletePillReminder(pillReminderModel[index].id.toString());
+                                deletePillReminder(
+                                    pillReminderModel[index].id.toString());
                               },
                               icon: const Icon(
                                 Icons.delete,
@@ -291,31 +287,31 @@ class _PillReminderScreenState extends State<PillReminderScreen> {
                                 ),
                               ],
                             ),
-                            // trailing: Switch(
-                            //   activeColor: orange,
-                            //   inactiveTrackColor: Colors.grey[600],
-                            //   value: notifList[index],
-                            //   onChanged: (val) {
-                            //     setState(() {
-                            //       isModify = true;
-                            //       notifList[index] = !notifList[index];
-                            //       if (val == false) {
-                            //         FirebaseNotif().cancelNotif(sleepTimeId);
-                            //       } else {
-                            //         // FirebaseNotif().scheduledNotification(
-                            //         //   id: sleepTimeId,
-                            //         //   hour: sleepHour!,
-                            //         //   minute: sleepMinutes!,
-                            //         //   title: "It's time to sleep",
-                            //         //   desc: "ZZZ ... sweet dreams",
-                            //         // );
-                            //       }
-                            //       // trackReminder = !trackReminder;
-                            //       // callApi();
-                            //       savePillReminders();
-                            //     });
-                            //   },
-                            // ),
+                            trailing: Switch(
+                              activeColor: orange,
+                              inactiveTrackColor: Colors.grey[600],
+                              value: notifList[index],
+                              onChanged: (val) {
+                                setState(() {
+                                  isModify = true;
+                                  notifList[index] = !notifList[index];
+                                  if (val == false) {
+                                    FirebaseNotif().cancelNotif(sleepTimeId);
+                                  } else {
+                                    // FirebaseNotif().scheduledNotification(
+                                    //   id: sleepTimeId,
+                                    //   hour: sleepHour!,
+                                    //   minute: sleepMinutes!,
+                                    //   title: "It's time to sleep",
+                                    //   desc: "ZZZ ... sweet dreams",
+                                    // );
+                                  }
+                                  // trackReminder = !trackReminder;
+                                  // callApi();
+                                  savePillReminders();
+                                });
+                              },
+                            ),
                           );
                         });
                   }),
@@ -518,7 +514,6 @@ class _PillReminderScreenState extends State<PillReminderScreen> {
                                       dosageCount--;
                                     }
                                   });
-                                  print(dosageCount);
                                 },
                                 child: Container(
                                   decoration: const BoxDecoration(
@@ -549,17 +544,15 @@ class _PillReminderScreenState extends State<PillReminderScreen> {
                                     child: Text(
                                       dosageCount.toString(),
                                       style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: orange
-                                      ),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: orange),
                                     ),
                                   )),
                               GestureDetector(
                                 onTap: () {
                                   dosageCount++;
                                   setState(() {});
-                                  print(dosageCount);
                                 },
                                 child: Container(
                                   decoration: const BoxDecoration(
@@ -630,16 +623,9 @@ class _PillReminderScreenState extends State<PillReminderScreen> {
         return;
       }
       setState(() {
-        var selection = value;
-        var format24hrTime =
-            '${selection.hour.toString().padLeft(2, "0")}:${selection.minute.toString().padLeft(2, "0")}:00' ;
-        _selectedTime = selection.format(context);
-        time24hrs = format24hrTime;
-        log(time24hrs!);
-        timeController.text = _selectedTime!;
-        log('selected time in 24 hrs -> $format24hrTime');
-        log('selected time -> ${_selectedTime!}');
         timeController.text = value.format(context);
+        // startTime = value;
+        // endTime = value;
       });
     });
   }

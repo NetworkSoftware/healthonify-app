@@ -39,5 +39,22 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
         ),
       ),
     );
+      // body: Column(
+      //   crossAxisAlignment: CrossAxisAlignment.stretch,
+      //   children: [
+      //     SizedBox(
+      //       height: MediaQuery.of(context).size.height * 0.25,
+      //     ),
+      //     Image.asset('assets/logo/logo.png'),
+      //     const Center(child: Text('Version 0.0.0')),
+      //     const SizedBox(height: 8),
+      //     const Center(
+      //       child: Text(
+      //         'Copyright 2022, Healthonify Pvt Ltd. All rights reserved.',
+      //         textAlign: TextAlign.center,
+      //       ),
+      //     ),
+      //   ],
+      // ),
   }
 }

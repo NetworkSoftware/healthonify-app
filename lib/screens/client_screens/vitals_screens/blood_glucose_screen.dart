@@ -26,82 +26,87 @@ class _BloodGlucoseScreen extends State<BloodGlucoseScreen>
   Widget build(BuildContext context) {
     TabController tabController = TabController(length: 4, vsync: this);
     return Scaffold(
-        appBar: TabAppBar(
-          appBarTitle: 'Blood Glucose',
-          actionWIdget2: kSharedPreferences.getString("role") != "ROLE_EXPERT" ?
-          Padding(
-            padding: const EdgeInsets.only(top: 15, right: 10),
-            child: GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const LogBloodGlucose();
-                  })).then((value) {
-                    setState(() {
-                      tab1 = 'Today';
-                      tab2 = 'This Week';
-                      tab3 = 'This Month';
-                      tab4 = 'This Year';
-                    });
-                  });
-                },
-                child: const Text(
-                  "+ Add Log",
-                  style: TextStyle(color: Colors.white, fontSize: 20,fontWeight: FontWeight.bold),
-                )),
-          ) : const SizedBox(),
-          bottomWidget: ColoredBox(
-            color: Theme.of(context).appBarTheme.backgroundColor!,
-            child: customTabBar(context, tabController),
-          ),
+      appBar: TabAppBar(
+        appBarTitle: 'Blood Glucose',
+        actionWIdget2: preferences.getString("role") != "ROLE_EXPERT"
+            ? Padding(
+                padding: const EdgeInsets.only(top: 15, right: 10),
+                child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const LogBloodGlucose();
+                      })).then((value) {
+                        setState(() {
+                          tab1 = 'Today';
+                          tab2 = 'This Week';
+                          tab3 = 'This Month';
+                          tab4 = 'This Year';
+                        });
+                      });
+                    },
+                    child: const Text(
+                      "+ Add Log",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    )),
+              )
+            : const SizedBox(),
+        bottomWidget: ColoredBox(
+          color: Theme.of(context).appBarTheme.backgroundColor!,
+          child: customTabBar(context, tabController),
         ),
-        body: DefaultTabController(
-          length: 4,
-          child: TabBarView(
-            controller: tabController,
-            physics: const BouncingScrollPhysics(),
-            children: [
-              BloodGlucoseTabScreen(
-                tabName: tab1,
-                dateType: "today",
-              ),
-              BloodGlucoseTabScreen(
-                tabName: tab2,
-                dateType: "weekly",
-              ),
-              BloodGlucoseTabScreen(
-                tabName: tab3,
-                dateType: "monthly",
-              ),
-              BloodGlucoseTabScreen(
-                tabName: tab4,
-                dateType: "yearly",
-              ),
-            ],
-          ),
+      ),
+      body: DefaultTabController(
+        length: 4,
+        child: TabBarView(
+          controller: tabController,
+          physics: const BouncingScrollPhysics(),
+          children: [
+            BloodGlucoseTabScreen(
+              tabName: tab1,
+              dateType: "today",
+            ),
+            BloodGlucoseTabScreen(
+              tabName: tab2,
+              dateType: "weekly",
+            ),
+            BloodGlucoseTabScreen(
+              tabName: tab3,
+              dateType: "monthly",
+            ),
+            BloodGlucoseTabScreen(
+              tabName: tab4,
+              dateType: "yearly",
+            ),
+          ],
         ),
-        // bottomNavigationBar:
-        //     kSharedPreferences.getString("role") != "ROLE_EXPERT"
-        //         ? SizedBox(
-        //             height: 56,
-        //             child: GradientButton2(
-        //               gradient: orangeGradient,
-        //               title: "Add Manually",
-        //               func: () {
-        //                 Navigator.push(context,
-        //                     MaterialPageRoute(builder: (context) {
-        //                   return const LogBloodGlucose();
-        //                 })).then((value) {
-        //                   setState(() {
-        //                     tab1 = 'Today';
-        //                     tab2 = 'This Week';
-        //                     tab3 = 'This Month';
-        //                     tab4 = 'This Year';
-        //                   });
-        //                 });
-        //               },
-        //             ),
-        //           )
-        //         : const SizedBox()
+      ),
+      // bottomNavigationBar:
+      //     kSharedPreferences.getString("role") != "ROLE_EXPERT"
+      //         ? SizedBox(
+      //             height: 56,
+      //             child: GradientButton2(
+      //               gradient: orangeGradient,
+      //               title: "Add Manually",
+      //               func: () {
+      //                 Navigator.push(context,
+      //                     MaterialPageRoute(builder: (context) {
+      //                   return const LogBloodGlucose();
+      //                 })).then((value) {
+      //                   setState(() {
+      //                     tab1 = 'Today';
+      //                     tab2 = 'This Week';
+      //                     tab3 = 'This Month';
+      //                     tab4 = 'This Year';
+      //                   });
+      //                 });
+      //               },
+      //             ),
+      //           )
+      //         : const SizedBox()
     );
   }
 

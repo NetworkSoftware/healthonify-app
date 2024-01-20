@@ -44,7 +44,8 @@ class ExpertClientDetails extends StatefulWidget {
       {Key? key,
       required this.clientId,
       required this.patientData,
-      required this.topLevelExp,required this.clientName})
+      required this.topLevelExp,
+      required this.clientName})
       : super(key: key);
 
   @override
@@ -65,7 +66,8 @@ class _ExpertClientDetailsState extends State<ExpertClientDetails> {
       return optiondCard3List;
     }
 
-    if (widget.topLevelExp == "Fitness" || widget.topLevelExp == "Manage Weight") {
+    if (widget.topLevelExp == "Fitness" ||
+        widget.topLevelExp == "Manage Weight") {
       return optiondCard4List;
     }
     return [];
@@ -77,10 +79,8 @@ class _ExpertClientDetailsState extends State<ExpertClientDetails> {
   void initState() {
     super.initState();
     String userId = Provider.of<UserData>(context, listen: false).userData.id!;
-    String userName = Provider.of<UserData>(context, listen: false).userData.firstName!;
-
-    print("name1 : $userId");
-    print("name2 : $userName");
+    String userName =
+        Provider.of<UserData>(context, listen: false).userData.firstName!;
 
     ZIMKit().connectUser(id: userId, name: userName);
   }
@@ -93,8 +93,6 @@ class _ExpertClientDetailsState extends State<ExpertClientDetails> {
         actions: [
           IconButton(
             onPressed: () {
-              print("name : ${widget.clientId}");
-             // ZIMKit().showDefaultNewPeerChatDialog(context);
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return ZIMKitMessageListPage(
                   conversationID: widget.clientId,
@@ -226,12 +224,11 @@ class _ExpertClientDetailsState extends State<ExpertClientDetails> {
                   );
                 }
                 if (listOfCards[index]["title"] == "Prescription") {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                        return PrescriptionExpertsScreen(
-                          userId: widget.clientId,
-                        );
-                      }));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return PrescriptionExpertsScreen(
+                      userId: widget.clientId,
+                    );
+                  }));
                 }
                 if (listOfCards[index]["title"] == "User Diary") {
                   Navigator.of(context).push(
@@ -423,7 +420,7 @@ class _ExpertClientDetailsState extends State<ExpertClientDetails> {
   String? meetingAndConsultationId;
 
   void onSubmit() {
-  //  meetingAndConsultationId = getRandomString(10);
+    //  meetingAndConsultationId = getRandomString(10);
     startLiveSessionMap['expertId'] =
         Provider.of<UserData>(context, listen: false).userData.id!;
 

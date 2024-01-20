@@ -10,7 +10,6 @@ import 'package:healthonify_mobile/providers/weight_management/diet_plan_provide
 import 'package:healthonify_mobile/screens/expert_screens/home/diet/my_diet_plans/add_diet_plan.dart';
 import 'package:healthonify_mobile/screens/expert_screens/home/diet/my_diet_plans/recipies/recipes_screen.dart';
 import 'package:healthonify_mobile/screens/expert_screens/home/diet/my_diet_plans/search_diet_plans.dart';
-import 'package:healthonify_mobile/screens/expert_screens/home/diet/my_diet_plans/view_all_diet_plans.dart';
 import 'package:healthonify_mobile/widgets/experts/dietplans/dietplan_card.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +17,6 @@ class MyDietPlans extends StatefulWidget {
   final bool isFromTopCard;
   final bool isFromClient;
   final String clientId;
-
   const MyDietPlans(
       {Key? key,
       this.isFromClient = false,
@@ -48,16 +46,14 @@ class _MyDietPlansState extends State<MyDietPlans> {
         roleTitle = "expertId";
       }
 
+      if (widget.isFromTopCard) {
         dietPlans = await Provider.of<DietPlanProvider>(context, listen: false)
             .getUserDietPlans("?userId=${userData.id}");
-      // if (widget.isFromTopCard) {
-      //   dietPlans = await Provider.of<DietPlanProvider>(context, listen: false)
-      //       .getUserDietPlans("?userId=${userData.id}");
-      //   return;
-      // }
-      //
-      // dietPlans = await Provider.of<DietPlanProvider>(context, listen: false)
-      //     .getDietPlans("?$roleTitle=${userData.id}");
+        return;
+      }
+
+      dietPlans = await Provider.of<DietPlanProvider>(context, listen: false)
+          .getDietPlans("?$roleTitle=${userData.id}");
       log('fetched diet plans');
     } on HttpException catch (e) {
       log(e.toString());
@@ -109,35 +105,6 @@ class _MyDietPlansState extends State<MyDietPlans> {
                           'My Diet Plans',
                           style: Theme.of(context).textTheme.headlineMedium,
                         ),
-                        actions: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 17,right: 10),
-                            child: GestureDetector(
-                                onTap: () async {
-                                 bool result = await Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: ((context) =>
-                                       ViewAllDietPlans(
-                                        isFromClient: widget.isFromClient,
-                                        isFromTopCard: widget.isFromTopCard,
-                                        clientId: widget.clientId,
-                                      )),
-                                    ),
-                                  );
-
-                                 if(result == true){
-                                   fetchDietPlan();
-                                 }
-                                },
-                                child: Text(
-                                  "View All Diet Plans",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(color: whiteColor,fontWeight: FontWeight.bold),
-                                )),
-                          )
-                        ],
                         leading: IconButton(
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -212,7 +179,6 @@ class _MyDietPlansState extends State<MyDietPlans> {
                                         const NeverScrollableScrollPhysics(),
                                     itemBuilder: (_, index) => DietPlanCard(
                                         dietPlan: dietPlans[index],
-                                        isFromMain: true,
                                         isFromClient: widget.isFromClient,
                                         isFromTopCard: widget.isFromTopCard,
                                         clientId: widget.clientId,

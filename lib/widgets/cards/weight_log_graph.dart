@@ -26,10 +26,9 @@ class _WeightLogGraphState extends State<WeightLogGraph> {
         double.parse(widget.weightGoalData.startingWeight!)) {
       maxYValue = (double.parse(widget.weightGoalData.goalWeight!) + 10) / 2;
     } else {
-      maxYValue = (double.parse(widget.weightGoalData.startingWeight!) + 10) / 2;
+      maxYValue =
+          (double.parse(widget.weightGoalData.startingWeight!) + 10) / 2;
     }
-
-    print("maxYValue $maxYValue");
 
     setState(() {
       filterValue = filterOptions[0];
@@ -64,7 +63,8 @@ class _WeightLogGraphState extends State<WeightLogGraph> {
             height: 330,
             width: MediaQuery.of(context).size.width * 0.94,
             child: Padding(
-              padding: const EdgeInsets.only(left: 20,right: 10,top: 20,bottom: 20),
+              padding: const EdgeInsets.only(
+                  left: 20, right: 10, top: 20, bottom: 20),
               child: LineChart(
                 LineChartData(
                   titlesData: FlTitlesData(

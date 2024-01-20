@@ -25,7 +25,7 @@ class NotificationsData with ChangeNotifier {
         headers: {"Content-Type": "application/json"},
       );
       final responseData = json.decode(response.body) as Map<String, dynamic>;
-       log(json.encode(responseData));
+      // log(json.encode(responseData));
       if (response.statusCode >= 400) {
         throw HttpException(responseData["message"]);
       }
@@ -40,7 +40,6 @@ class NotificationsData with ChangeNotifier {
               id: element["_id"],
               title: element["title"],
               userId: element["userId"],
-              time: element["time"],
               createdAt: element["created_at"],
             ),
           );

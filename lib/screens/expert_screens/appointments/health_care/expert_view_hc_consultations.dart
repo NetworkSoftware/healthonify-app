@@ -18,7 +18,6 @@ class ExpertViewHcConsultations extends StatefulWidget {
   final String? clientId;
   final bool isHomeFlow;
   final String? title;
-
   const ExpertViewHcConsultations(
       {Key? key,
       required this.clientId,
@@ -44,7 +43,7 @@ class _ExpertViewHcConsultationsState extends State<ExpertViewHcConsultations> {
   int currentPage = 0;
 
   final RefreshController _refreshController = RefreshController();
-  ZIMRoomInfo roomInfo = ZIMRoomInfo();
+
   late String expertId;
 
   @override
@@ -198,7 +197,6 @@ class _ExpertViewHcConsultationsState extends State<ExpertViewHcConsultations> {
     final time =
         StringDateTimeFormat().stringToTimeOfDay(consultationData.startTime!);
 
-    print("Time : $time");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Card(
@@ -216,14 +214,12 @@ class _ExpertViewHcConsultationsState extends State<ExpertViewHcConsultations> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 8),
-                        Text(
-                          "Ticket Number : ${consultationData.ticketNumber!}",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall!
-                              .copyWith(fontSize: 16),
-                        ),
+                        // Text(
+                        //   consultationData.userId![0]["firstName"] ??
+                        //       "" " " + consultationData.expert![0]["firstName"] ??
+                        //       "",
+                        //   style: Theme.of(context).textTheme.headlineSmall,
+                        // ),
                         const SizedBox(height: 8),
                         Row(
                           children: [
@@ -234,7 +230,13 @@ class _ExpertViewHcConsultationsState extends State<ExpertViewHcConsultations> {
                             ),
                             const SizedBox(width: 10),
                             Text(
-                              consultationData.status!,
+                              consultationData.status ==
+                                          "meetingLinkGenerated" ||
+                                      consultationData.status ==
+                                          "expertAssigned" ||
+                                      consultationData.status == "scheduled"
+                                  ? "Scheduled"
+                                  : 'Meeting yet to schedule',
                               style: Theme.of(context)
                                   .textTheme
                                   .headlineSmall!
@@ -319,8 +321,6 @@ class _ExpertViewHcConsultationsState extends State<ExpertViewHcConsultations> {
               children: [
                 InkWell(
                   onTap: () {
-                    print("name : ${widget.clientId}");
-
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return ZIMKitMessageListPage(
@@ -328,23 +328,6 @@ class _ExpertViewHcConsultationsState extends State<ExpertViewHcConsultations> {
                         conversationType: ZIMConversationType.peer,
                       );
                     }));
-
-                    // roomInfo.roomID = consultationData.ticketNumber!;
-                    // roomInfo.roomName = consultationData.ticketNumber!;
-                    //
-                    // ZIMRoomAdvancedConfig advancedConfig =
-                    //     ZIMRoomAdvancedConfig();
-                    // ZIM
-                    //     .getInstance()!
-                    //     .enterRoom(roomInfo, advancedConfig)
-                    //     .then((value) => {
-                    //       print("Value: ${value.roomInfo}")
-                    //
-                    //         })
-                    //     .catchError((onError) {
-                    //   // enter This will be triggered when operation failed.
-                    // });
-                    // ZIMKit().showDefaultNewPeerChatDialog(context);
                   },
                   borderRadius: BorderRadius.circular(10),
                   child: Padding(
@@ -364,10 +347,9 @@ class _ExpertViewHcConsultationsState extends State<ExpertViewHcConsultations> {
                 ),
                 const SizedBox(width: 40),
                 InkWell(
-                  onTap: StringDateTimeFormat()
-                          .checkForVideoCallSessionValidation(
-                              consultationData.startTime!,
-                              consultationData.startDate!)
+                  onTap: StringDateTimeFormat().checkForVideoCallValidation(
+                          consultationData.startTime!,
+                          consultationData.startDate!)
                       ? () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -392,6 +374,14 @@ class _ExpertViewHcConsultationsState extends State<ExpertViewHcConsultations> {
                           );
                         }
                       : () {
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) => VideoCall(
+                          //       meetingId: consultationData.id,
+                          //       onVideoCallEnds: () {},
+                          //     ),
+                          //   ),
+                          // );
                           Fluttertoast.showToast(
                               msg:
                                   "Video call will be available 15 mins before and till 1 hour after the assigned time ",

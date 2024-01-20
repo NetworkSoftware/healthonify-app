@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:healthonify_mobile/providers/physiotherapy/enquiry_form_data.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -31,9 +30,8 @@ class SecondOpinionScreen extends StatefulWidget {
 class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
-
   // List<CompletedConsultations> completedConsultations = [];
-  late String userId, userName, userMobile, userEmail;
+  late String userId;
 
   // bool isLoading = true;
 
@@ -83,8 +81,8 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
         await uploadFile(pickedFile!, userData);
       }
       log(consultationData.toString());
-      await Provider.of<EnquiryData>(context, listen: false)
-          .submitEnquiryForm(consultationData);
+      await Provider.of<HealthCareProvider>(context, listen: false)
+          .consultSpecialist(consultationData);
       Fluttertoast.showToast(msg: 'Second opinion scheduled successfully');
       popFunction();
     } on HttpException catch (e) {
@@ -100,15 +98,8 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
 
   void onSubmit() {
     consultationData['userId'] = userId;
-    consultationData['name'] = userName ?? "";
-    consultationData['email'] = userEmail ?? "";
-    consultationData['contactNumber'] = userMobile ?? "";
-    consultationData['flow'] = "healthCare";
-    consultationData['category'] = "Health Care";
-    consultationData['comments'] = "SecondOpinion";
     if (speciality != null) {
       consultationData['expertiseId'] = speciality;
-      consultationData['enquiryFor'] = specialityName;
     } else {
       Fluttertoast.showToast(msg: 'Please select a consultation speciality');
       return;
@@ -127,7 +118,7 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
     }
 
     if (description != null) {
-      consultationData['message'] = description;
+      consultationData['description'] = description;
     } else {
       Fluttertoast.showToast(
           msg: 'Please enter a brief description for your consultation');
@@ -145,10 +136,6 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
   void initState() {
     super.initState();
     userId = Provider.of<UserData>(context, listen: false).userData.id!;
-    userName =
-        Provider.of<UserData>(context, listen: false).userData.firstName!;
-    userEmail = Provider.of<UserData>(context, listen: false).userData.email!;
-    userMobile = Provider.of<UserData>(context, listen: false).userData.mobile!;
     getSpeciality().then((value) {
       specialities =
           Provider.of<ExpertiseData>(context, listen: false).expertise;
@@ -193,12 +180,6 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
   bool isSubmitting = true;
 
   Future<void> uploadFile(PlatformFile file, User userData) async {
-
-    print("File size : ${file.size}");
-    if (file.size > 7000000) {
-      Fluttertoast.showToast(msg: "File size shouldn't exceed 7 mb");
-      return;
-    }
     var dio = Dio();
     try {
       FormData formData = FormData.fromMap({
@@ -264,7 +245,7 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
                       items: specialities
                           .map<DropdownMenuItem<String>>((Expertise value) {
                         return DropdownMenuItem(
-                          value: value.id!,
+                          value: value.id,
                           child: Text(
                             value.name!,
                             style: Theme.of(context).textTheme.bodyMedium,
@@ -275,14 +256,7 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
                         setState(() {
                           speciality = newValue!;
                         });
-
-                        for (int i = 0; i < specialities.length; i++) {
-                          if (specialities[i].id == speciality) {
-                            specialityName = specialities[i].name;
-                          }
-                        }
                         log(speciality!);
-                        log(specialityName!);
                       },
                       value: speciality,
                       style: Theme.of(context).textTheme.bodyMedium,
@@ -306,7 +280,7 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
                           maxHeight: 56,
                         ),
                         contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 8),
+                        const EdgeInsets.symmetric(horizontal: 8),
                       ),
                       icon: const Icon(
                         Icons.keyboard_arrow_down_rounded,
@@ -333,9 +307,9 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
                         style: uploadText != "Add Prescription"
                             ? Theme.of(context).textTheme.bodySmall
                             : Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(color: Colors.grey),
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: Colors.grey),
                       ),
                       trailing: TextButton(
                         onPressed: () {
@@ -374,8 +348,8 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
                                         .textTheme
                                         .bodySmall!
                                         .copyWith(
-                                          color: const Color(0xFF717579),
-                                        ),
+                                      color: const Color(0xFF717579),
+                                    ),
                                     suffixIcon: TextButton(
                                       onPressed: () {
                                         datePicker(dateController);
@@ -417,8 +391,8 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
                                         .textTheme
                                         .bodySmall!
                                         .copyWith(
-                                          color: const Color(0xFF717579),
-                                        ),
+                                      color: const Color(0xFF717579),
+                                    ),
                                     suffixIcon: TextButton(
                                       onPressed: () {
                                         timePicker(timeController);
@@ -601,7 +575,6 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
   }
 
   String? speciality;
-  String? specialityName;
   List doctorSpecialities = [
     'Speciality 1',
     'Speciality 2',
@@ -634,7 +607,7 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                   child: DropdownButtonFormField(
                     isDense: true,
                     items: specialities
@@ -713,8 +686,8 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
                                       .textTheme
                                       .bodySmall!
                                       .copyWith(
-                                        color: const Color(0xFF717579),
-                                      ),
+                                    color: const Color(0xFF717579),
+                                  ),
                                   suffixIcon: TextButton(
                                     onPressed: () {
                                       datePicker(dateController);
@@ -728,7 +701,7 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
                                     ),
                                   ),
                                   contentPadding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  const EdgeInsets.symmetric(horizontal: 8),
                                 ),
                                 style: Theme.of(context).textTheme.bodySmall,
                                 cursorColor: whiteColor,
@@ -756,8 +729,8 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
                                       .textTheme
                                       .bodySmall!
                                       .copyWith(
-                                        color: const Color(0xFF717579),
-                                      ),
+                                    color: const Color(0xFF717579),
+                                  ),
                                   suffixIcon: TextButton(
                                     onPressed: () {
                                       timePicker(timeController);
@@ -771,7 +744,7 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
                                     ),
                                   ),
                                   contentPadding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  const EdgeInsets.symmetric(horizontal: 8),
                                 ),
                                 style: Theme.of(context).textTheme.bodySmall,
                                 cursorColor: whiteColor,
@@ -785,7 +758,7 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   child: SizedBox(
                     child: TextFormField(
                       maxLines: 5,
@@ -834,7 +807,6 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
   }
 
   String? startTime;
-
   void timePicker(TextEditingController controller) {
     showTimePicker(
       context: context,
@@ -859,7 +831,7 @@ class _SecondOpinionScreenState extends State<SecondOpinionScreen> {
         if (value.hour < (DateTime.now().hour + 3)) {
           Fluttertoast.showToast(
               msg:
-                  'Consultation time must be atleast 3 hours after current time');
+              'Consultation time must be atleast 3 hours after current time');
 
           return;
         }

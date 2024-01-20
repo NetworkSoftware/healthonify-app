@@ -16,9 +16,8 @@ class ExpertiseData with ChangeNotifier {
   }
 
   Future<List<TopLevelExpertise>> fetchTopLevelExpertiseData() async {
-   // String url = "${ApiUrl.url}get/expertise?getTopExpertise=true";
+    // String url = "${ApiUrl.url}get/expertise?getTopExpertise=true";
     String url = "${ApiUrl.url}get/expertise";
-    print("url1 : $url");
     final List<TopLevelExpertise> loadedData = [];
     try {
       final response = await http.get(
@@ -122,11 +121,9 @@ class ExpertiseData with ChangeNotifier {
         try {
           // data = therapistsList.GetTherapyList.fromJson(response.body);
           responseData = responseMessage['data'];
-          print(responseData);
           for (int i = 0; i < responseData!.length; i++) {
             dataList.add(therapistsList.Data.fromJson(responseData[i]));
           }
-          print(dataList[0].firstName);
           // log(data.data![0].firstName.toString());
         } catch (e) {
           log('this is the probelm $e');

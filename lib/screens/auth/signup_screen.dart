@@ -108,7 +108,6 @@ class _AuthSignUpState extends State<AuthSignUp> {
   void onSubmit(BuildContext context) {
     setState(() => isLoading = true);
     if (!_formKey.currentState!.validate()) {
-      // print("zHey");
       setState(() => isLoading = false);
       return;
     }
@@ -122,7 +121,8 @@ class _AuthSignUpState extends State<AuthSignUp> {
     }
 
     if (!checkedGoogleValue) {
-      Fluttertoast.showToast(msg: "Please accept the Google API Services User Data Policy");
+      Fluttertoast.showToast(
+          msg: "Please accept the Google API Services User Data Policy");
       setState(() => isLoading = false);
       return;
     }
@@ -224,7 +224,7 @@ class _AuthSignUpState extends State<AuthSignUp> {
             child: TextFormField(
               readOnly: true,
               controller: _selectDate,
-              onTap: () => dateTap(context,_selectDate),
+              onTap: () => dateTap(context, _selectDate),
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -245,7 +245,10 @@ class _AuthSignUpState extends State<AuthSignUp> {
               onSaved: (value) {
                 getDoB(value!);
               },
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.black),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: Colors.black),
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Please enter your dob';
@@ -259,12 +262,18 @@ class _AuthSignUpState extends State<AuthSignUp> {
             children: [
               const Text(
                 "Gender : ",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,color: Colors.black),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.black),
               ),
               const SizedBox(width: 5),
               Row(
                 children: [
-                  const Text("Male",style: TextStyle(color: Colors.black),),
+                  const Text(
+                    "Male",
+                    style: TextStyle(color: Colors.black),
+                  ),
                   Radio(
                       value: "male",
                       groupValue: gender,
@@ -273,14 +282,16 @@ class _AuthSignUpState extends State<AuthSignUp> {
                           gender = value.toString();
                         });
                         getGender(gender);
-                        print("Gender : $gender");
                       }),
                 ],
               ),
               const SizedBox(width: 5),
               Row(
                 children: [
-                  const Text("Female",style: TextStyle(color: Colors.black),),
+                  const Text(
+                    "Female",
+                    style: TextStyle(color: Colors.black),
+                  ),
                   Radio(
                       value: "female",
                       groupValue: gender,
@@ -289,7 +300,6 @@ class _AuthSignUpState extends State<AuthSignUp> {
                           gender = value.toString();
                         });
                         getGender(gender);
-                        print("Gender : $gender");
                       }),
                 ],
               ),
@@ -347,7 +357,8 @@ class _AuthSignUpState extends State<AuthSignUp> {
                   child: CheckboxListTile(
                     title: RichText(
                       text: TextSpan(
-                          text: '$kAppName use and transfer of information received from Google APIs to any other app will adhere to ',
+                          text:
+                              '$kAppName use and transfer of information received from Google APIs to any other app will adhere to ',
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -355,10 +366,13 @@ class _AuthSignUpState extends State<AuthSignUp> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: 'Google API Services User Data Policy',
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  decoration: TextDecoration.underline,
-                                  color: Colors.blue,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                      decoration: TextDecoration.underline,
+                                      color: Colors.blue,
+                                    ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     launchUrl(
@@ -383,22 +397,22 @@ class _AuthSignUpState extends State<AuthSignUp> {
                         checkedGoogleValue = newValue!;
                       });
                     },
-                    controlAffinity:
-                    ListTileControlAffinity.leading, //  <-- leading Checkbox
+                    controlAffinity: ListTileControlAffinity
+                        .leading, //  <-- leading Checkbox
                   ),
                 ),
               ),
-              Platform.isAndroid ?
-              Image.asset(
-                'assets/images/google_fit.png',
-                height: 50,
-                width: 50,
-              ):
-              Image.asset(
-                'assets/images/healthkit.png',
-                height: 50,
-                width: 50,
-              ),
+              Platform.isAndroid
+                  ? Image.asset(
+                      'assets/images/google_fit.png',
+                      height: 50,
+                      width: 50,
+                    )
+                  : Image.asset(
+                      'assets/images/healthkit.png',
+                      height: 50,
+                      width: 50,
+                    ),
             ],
           ),
           Row(

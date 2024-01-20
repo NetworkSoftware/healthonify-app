@@ -42,7 +42,6 @@ class _MyDiaryState extends State<MyDiary> {
   bool isLoading = true;
 
   late String userId;
-  dynamic fastingRecord =[],randomRecord = [];
 
   Future<void> getAllTrackers(BuildContext context) async {
     try {
@@ -63,21 +62,7 @@ class _MyDiaryState extends State<MyDiary> {
             double.parse(data.calorieProgress!['totalWorkoutCalories']));
       }
 
-      if(data.bloodGlucoseLogs!.isNotEmpty){
-        for(int i =0; i< data.bloodGlucoseLogs!.length; i++ ){
-          if(data.bloodGlucoseLogs![i]["testType"] == "fasting"){
-            fastingRecord.add(data.bloodGlucoseLogs![i]);
-          }else{
-            randomRecord.add(data.bloodGlucoseLogs![i]);
-          }
-        }
-         // fastingRecord = data.bloodGlucoseLogs!.firstWhere((element) => element["testType"] == "fasting");
-         // randomRecord = data.bloodGlucoseLogs!.firstWhere((element) => element["testType"] == "random");
-      }
-      print("List1 : $randomRecord");
-      print("List : $fastingRecord");
-
-
+      //double hours = data.userSleepCount! / 3600;
 
       int totalSleepHrs = (data.userSleepCount! ~/ 3600);
       int totalSleepMins = (data.userSleepCount!.remainder(3600) ~/ 60);
@@ -162,7 +147,6 @@ class _MyDiaryState extends State<MyDiary> {
   @override
   void initState() {
     super.initState();
-    print("Role : ${kSharedPreferences.getString("role")}");
     selectedDate = DateFormat("yyyy/MM/dd").format(DateTime.now());
 
     userId = Provider.of<UserData>(context, listen: false).userData.id!;
@@ -204,6 +188,34 @@ class _MyDiaryState extends State<MyDiary> {
                       indent: 10,
                       endIndent: 10,
                     ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     IconButton(
+                    //       onPressed: () {},
+                    //       icon: Icon(
+                    //         Icons.chevron_left_rounded,
+                    //         size: 22,
+                    //         color: Theme.of(context).colorScheme.secondary,
+                    //       ),
+                    //       splashRadius: 18,
+                    //     ),
+                    //     Text(
+
+                    //       'Today',
+                    //       style: Theme.of(context).textTheme.labelMedium,
+                    //     ),
+                    //     IconButton(
+                    //       onPressed: () {},
+                    //       icon: Icon(
+                    //         Icons.chevron_right_rounded,
+                    //         size: 22,
+                    //         color: Theme.of(context).colorScheme.secondary,
+                    //       ),
+                    //       splashRadius: 18,
+                    //     ),
+                    //   ],
+                    // ),
                     isRefresh
                         ? const Center(child: CircularProgressIndicator())
                         : Column(
@@ -485,19 +497,17 @@ class _MyDiaryState extends State<MyDiary> {
                                   }
                                 },
                               ),
-                              otherSecondaryCards(
+                              otherCards(
                                 context,
                                 'Blood Glucose',
-                                'Latest glucose reading(Fasting)',
-                                '${fastingRecord.isEmpty ? "0" : fastingRecord[0]["bloodGlucoseLevel"]}',
-                                'Latest glucose reading(Random)',
-                                '${randomRecord.isEmpty ? "0" : randomRecord[0]["bloodGlucoseLevel"]}',
+                                'Latest glucose reading',
+                                '${data.bloodGlucoseLogs!.isEmpty ? "0" : data.bloodGlucoseLogs![0]["bloodGlucoseLevel"]}',
                                 'Add Glucose reading',
-                                    () async {
+                                () async {
                                   bool result = await Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                        return const BloodGlucoseScreen();
-                                      }));
+                                    return const BloodGlucoseScreen();
+                                  }));
 
                                   if (result == true) {
                                     getAllTrackers(context);
@@ -566,90 +576,7 @@ class _MyDiaryState extends State<MyDiary> {
             ),
             const Divider(),
             if (!widget.isFromClient &&
-                kSharedPreferences.getString("role") != "ROLE_EXPERT")
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      onTap();
-                    },
-                    child: Text(
-                      button,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.more_horiz_rounded,
-                      size: 22,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    splashRadius: 18,
-                  ),
-                ],
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget otherSecondaryCards(
-      context,
-      String cardTitle,
-      String desc1,
-      String qty1,
-      String desc2,
-      String qty2,
-      String button,
-      Function onTap,
-      ) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              cardTitle,
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    desc1,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-                Text(
-                  qty1,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    desc2,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-                Text(
-                  qty2,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-            const Divider(),
-            if (!widget.isFromClient &&
-                kSharedPreferences.getString("role") != "ROLE_EXPERT")
+                preferences.getString("role") != "ROLE_EXPERT")
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -731,7 +658,7 @@ class _MyDiaryState extends State<MyDiary> {
             //   ),
             const Divider(),
             if (!widget.isFromClient &&
-                kSharedPreferences.getString("role") != "ROLE_EXPERT")
+                preferences.getString("role") != "ROLE_EXPERT")
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

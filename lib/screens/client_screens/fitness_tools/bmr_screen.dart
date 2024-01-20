@@ -5,7 +5,6 @@ import 'package:healthonify_mobile/constants/theme_data.dart';
 import 'package:healthonify_mobile/models/fitness_tools_models/fitness_tools_models.dart';
 import 'package:healthonify_mobile/models/http_exception.dart';
 import 'package:healthonify_mobile/providers/fitness_tools/fitness_tools_data.dart';
-import 'package:healthonify_mobile/providers/user_data.dart';
 import 'package:healthonify_mobile/screens/client_screens/fitness_tools/bmi_details.dart';
 import 'package:healthonify_mobile/screens/client_screens/fitness_tools/bmi_results.dart';
 import 'package:healthonify_mobile/widgets/buttons/custom_buttons.dart';
@@ -70,7 +69,6 @@ class _BMRScreenState extends State<BMRScreen> {
 
   Future<void> calulate(BuildContext context,
       Function(Map<String, dynamic> data) onSuccess) async {
-    String userId = Provider.of<UserData>(context, listen: false).userData.id!;
     setState(() {
       _isLoading = true;
     });
@@ -80,7 +78,7 @@ class _BMRScreenState extends State<BMRScreen> {
     try {
       var data = await Provider.of<FitnessToolsData>(context, listen: false)
           .calculateTool(
-        "weight=${bmiData.weight}&height=${bmiData.height}&age=${bmiData.age}&gender=${bmiData.gender}&tool=bmr&userId=$userId",
+        "weight=${bmiData.weight}&height=${bmiData.height}&age=${bmiData.age}&gender=${bmiData.gender}&tool=bmr",
       );
       onSuccess.call(data);
     } on HttpException catch (e) {

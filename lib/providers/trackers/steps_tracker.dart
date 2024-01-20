@@ -145,8 +145,6 @@ class StepTrackerProvider with ChangeNotifier {
           }
         }
 
-        print("dadadda");
-        print(loadedData.last.stepsCount);
         _stepsData = loadedData;
         var latestDateFormatted =
             DateFormat("MM/dd/yyyy").format(DateTime.now());
@@ -174,18 +172,16 @@ class StepTrackerProvider with ChangeNotifier {
 
     List<StepCounter> loadedData = [];
 
-    try{
+    try {
       final response = await http.get(
         Uri.parse(url),
         headers: {"Content-Type": "application/json"},
       );
       final responseData = json.decode(response.body) as Map<String, dynamic>;
       if (response.statusCode >= 400) {
-        print("qqqq");
         throw HttpException(responseData["message"]);
       }
       if (responseData["status"] == 1) {
-        print("pppp");
         final data = responseData["data"] as List<dynamic>;
 
         for (var i = 0; i < data.length; i++) {
@@ -203,16 +199,13 @@ class StepTrackerProvider with ChangeNotifier {
         }
         String lastStepCount;
         _stepsLastData = loadedData;
-        print("LIST : ${_stepsLastData.length}");
-        // lastStepCount = data.first["stepsCount"];
-        // print("LAst STep DATATA : $lastStepCount");
         notifyListeners();
 
         return loadedData;
-      }else {
+      } else {
         throw HttpException(responseData["message"]);
       }
-    }catch (e) {
+    } catch (e) {
       rethrow;
     }
   }

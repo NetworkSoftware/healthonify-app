@@ -279,21 +279,21 @@ List<HealthcareTopList> healthcareTopList = [
     },
     image: Image.asset('assets/icons/my_care.png'),
   ),
-  HealthcareTopList(
-    title: "Ayurveda",
-    gradient: orangeGradient,
-    function: (BuildContext context) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return AyurvedaScreen();
-          },
-        ),
-      );
-    },
-    image: Image.asset('assets/icons/ayurveda.png'),
-  ),
+  // HealthcareTopList(
+  //   title: "Ayurveda",
+  //   gradient: orangeGradient,
+  //   function: (BuildContext context) {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) {
+  //           return AyurvedaScreen();
+  //         },
+  //       ),
+  //     );
+  //   },
+  //   image: Image.asset('assets/icons/ayurveda.png'),
+  // ),
 
   // HealthcareTopList(
   //   title: "Medical History",

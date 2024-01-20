@@ -156,9 +156,10 @@ class WmConsultationData with ChangeNotifier {
           loadedData.add(
             WmConsultation(
               id: ele["_id"],
+              expert: ele["expertId"] != null
+                  ? List<dynamic>.from(ele["expertId"].map((x) => x))
+                  : [],
               userId: List<dynamic>.from(ele["userId"].map((x) => x)),
-             // expert: List<dynamic>.from(ele["expertId"].map((x) => x)),
-
               startTime: ele["startTime"],
               startDate: ele["startDate"],
               status: ele["status"],

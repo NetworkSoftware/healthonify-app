@@ -110,7 +110,6 @@ class _MyClientScreenState extends State<MyClientScreen> {
     startLiveSessionMap['consultationId'] = meetingAndConsultationId;
     startLiveSessionMap['sessionName'] = widget.sessionName;
 
-    print(startLiveSessionMap.toString());
     startLive();
   }
 
@@ -243,8 +242,6 @@ class _MyClientScreenState extends State<MyClientScreen> {
             } else if (userId.isNotEmpty && isChecked == false) {
               userId.remove(patientId);
             } else {}
-
-            print(userId.toString());
           },
           activeColor: const Color(0xFFff7f3f),
           checkboxShape: RoundedRectangleBorder(

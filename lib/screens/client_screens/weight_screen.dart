@@ -162,32 +162,29 @@ class _WeightScreenState extends State<WeightScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         appBarTitle: 'Weight',
-        widgetRight:  kSharedPreferences.getString("role") != "ROLE_EXPERT" ? Padding(
-          padding: const EdgeInsets.only(right: 15),
-          child: GestureDetector(
-            onTap: (){
-              addWeightLog(context);
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Icon(
-                  Icons.add_circle,
-                  color: whiteColor,
-                  size: 28,
+        widgetRight: preferences.getString("role") != "ROLE_EXPERT"
+            ? Padding(
+                padding: const EdgeInsets.only(right: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Icon(
+                      Icons.add_circle,
+                      color: whiteColor,
+                      size: 28,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      'Add Logs',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge!
+                          .copyWith(color: whiteColor),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 5),
-                Text(
-                  'Add Logs',
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelLarge!
-                      .copyWith(color: whiteColor),
-                ),
-              ],
-            ),
-          ),
-        ) : const SizedBox(),
+              )
+            : const SizedBox(),
       ),
       body: isLoading
           ? const Center(
@@ -258,7 +255,10 @@ class _WeightScreenState extends State<WeightScreen> {
                             vertical: 8, horizontal: 16),
                         child: Text(
                           'Recent Logs',
-                          style: Theme.of(context).textTheme.labelLarge!.copyWith(color: orange),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge!
+                              .copyWith(color: orange),
                         ),
                       ),
                       recentLogs.isEmpty
@@ -278,7 +278,6 @@ class _WeightScreenState extends State<WeightScreen> {
                               itemCount:
                                   recentLogs.length > 5 ? 5 : recentLogs.length,
                               itemBuilder: (context, index) {
-                                print("recentLogs : ${recentLogs.length}");
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
@@ -305,30 +304,31 @@ class _WeightScreenState extends State<WeightScreen> {
                                           ),
                                         ],
                                       ),
-                                      trailing: kSharedPreferences
-                                                  .getString("role") !=
+                                      trailing: preferences.getString("role") !=
                                               "ROLE_EXPERT"
                                           ? GestureDetector(
-                                        onTap: () {
-                                          editWeightLog(
-                                            context,
-                                            recentLogs[index].date!,
-                                            recentLogs[index].id!,
-                                          );
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              color: orange
-                                          ),
-                                          child: const Icon(
-                                            Icons.edit,
-                                            size: 25,
-                                            color: whiteColor,
-                                          ),
-                                        ),
-                                      )
+                                              onTap: () {
+                                                editWeightLog(
+                                                  context,
+                                                  recentLogs[index].date!,
+                                                  recentLogs[index].id!,
+                                                );
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    color: orange),
+                                                child: const Icon(
+                                                  Icons.edit,
+                                                  size: 25,
+                                                  color: whiteColor,
+                                                ),
+                                              ),
+                                            )
                                           : const SizedBox(),
                                     ),
                                   ),

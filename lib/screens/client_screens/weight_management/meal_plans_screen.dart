@@ -1,7 +1,5 @@
 import 'dart:developer';
 import 'dart:ui';
-import 'package:healthonify_mobile/providers/tracker_data/home_tracker_data.dart';
-import 'package:healthonify_mobile/providers/user_data.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -64,12 +62,9 @@ class _MealPlansScreenState extends State<MealPlansScreen> {
     });
   }
 
-  late String userId;
-
   @override
   void initState() {
     super.initState();
-    userId = Provider.of<UserData>(context, listen: false).userData.id!;
     currentDate = DateFormat("yyyy/MM/dd").format(DateTime.now());
     getDietLogs(DateFormat("yyyy/MM/dd").format(
       DateTime.now(),
@@ -121,11 +116,8 @@ class _MealPlansScreenState extends State<MealPlansScreen> {
                     builder: (context, value, child) {
                       dietLog = value.dietLog;
 
-                      print("diet logs : $dietLog");
                       addDiet();
-                      calculateCalories();
-                      Provider.of<HomeTrackerProvider>(context, listen: false)
-                          .getHomeTrackerData(userId);//issue with this
+                      calculateCalories(); //issue with this
                       return StatefulBuilder(
                         builder: (context, setState) {
                           widgetState = setState;
@@ -170,6 +162,10 @@ class _MealPlansScreenState extends State<MealPlansScreen> {
                                                             dietLog[index]
                                                                     .mealName ??
                                                                 ""),
+                                                    // mealTime: StringDateTimeFormat()
+                                                    //     .convertTimeStampToTime(
+                                                    //         dietLog[index]
+                                                    //             .timeInMs!),
                                                     dishes:
                                                         dietLog[index].dishes ??
                                                             [],

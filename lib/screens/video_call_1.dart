@@ -19,15 +19,18 @@ class VideoCall1 extends StatefulWidget {
 
 class _VideoCall1State extends State<VideoCall1> {
   User? data;
+
   /// Meeting AppId and AppSign
   static const int appId = 1441473249;
-  static const String appSign = "fd9fc0a015b641806af857e53b647b16b275e1470d56344c46d408a609bfbaef";
+  static const String appSign =
+      "fd9fc0a015b641806af857e53b647b16b275e1470d56344c46d408a609bfbaef";
   @override
   void initState() {
     super.initState();
     log(widget.meetingId!);
-    data = Provider.of<UserData>(context,listen: false).userData;
+    data = Provider.of<UserData>(context, listen: false).userData;
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -37,7 +40,8 @@ class _VideoCall1State extends State<VideoCall1> {
         userID: data!.id!,
         userName: data!.firstName!,
         callID: widget.meetingId!,
-        config: ZegoUIKitPrebuiltCallConfig(turnOnCameraWhenJoining: true,useSpeakerWhenJoining: true),
+        config: ZegoUIKitPrebuiltCallConfig(
+            turnOnCameraWhenJoining: true, useSpeakerWhenJoining: true),
       ),
     );
   }
@@ -116,25 +120,20 @@ class _VideoCall1State extends State<VideoCall1> {
 //       zoom.initZoom(zoomOptions).then((results) {
 //         if (results[0] == 0) {
 //           zoom.onMeetingStatus().listen((status) {
-//             print("${"[Meeting Status Stream] : " + status[0]} - " + status[1]);
 //             if (_isMeetingEnded(status[0])) {
-//               print("[Meeting Status] :- Ended");
 //               timer!.cancel();
 //             }
 //           });
-//           print("listen on event channel");
 //           zoom.joinMeeting(meetingOptions).then((joinMeetingResult) {
 //
 //             timer = Timer.periodic(const Duration(seconds: 2), (timer) {
 //               zoom.meetingStatus(meetingOptions.meetingId!).then((status) {
-//                 print("${"[Meeting Status Polling] : " + status[0]} - " +
 //                     status[1]);
 //               });
 //             });
 //           });
 //         }
 //       }).catchError((error) {
-//         print("[Error Generated] : " + error);
 //       });
 //     } else {
 //       if (meetingId!.isEmpty) {

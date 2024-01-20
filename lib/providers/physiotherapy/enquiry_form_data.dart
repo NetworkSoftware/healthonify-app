@@ -43,15 +43,12 @@ class EnquiryData with ChangeNotifier {
 
     log("submit enquiry $url");
 
-
-    print("Data : ${json.encode(enquiryData)}");
     try {
       final response = await http.post(
         Uri.parse(url),
         headers: {"Content-Type": "application/json"},
         body: json.encode(enquiryData),
       );
-      print("JsonData : ${response.body}");
       final responseData = json.decode(response.body) as Map<String, dynamic>;
 
       if (response.statusCode >= 400) {

@@ -12,7 +12,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin{
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   bool session = false;
   var isLoading = false;
@@ -23,7 +24,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     });
     SharedPrefManager pref = SharedPrefManager();
     session = await pref.getSession();
-    // print(session);
     if (session == true) {
       Timer(const Duration(seconds: 3), () {
         Navigator.pushReplacement(context,
@@ -55,6 +55,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _animationController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -63,17 +64,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         child: Scaffold(
             //backgroundColor: Colors.transparent,
             body: Stack(children: [
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                    // width: 250,
-                    // height: 150.0,
-                    color: Colors.white,
-                    child: Center(
-                        child: ScaleTransition(
-                            scale: _animationController,
-                            child: Image.asset('assets/logo/splash.gif')))),
-              ),
-            ])));
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+                // width: 250,
+                // height: 150.0,
+                color: Colors.white,
+                child: Center(
+                    child: ScaleTransition(
+                        scale: _animationController,
+                        child: Image.asset('assets/logo/splash.gif')))),
+          ),
+        ])));
   }
 }

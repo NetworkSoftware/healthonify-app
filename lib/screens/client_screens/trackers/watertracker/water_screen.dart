@@ -57,6 +57,8 @@ class _WaterTrackerScreenState extends State<WaterTrackerScreen> {
                 Consumer<AllTrackersData>(
                   builder: (context, value, child) => WaterCardDetails(
                     goalCount: goalCount,
+                    // returnWaterGlass: widget.returnWaterGlass,
+                    // returnWaterGlass: (){},
                     waterGlass:
                         value.allTrackersData.userWaterGlassCount.toString(),
                   ),

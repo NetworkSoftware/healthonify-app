@@ -21,19 +21,15 @@ import 'package:healthonify_mobile/screens/client_screens/consult_experts.dart';
 import 'package:healthonify_mobile/screens/client_screens/fitness_screen.dart';
 import 'package:healthonify_mobile/screens/client_screens/health_care/ayurveda/ayurveda.dart';
 import 'package:healthonify_mobile/screens/client_screens/health_care/ayurveda/browse_plans/browse_hc_plans.dart';
-import 'package:healthonify_mobile/screens/client_screens/health_care/lab_reports/lab_reports.dart';
-import 'package:healthonify_mobile/screens/client_screens/live_fitness.dart';
 import 'package:healthonify_mobile/screens/client_screens/live_well/live_well_screen.dart';
 import 'package:healthonify_mobile/screens/client_screens/physio/physiotherapy_screen.dart';
 import 'package:healthonify_mobile/screens/client_screens/weight_management/manage_weight_screen.dart';
-import 'package:healthonify_mobile/screens/client_screens/weight_management/weight_loss_enquiry.dart';
 import 'package:healthonify_mobile/screens/main_screen.dart';
 import 'package:healthonify_mobile/widgets/buttons/custom_buttons.dart';
 import 'package:healthonify_mobile/widgets/other/carousel_slider.dart';
 import 'package:healthonify_mobile/widgets/other/horiz_list_view/home_top_list_buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 class HealthCareScreen extends StatefulWidget {
   HealthCareScreen(
@@ -107,34 +103,26 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
       if (widget.topLevelExpertise![i].parentExpertiseId != null) {
         if (widget.categoryId ==
             widget.topLevelExpertise![i].parentExpertiseId) {
-          subCategoryData.add(
-              SubCategory(id: widget.topLevelExpertise![i].id!,
-                  name: widget.topLevelExpertise![i].name!,
-                  parentId: widget.topLevelExpertise![i].parentExpertiseId!)
-          );
+          subCategoryData.add(SubCategory(
+              id: widget.topLevelExpertise![i].id!,
+              name: widget.topLevelExpertise![i].name!,
+              parentId: widget.topLevelExpertise![i].parentExpertiseId!));
         }
       }
     }
 
-    print("list1111 : ${subCategoryData.length}");
-
-    for(int j=0; j<subCategoryData.length; j++){
-      if(subCategoryData[j].name == "Ayurveda"){
+    for (int j = 0; j < subCategoryData.length; j++) {
+      if (subCategoryData[j].name == "Ayurveda") {
         ayurvedaId = subCategoryData[j].id;
       }
     }
-    print("ayurveda : $ayurvedaId");
   }
 
   @override
   void initState() {
     super.initState();
     subCategory();
-    print("CategoryID : ${widget.categoryId}");
-    userId = Provider
-        .of<UserData>(context, listen: false)
-        .userData
-        .id!;
+    userId = Provider.of<UserData>(context, listen: false).userData.id!;
 
     fetchAllBlogs();
     getHraAnswers();
@@ -151,29 +139,24 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
         Navigator.pop(context, true);
         return true;
       },
-      child: Scaffold(
-          body: Consumer<ExpertiseData>(
-              builder: (context, categoryData, child) {
-                return NestedScrollView(
-                  headerSliverBuilder: (context, value) {
-                    return [
-                      flexibleAppBar(
-                          context, categoryData.topLevelExpertiseData),
-                    ];
-                  },
-                  body: isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : pageContent(context),
-                );
-              })
-
-
-      ),
+      child: Scaffold(body:
+          Consumer<ExpertiseData>(builder: (context, categoryData, child) {
+        return NestedScrollView(
+          headerSliverBuilder: (context, value) {
+            return [
+              flexibleAppBar(context, categoryData.topLevelExpertiseData),
+            ];
+          },
+          body: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : pageContent(context),
+        );
+      })),
     );
   }
 
-  PreferredSizeWidget flexibleAppBar(context,
-      List<TopLevelExpertise> topLevelExpertise) {
+  PreferredSizeWidget flexibleAppBar(
+      context, List<TopLevelExpertise> topLevelExpertise) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(56),
       child: SliverAppBar(
@@ -198,10 +181,10 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  //color: const Color(0xFFec6a13),
-                  color: Theme.of(context).drawerTheme.backgroundColor,
-                 // border: Border.all(color: Colors.black, width: 1)
+                borderRadius: BorderRadius.circular(20),
+                //color: const Color(0xFFec6a13),
+                color: Theme.of(context).drawerTheme.backgroundColor,
+                // border: Border.all(color: Colors.black, width: 1)
               ),
               child: DropdownButton2(
                 buttonHeight: 20,
@@ -210,12 +193,12 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                 underline: const SizedBox(),
                 dropdownWidth: 240,
                 offset: const Offset(-30, 20),
-                dropdownDecoration:  BoxDecoration(
+                dropdownDecoration: BoxDecoration(
                     color: Theme.of(context).drawerTheme.backgroundColor,
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 alignment: Alignment.topLeft,
                 value: selectedValue,
-                hint:  Row(
+                hint: Row(
                   children: [
                     Text(
                       'Choose Category',
@@ -241,7 +224,12 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                         ),
                         Text(
                           list.title,
-                          style: Theme.of(context).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.bold,fontSize: 14),),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall!
+                              .copyWith(
+                                  fontWeight: FontWeight.bold, fontSize: 14),
+                        ),
                       ],
                     ),
                   );
@@ -261,7 +249,9 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
                         return HealthCareScreen(
-                            category: 1, categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                            category: 1,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
@@ -277,7 +267,9 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
                         return ManageWeightScreen(
-                            category: 2, categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                            category: 2,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
@@ -293,7 +285,9 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
                         return FitnessScreen(
-                            category: 3, categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                            category: 3,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
@@ -309,7 +303,9 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
                         return PhysiotherapyScreen(
-                            category: 4, categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                            category: 4,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
@@ -335,13 +331,15 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
                         return LiveWellScreen(
-                            category: 6, categoryId: categoryId,topLevelExpertise: topLevelExpertise);
+                            category: 6,
+                            categoryId: categoryId,
+                            topLevelExpertise: topLevelExpertise);
                       }));
 
                       if (result == true) {
                         selectedValue = null;
                       }
-                    }  else if (selectedValue == 7) {
+                    } else if (selectedValue == 7) {
                       for (int i = 0; i < topLevelExpertise.length; i++) {
                         if (topLevelExpertise[i].name == "Ayurveda") {
                           categoryId = topLevelExpertise[i].id!;
@@ -359,14 +357,11 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                       if (result == true) {
                         selectedValue = null;
                       }
-                    }
-
-                    else if (selectedValue == 8) {
+                    } else if (selectedValue == 8) {
                       Navigator.of(
                         context, /*rootnavigator: true*/
                       ).push(MaterialPageRoute(builder: (context) {
-                        return const ShopScreen(
-                        );
+                        return const ShopScreen();
                       }));
                       //launchUrl(Uri.parse("https://healthonify.com/Shop"));
                     }
@@ -377,7 +372,6 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
 //                  buttonPadding: const EdgeInsets.only(left: 0,bottom: 25,top: 0),
                 iconEnabledColor: Theme.of(context).colorScheme.onBackground,
                 iconDisabledColor: Theme.of(context).colorScheme.onBackground,
-
               ),
             ),
           ),
@@ -455,27 +449,15 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
       // 'assets/images/Picture16.jpg',
       {
         'image': 'assets/images/hc/hc4.jpg',
-        'route': () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const LiveFitnessScreen();
-          }));
-        },
+        'route': () {},
       },
       {
         'image': 'assets/images/hc/hc5.jpg',
-        'route': () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const WeightLossEnquiry(isFitnessFlow: false);
-          }));
-        },
+        'route': () {},
       },
       {
         'image': 'assets/images/hc/hc6.jpg',
-        'route': () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const LabReportScreen();
-          }));
-        },
+        'route': () {},
       },
     ];
     return SingleChildScrollView(
@@ -486,6 +468,35 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
         children: [
           HealthcareTopButtons(id: ayurvedaId),
           CustomCarouselSlider(imageUrls: imgs),
+          // Card(
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(8),
+          //     child: Column(
+          //       children: [
+          //         Text(
+          //             "Half of the population don't even know that they are having chronic conditions like Diabetes, Hypertension and Cardiovascular disorders? Do you know? ",
+          //             style: Theme
+          //                 .of(context)
+          //                 .textTheme
+          //                 .labelSmall),
+          //         const SizedBox(
+          //           height: 10,
+          //         ),
+          //         GradientButton(
+          //           title: 'Take a Health Risk Assessment',
+          //           func: () {
+          //             Navigator.of(
+          //               context, /*rootnavigator: true*/
+          //             ).push(MaterialPageRoute(builder: (context) {
+          //               return HraScreen(hraData: hraAnswers);
+          //             }));
+          //           },
+          //           gradient: blueGradient,
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           GridView.builder(
             padding: const EdgeInsets.all(4),
             shrinkWrap: true,
@@ -520,10 +531,7 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                     //const SizedBox(height: 10),
                     Text(
                       healthCareGridView[index]["title"],
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .labelSmall,
+                      style: Theme.of(context).textTheme.labelSmall,
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -536,10 +544,7 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: SizedBox(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.98,
+                width: MediaQuery.of(context).size.width * 0.98,
                 child: Card(
                   elevation: 5,
                   color: const Color(0xFFec6a13),
@@ -547,8 +552,9 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    child:  Row(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: Row(
                       children: [
                         InkWell(
                           onTap: () {
@@ -577,7 +583,8 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: Colors.white,
-                                        border: Border.all(color: const Color(0xFFec6a13))),
+                                        border: Border.all(
+                                            color: const Color(0xFFec6a13))),
                                     child: const Center(
                                       child: Text(
                                         "View",
@@ -599,18 +606,18 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                           children: [
                             Text(
                               "Your Appointments",
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
-                                  .labelLarge!.copyWith(color: Colors.white),
+                                  .labelLarge!
+                                  .copyWith(color: Colors.white),
                             ),
                             const SizedBox(height: 6),
                             Text(
                               'Book and View your appointments here',
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
-                                  .bodySmall!.copyWith(color: Colors.white),
+                                  .bodySmall!
+                                  .copyWith(color: Colors.white),
                             ),
                           ],
                         ),
@@ -621,6 +628,115 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
               ),
             ),
           ),
+          // Padding(
+          //   padding: const EdgeInsets.all(4),
+          //   child: Card(
+          //     child: Padding(
+          //       padding: const EdgeInsets.all(10),
+          //       child: Column(
+          //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Text(
+          //             "Your Appointments",
+          //             style: Theme
+          //                 .of(context)
+          //                 .textTheme
+          //                 .labelLarge,
+          //           ),
+          //           const SizedBox(height: 6),
+          //           Text(
+          //             'Book and view your consultations here',
+          //             style: Theme
+          //                 .of(context)
+          //                 .textTheme
+          //                 .bodySmall,
+          //           ),
+          //           const SizedBox(height: 10),
+          //           Row(
+          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //             children: [
+          //               Container(
+          //                 constraints:
+          //                 const BoxConstraints(minWidth: 70, minHeight: 40),
+          //                 decoration: BoxDecoration(
+          //                   gradient: purpleGradient,
+          //                   borderRadius:
+          //                   const BorderRadius.all(Radius.circular(10.0)),
+          //                 ),
+          //                 child: InkWell(
+          //                   onTap: () {
+          //                     // Navigator.push(context,
+          //                     //     MaterialPageRoute(builder: (context) {
+          //                     //   return const HealthCareAppointmentsScreen();
+          //                     // }));
+          //                     Navigator.of(
+          //                       context, /*rootnavigator: true*/
+          //                     ).push(
+          //                       MaterialPageRoute(
+          //                         builder: (context) =>
+          //                             AllAppointmentsScreen(flow: 'healthCare'),
+          //                       ),
+          //                     );
+          //                   },
+          //                   borderRadius: BorderRadius.circular(10),
+          //                   child: Center(
+          //                     child: Text(
+          //                       'View',
+          //                       style: Theme
+          //                           .of(context)
+          //                           .textTheme
+          //                           .labelMedium!
+          //                           .copyWith(color: whiteColor),
+          //                     ),
+          //                   ),
+          //                 ),
+          //               ),
+          //               Container(
+          //                 constraints:
+          //                 const BoxConstraints(minWidth: 90, minHeight: 40),
+          //                 decoration: BoxDecoration(
+          //                   gradient: purpleGradient,
+          //                   borderRadius:
+          //                   const BorderRadius.all(Radius.circular(10.0)),
+          //                 ),
+          //                 child: InkWell(
+          //                   onTap: () {
+          //                     Navigator.push(context,
+          //                         MaterialPageRoute(builder: (context) {
+          //                           return const DoctorConsultationScreen();
+          //                         }));
+          //                   },
+          //                   borderRadius: BorderRadius.circular(10),
+          //                   child: Padding(
+          //                     padding:
+          //                     const EdgeInsets.symmetric(horizontal: 10.0),
+          //                     child: Row(
+          //                       children: [
+          //                         const Icon(
+          //                           Icons.add,
+          //                           color: Colors.white,
+          //                         ),
+          //                         Text(
+          //                           'Request',
+          //                           style: Theme
+          //                               .of(context)
+          //                               .textTheme
+          //                               .labelMedium!
+          //                               .copyWith(color: whiteColor),
+          //                         ),
+          //                       ],
+          //                     ),
+          //                   ),
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Row(
@@ -630,8 +746,8 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                     func: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                            return BrowseHealthCarePlans();
-                          }));
+                        return BrowseHealthCarePlans();
+                      }));
                     },
                     title: 'Chronic Condition reversal Plans',
                     gradient: orangeGradient,
@@ -646,22 +762,19 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
             padding: const EdgeInsets.only(left: 16, bottom: 8),
             child: Text(
               'Quick Links',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headlineSmall,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: GridView.builder(
-                padding: const EdgeInsets.all(4),
+                padding: const EdgeInsets.only(top: 15.0, bottom: 8),
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
-                  mainAxisExtent: 130,
+                  mainAxisExtent: 126,
                   mainAxisSpacing: 0.0,
                   crossAxisSpacing: 0.0,
                 ),
@@ -687,13 +800,10 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                             ),
                           ),
                         ),
-                        //const SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
                           healthCareQuickLinks[index]["title"],
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .labelSmall,
+                          style: Theme.of(context).textTheme.labelSmall,
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -711,10 +821,7 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                 padding: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
                 child: Text(
                   "Blogs",
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headlineSmall,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ),
               TextButton(
@@ -745,9 +852,8 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                                  return BlogDetailsScreen(
-                                      blogData: blogs[index]);
-                                }));
+                              return BlogDetailsScreen(blogData: blogs[index]);
+                            }));
                           },
                           child: Image.network(
                             blogs[index].mediaLink!,
@@ -759,10 +865,7 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                       ),
                       Text(
                         blogs[index].blogTitle!,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyMedium,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ),
@@ -794,9 +897,7 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
       context: context,
       builder: (context) {
         return Dialog(
-          backgroundColor: Theme
-              .of(context)
-              .canvasColor,
+          backgroundColor: Theme.of(context).canvasColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -808,19 +909,13 @@ class _HealthCareScreenState extends State<HealthCareScreen> {
                 Center(
                   child: Text(
                     "DISCLAIMER",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .labelLarge,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   "Healthonify collects location data to enable fitness tracking even when the app is closed or not in use. Location features will be used to detect laboratories around your location. Please grant access to continue.",
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),

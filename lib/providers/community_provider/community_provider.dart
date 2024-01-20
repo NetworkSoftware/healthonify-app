@@ -31,7 +31,6 @@ class CommunityProvider with ChangeNotifier {
           commentsData.add(
             CommunityModel(
               isApproved: ele["isApproved"] ?? "",
-              format: ele["format"] ?? "",
               likesCount: ele["likesCount"].toString(),
               commentsCount: ele["commentsCount"].toString(),
               id: ele["_id"],

@@ -6,7 +6,6 @@ import 'package:healthonify_mobile/constants/theme_data.dart';
 import 'package:healthonify_mobile/models/fitness_tools_models/fitness_tools_models.dart';
 import 'package:healthonify_mobile/models/http_exception.dart';
 import 'package:healthonify_mobile/providers/fitness_tools/macro_calc_provider.dart';
-import 'package:healthonify_mobile/providers/user_data.dart';
 import 'package:healthonify_mobile/widgets/buttons/custom_buttons.dart';
 import 'package:healthonify_mobile/widgets/cards/custom_appbar.dart';
 import 'package:provider/provider.dart';
@@ -76,14 +75,13 @@ class _MacrosCalculatorScreenState extends State<MacrosCalculatorScreen> {
   void getCalories(String value) => calories = value;
 
   Future<void> calculateMacroData(BuildContext context) async {
-    String userId = Provider.of<UserData>(context, listen: false).userData.id!;
     setState(() {
       isLoading = true;
     });
     try {
       macroDetails =
           await Provider.of<MacroCalculatorProvider>(context, listen: false)
-              .calculateMacros(dropDownDietId!, calories,userId);
+              .calculateMacros(dropDownDietId!, calories);
 
       log('macros calculated');
       log('proteins : ${macroDetails[0].proteinInGrams}');

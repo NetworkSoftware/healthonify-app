@@ -40,7 +40,8 @@ class _MyGoalsScreenState extends State<MyGoalsScreen> {
   Future postWeightGoal() async {
     try {
       await Provider.of<WeightGoalProvider>(context, listen: false)
-          .postWeightGoals(goalMap).then((value) {
+          .postWeightGoals(goalMap)
+          .then((value) {
         getWeightGoal();
       });
       Fluttertoast.showToast(msg: 'Weight Goals uploaded successfully');
@@ -95,7 +96,6 @@ class _MyGoalsScreenState extends State<MyGoalsScreen> {
         var tempDateTime = DateFormat('yyyy-MM-dd').parse(temp!);
         sDate = DateFormat('dd/MM/yyyy').format(tempDateTime);
 
-        print("Current weight : ${goalData[0].currentWeight}");
         if (sWeight != null && sDate != null) {
           startWght = '$sWeight kgs on $sDate';
         } else {
@@ -146,8 +146,7 @@ class _MyGoalsScreenState extends State<MyGoalsScreen> {
             },
           },
         ];
-      }
-      else {
+      } else {
         myGoalsData = [
           {
             'title': 'Starting Weight',
@@ -194,7 +193,7 @@ class _MyGoalsScreenState extends State<MyGoalsScreen> {
         ];
       }
 
-      setState((){});
+      setState(() {});
       log('fetched weight goals');
     } on HttpException catch (e) {
       log('HTTP Exception: $e');
@@ -258,8 +257,9 @@ class _MyGoalsScreenState extends State<MyGoalsScreen> {
                                     child: Text(
                                       myGoalsData[index]['title'],
                                       maxLines: 2,
-                                      style:
-                                          Theme.of(context).textTheme.bodyMedium,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
                                     ),
                                   ),
                                   Text(
@@ -431,10 +431,9 @@ class _MyGoalsScreenState extends State<MyGoalsScreen> {
                         goalMap['date'] = mapDate;
                         goalMap['startingWeight'] = sWeight;
                         onSubmit();
-                       // getWeightGoal();
+                        // getWeightGoal();
                       });
                       log(goalMap.toString());
-                      
                     },
                     gradient: orangeGradient,
                   ),
@@ -468,9 +467,9 @@ class _MyGoalsScreenState extends State<MyGoalsScreen> {
                       filled: true,
                       hintText: 'Burn Calories',
                       hintStyle:
-                      Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: const Color(0xFF717579),
-                      ),
+                          Theme.of(context).textTheme.bodySmall!.copyWith(
+                                color: const Color(0xFF717579),
+                              ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: const BorderSide(
@@ -640,7 +639,7 @@ class _MyGoalsScreenState extends State<MyGoalsScreen> {
                       onSubmit();
                       log(goalMap.toString());
                       Navigator.pop(context);
-                     // getWeightGoal();
+                      // getWeightGoal();
                     },
                     gradient: orangeGradient,
                   ),
@@ -734,7 +733,6 @@ class _MyGoalsScreenState extends State<MyGoalsScreen> {
   }
 
   void activityLevelFunc() {
-
     showDialog(
       context: context,
       builder: (context) {

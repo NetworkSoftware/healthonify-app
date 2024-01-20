@@ -32,7 +32,6 @@ class UserData with ChangeNotifier {
       );
       log(response.body);
       final responseData = json.decode(response.body) as Map<String, dynamic>;
-      // print(json.encode(responseData));
       if (response.statusCode >= 400) {
         throw HttpException(responseData["message"]);
       }
@@ -55,7 +54,6 @@ class UserData with ChangeNotifier {
         _userData.city = data["city"];
         _userData.gender = data["gender"];
         _userData.state = data["state"];
-        _userData.weight = data["weightInKgs"];
         _userData.pincode = data["pinCode"] ?? 0;
         _userData.country = data["country"];
         _userData.about = data["about"];
@@ -129,7 +127,6 @@ class UserData with ChangeNotifier {
         clientData.state = data["state"];
         clientData.pincode = data["pinCode"];
         clientData.country = data["country"];
-        clientData.weight = data["weightInKgs"];
         clientData.about = data["about"];
         clientData.dob = data["dob"];
         clientData.bmi = data["bmi"] ?? "";
@@ -160,14 +157,12 @@ class UserData with ChangeNotifier {
 
     String url = "${ApiUrl.url}fetch/experts?id=$userId";
 
-
     try {
       final response = await http.get(
         Uri.parse(url),
         headers: {"Content-Type": "application/json"},
       );
       final responseData = json.decode(response.body) as Map<String, dynamic>;
-      // print(json.encode(responseData));
       if (response.statusCode >= 400) {
         throw HttpException(responseData["message"]);
       }
@@ -208,7 +203,6 @@ class UserData with ChangeNotifier {
         _userData.state = data["state"];
         _userData.pincode = data["pinCode"];
         _userData.country = data["country"];
-        _userData.weight = data["weightInKgs"];
         _userData.about = data["about"];
         _userData.consultationCharge = data["consultationCharge"];
         _userData.dob = data["dob"];
@@ -364,7 +358,6 @@ class UserData with ChangeNotifier {
     String url =
         "${ApiUrl.url}get/user?roles=6229b2f153fc7e317ceaf675&isAdminApproved=true";
 
-    print("Get Experts : $url");
     List<User> loadedData = [];
 
     try {
@@ -419,7 +412,6 @@ class UserData with ChangeNotifier {
       }
       if (responseData["status"] == 1) {
         final data = responseData["data"] as List<dynamic>;
-        print(data[0]["topExpertise"]["name"]);
         for (var element in data) {
           if (element["topExpertise"]["name"].contains("Physiotherapy")) {
             loadedData.add(

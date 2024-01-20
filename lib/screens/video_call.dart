@@ -51,7 +51,6 @@
 //           audioMuted: true,
 //           featureFlags: featureFlags);
 //
-//       print("Options meet: $meetingId");
 //       try {
 //         var _ = await JitsiMeet.joinMeeting(
 //           options,

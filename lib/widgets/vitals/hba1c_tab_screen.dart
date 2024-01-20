@@ -88,13 +88,13 @@ class _Hba1cTabScreenState extends State<Hba1cTabScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Padding(
-                    //   padding: const EdgeInsets.all(10),
-                    //   child: Text(
-                    //     widget.isYearlyTab ? 'This Year' : 'This Month',
-                    //     style: Theme.of(context).textTheme.labelLarge,
-                    //   ),
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        widget.isYearlyTab ? 'This Year' : 'This Month',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Card(
@@ -153,15 +153,35 @@ class _Hba1cTabScreenState extends State<Hba1cTabScreen>
                         ),
                       ),
                     ),
-                    //const SizedBox(height: 10),
+                    const SizedBox(height: 16),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(16),
+                    //   child: Text(
+                    //     'STATS',
+                    //     style: Theme.of(context).textTheme.labelLarge,
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(10),
+                    //   child: Row(
+                    //     children: [
+                    //       Text(
+                    //         'Average HbA1c',
+                    //         style: Theme.of(context).textTheme.bodySmall,
+                    //       ),
+                    //       const Spacer(),
+                    //       Text(
+                    //         _hbA1cData.averageData!["hba1cAverage"] ?? "_",
+                    //         style: Theme.of(context).textTheme.bodySmall,
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(
-                        'Logs',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge!
-                            .copyWith(color: orange),
+                        'HISTORY',
+                        style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ),
                     if (_hbA1cData.recentLogs != null ||
@@ -174,99 +194,64 @@ class _Hba1cTabScreenState extends State<Hba1cTabScreen>
                           itemBuilder: (context, index) => Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Container(
-                                color: double.parse(_hbA1cData
-                                    .recentLogs![index]
-                                    .hba1cLevel!) <=
-                                    6
-                                    ? const Color(0xFF92d050)
-                                    : double.parse(_hbA1cData
-                                    .recentLogs![
-                                index]
-                                    .hba1cLevel!) >
-                                    6 &&
-                                    double.parse(_hbA1cData
-                                        .recentLogs![
-                                    index]
-                                        .hba1cLevel!) <=
-                                        8
-                                    ? const Color(0xFFffc000)
-                                    : Colors.red,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 4),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        _hbA1cData.recentLogs![index].hba1cLevel!,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge!,
-                                      ),
-                                      Text(
-                                        ' %',
-                                        style:
-                                            Theme.of(context).textTheme.bodySmall,
-                                      ),
-                                      const Spacer(),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            StringDateTimeFormat()
-                                                .stringtDateFormatLogWeight(
-                                                    _hbA1cData.recentLogs![index]
-                                                        .date!),
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!
-                                                ,
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            _hbA1cData.recentLogs![index].time!,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!,
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(width: 10),
-                                      IconButton(
-                                        onPressed: () {
-                                          dateController.text =
-                                              StringDateTimeFormat()
-                                                  .stringDateBloodGlucoseFormat(
-                                                      _hbA1cData
-                                                          .recentLogs![index]
-                                                          .date!);
-                                          selectedDate = DateFormat("MM/dd/yyyy")
-                                              .parse(_hbA1cData
-                                                  .recentLogs![index].date!);
-                                          timeController.text =
-                                              _hbA1cData.recentLogs![index].time!;
-                                          selectedTime =
-                                              _hbA1cData.recentLogs![index].time!;
-                                          levelController.text = _hbA1cData
-                                              .recentLogs![index].hba1cLevel!;
-                                          hba1cLevel = _hbA1cData
-                                              .recentLogs![index].hba1cLevel!;
-                                          edithba1clevel(
-                                              _hbA1cData.recentLogs![index].id!);
-                                        },
-                                        icon: const Icon(
-                                          Icons.edit_note_rounded,
-                                          //color: Theme.of(context).colorScheme.onBackground,
-                                          color: Colors.black,
-                                          size: 34,
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 4),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      _hbA1cData.recentLogs![index].hba1cLevel!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    ),
+                                    Text(
+                                      ' %',
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                    const Spacer(),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          StringDateTimeFormat()
+                                              .stringtDateFormat(_hbA1cData
+                                                  .recentLogs![index].date!),
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall!
+                                              .copyWith(color: Colors.grey),
                                         ),
-                                        splashRadius: 20,
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          _hbA1cData.recentLogs![index].time!,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall!
+                                              .copyWith(color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(width: 10),
+                                    IconButton(
+                                      onPressed: () {
+                                        edithba1clevel(
+                                            _hbA1cData.recentLogs![index].id!);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit_note_rounded,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                        size: 34,
                                       ),
-                                    ],
-                                  ),
+                                      splashRadius: 20,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -285,7 +270,6 @@ class _Hba1cTabScreenState extends State<Hba1cTabScreen>
 
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
-  TextEditingController levelController = TextEditingController();
 
   Map<String, dynamic> editHba1cMap = {"set": {}};
 
@@ -313,7 +297,7 @@ class _Hba1cTabScreenState extends State<Hba1cTabScreen>
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      // backgroundColor: Colors.black,
+      backgroundColor: Colors.black,
       builder: (context) {
         return Column(
           children: [
@@ -477,7 +461,6 @@ class _Hba1cTabScreenState extends State<Hba1cTabScreen>
   }
 
   DateTime? selectedDate;
-
   void datePicker() {
     showDatePicker(
       context: context,
@@ -503,7 +486,6 @@ class _Hba1cTabScreenState extends State<Hba1cTabScreen>
   }
 
   String? selectedTime;
-
   void timePicker() {
     showTimePicker(
       context: context,
@@ -520,11 +502,10 @@ class _Hba1cTabScreenState extends State<Hba1cTabScreen>
       }
       setState(() {
         var selection = value;
-        var format24hrTime =
+
+        selectedTime =
             '${selection.hour.toString().padLeft(2, "0")}:${selection.minute.toString().padLeft(2, "0")}:00';
-        selectedTime = selection.format(context);
-        timeController.text = selectedTime!;
-        log('selected time in 24 hrs -> $format24hrTime');
+        timeController.text = value.format(context);
         log('selected time -> ${selectedTime!}');
       });
     });
@@ -535,7 +516,6 @@ class _Hba1cTabScreenState extends State<Hba1cTabScreen>
   Widget inputFields(String glucoseLevel) {
     return TextFormField(
       keyboardType: TextInputType.phone,
-      controller: levelController,
       decoration: InputDecoration(
         border: const OutlineInputBorder(
           borderSide: BorderSide(

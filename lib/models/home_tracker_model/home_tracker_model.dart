@@ -172,16 +172,12 @@ class CalorieProgress {
     this.totalFoodCalories,
     this.totalWorkoutCalories,
     this.remainingCalories,
-    this.totalDietAnalysisData,
-    this.totalMacrosAnalysisData
   });
 
   String? caloriesGoal;
   String? totalFoodCalories;
   String? totalWorkoutCalories;
   String? remainingCalories;
-  TotalDietAnalysisData? totalDietAnalysisData;
-  TotalMacrosAnalysisData? totalMacrosAnalysisData;
 
   factory CalorieProgress.fromJson(Map<String, dynamic> json) =>
       CalorieProgress(
@@ -189,8 +185,6 @@ class CalorieProgress {
         totalFoodCalories: json["totalFoodCalories"],
         totalWorkoutCalories: json["totalWorkoutCalories"],
         remainingCalories: json["remainingCalories"],
-        totalDietAnalysisData: TotalDietAnalysisData.fromJson(json["totalDietAnalysisData"]),
-        totalMacrosAnalysisData: TotalMacrosAnalysisData.fromJson(json["totalMacrosAnalysisData"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -198,81 +192,7 @@ class CalorieProgress {
         "totalFoodCalories": totalFoodCalories,
         "totalWorkoutCalories": totalWorkoutCalories,
         "remainingCalories": remainingCalories,
-        "totalDietAnalysisData": totalDietAnalysisData,
-        "totalMacrosAnalysisData": totalMacrosAnalysisData,
       };
-}
-
-class TotalDietAnalysisData {
-  double? totalCalories;
-  //List<DietPercentagesData>? dietPercentagesData;
-
-  //TotalDietAnalysisData({this.totalCalories, this.dietPercentagesData});
-  TotalDietAnalysisData({this.totalCalories});
-
-  TotalDietAnalysisData.fromJson(Map<String, dynamic> json) {
-    totalCalories = json['totalCalories'];
-    // if (json['dietPercentagesData'] != null) {
-    //   dietPercentagesData = <DietPercentagesData>[];
-    //   json['dietPercentagesData'].forEach((v) { dietPercentagesData!.add(DietPercentagesData.fromJson(v)); });
-    // }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['totalCalories'] = totalCalories;
-    // if (dietPercentagesData != null) {
-    //   data['dietPercentagesData'] = dietPercentagesData!.map((v) => v.toJson()).toList();
-    // }
-    return data;
-  }
-}
-
-class DietPercentagesData {
-  String? name;
-  int? caloriesCount;
-  String? percentage;
-
-  DietPercentagesData({this.name, this.caloriesCount, this.percentage});
-
-  DietPercentagesData.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    caloriesCount = json['caloriesCount'];
-    percentage = json['percentage'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['caloriesCount'] = caloriesCount;
-    data['percentage'] = percentage;
-    return data;
-  }
-}
-
-class TotalMacrosAnalysisData {
-  String? proteins;
-  String? fats;
-  String? carbs;
-  String? fiber;
-
-  TotalMacrosAnalysisData({this.proteins, this.fats, this.carbs, this.fiber});
-
-  TotalMacrosAnalysisData.fromJson(Map<String, dynamic> json) {
-    proteins = json['proteins'];
-    fats = json['fats'];
-    carbs = json['carbs'];
-    fiber = json['fiber'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['proteins'] = proteins;
-    data['fats'] = fats;
-    data['carbs'] = carbs;
-    data['fiber'] = fiber;
-    return data;
-  }
 }
 
 class Hba1CLog {

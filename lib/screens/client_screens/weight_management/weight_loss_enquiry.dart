@@ -148,17 +148,17 @@ class _WeightLossEnquiryState extends State<WeightLossEnquiry> {
   }
 
   List<ValueItem> options = [
-  const ValueItem(label: 'Thyroid', value: '1'),
-  const ValueItem(label: 'Acidity', value: '2'),
-  const ValueItem(label: 'Cholestrol', value: '3'),
-  const ValueItem(label: 'Knee Pain', value: '4'),
-  const ValueItem(label: 'Back Pain', value: '5'),
-  const ValueItem(label: 'Diabetes (T2)', value: '6'),
-  const ValueItem(label: 'Blood Pressure', value: '7'),
-  const ValueItem(label: 'Pre Diabetes', value: '8'),
-  const ValueItem(label: 'PCOD', value: '9'),
-  const ValueItem(label: 'Others', value: '10'),
-  const ValueItem(label: 'None', value: '11'),
+    const ValueItem(label: 'Thyroid', value: '1'),
+    const ValueItem(label: 'Acidity', value: '2'),
+    const ValueItem(label: 'Cholestrol', value: '3'),
+    const ValueItem(label: 'Knee Pain', value: '4'),
+    const ValueItem(label: 'Back Pain', value: '5'),
+    const ValueItem(label: 'Diabetes (T2)', value: '6'),
+    const ValueItem(label: 'Blood Pressure', value: '7'),
+    const ValueItem(label: 'Pre Diabetes', value: '8'),
+    const ValueItem(label: 'PCOD', value: '9'),
+    const ValueItem(label: 'Others', value: '10'),
+    const ValueItem(label: 'None', value: '11'),
   ];
 
   List<String> selectedCondition = [];
@@ -194,8 +194,7 @@ class _WeightLossEnquiryState extends State<WeightLossEnquiry> {
                     id.add(element.id!);
                   }
                   return WeightEnqDropDown(
-                    dropDownValues:
-                    options,
+                    dropDownValues: options,
                     getValue: getEnqFor,
                   );
                 },
@@ -216,26 +215,33 @@ class _WeightLossEnquiryState extends State<WeightLossEnquiry> {
                   onOptionSelected: (options) {
                     debugPrint("check this ${options.toString()}");
                     selectedCondition.clear();
-                    for(int i =0; i< options.length; i++){
+                    for (int i = 0; i < options.length; i++) {
                       selectedCondition.add(options[i].label);
                     }
 
-                    print("selected condition : ${selectedCondition.length}");
                     getHealthCond(selectedCondition.join(","));
                   },
                   options: options,
                   borderWidth: 1,
                   focusedBorderWidth: 2,
                   selectionType: SelectionType.multi,
-                  backgroundColor: Theme.of(context).drawerTheme.backgroundColor,
+                  backgroundColor:
+                      Theme.of(context).drawerTheme.backgroundColor,
                   hint: 'Choose option',
-                  hintStyle: const TextStyle(fontSize: 16,color: Colors.teal),
-                  chipConfig: ChipConfig(wrapType: WrapType.scroll,backgroundColor: Theme.of(context).canvasColor,labelStyle: Theme.of(context).textTheme.bodyMedium,deleteIconColor: orange),
+                  hintStyle: const TextStyle(fontSize: 16, color: Colors.teal),
+                  chipConfig: ChipConfig(
+                      wrapType: WrapType.scroll,
+                      backgroundColor: Theme.of(context).canvasColor,
+                      labelStyle: Theme.of(context).textTheme.bodyMedium,
+                      deleteIconColor: orange),
                   dropdownHeight: 300,
-                  optionsBackgroundColor: Theme.of(context).drawerTheme.backgroundColor,
-                  selectedOptionBackgroundColor: Theme.of(context).drawerTheme.backgroundColor,
+                  optionsBackgroundColor:
+                      Theme.of(context).drawerTheme.backgroundColor,
+                  selectedOptionBackgroundColor:
+                      Theme.of(context).drawerTheme.backgroundColor,
                   optionTextStyle: Theme.of(context).textTheme.bodyMedium,
-                  selectedOptionIcon: const Icon(Icons.check_circle,color: orange),
+                  selectedOptionIcon:
+                      const Icon(Icons.check_circle, color: orange),
                   suffixIcon: Icons.keyboard_arrow_down_rounded,
                 ),
               ),
@@ -365,9 +371,7 @@ class _WeightLossEnquiryState extends State<WeightLossEnquiry> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   'Confirm',
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium!,
+                  style: Theme.of(context).textTheme.labelMedium!,
                 ),
               ),
             ),

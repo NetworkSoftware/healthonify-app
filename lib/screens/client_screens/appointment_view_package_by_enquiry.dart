@@ -3,14 +3,11 @@ import "dart:developer";
 import "package:flutter/material.dart";
 import "package:fluttertoast/fluttertoast.dart";
 import "package:healthonify_mobile/constants/theme_data.dart";
-import "package:healthonify_mobile/main.dart";
 import "package:healthonify_mobile/models/appointment_consultation/appointment_package_consultation_model.dart";
 import "package:healthonify_mobile/models/http_exception.dart";
 import "package:healthonify_mobile/providers/all_consultations_data.dart";
 import "package:healthonify_mobile/providers/user_data.dart";
 import "package:healthonify_mobile/screens/client_screens/appointment_view_session_by_enquiry.dart";
-import "package:healthonify_mobile/screens/expert_screens/assign_workout.dart";
-import "package:healthonify_mobile/screens/expert_screens/expert_appointment_view_session_by_enquiry.dart";
 import "package:healthonify_mobile/screens/pay_now.dart";
 import "package:healthonify_mobile/widgets/cards/custom_appbar.dart";
 import "package:provider/provider.dart";
@@ -98,7 +95,7 @@ class _AppointmentViewPackageByEnquiryState
   Widget consultCard(
       BuildContext context, AppointmentPackageConsultation consult) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -117,9 +114,7 @@ class _AppointmentViewPackageByEnquiryState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            consult.expertId != null
-                                ? "${consult.expertId!['firstName']} ${consult.expertId!['lastName']}"
-                                : "",
+                            "${consult.expertId!['firstName']} ${consult.expertId!['lastName']}",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
@@ -130,8 +125,7 @@ class _AppointmentViewPackageByEnquiryState
                       ),
                       CircleAvatar(
                         backgroundColor: Colors.lightBlue,
-                        backgroundImage: consult.expertId == null ||
-                                consult.expertId!['imageUrl'].isEmpty
+                        backgroundImage: consult.expertId!['imageUrl'].isEmpty
                             ? const AssetImage(
                                 "assets/icons/user.png",
                               ) as ImageProvider
@@ -161,79 +155,47 @@ class _AppointmentViewPackageByEnquiryState
                   infoRow(
                       title: 'Description',
                       value: consult.packageId!['description']),
-                  infoRow(title: 'Status', value: consult.status!),
+                  infoRow(
+                      title: 'Status',
+                      value: consult.status!),
                   const SizedBox(height: 20),
-                  kSharedPreferences.getString("role") !=  "ROLE_EXPERT" ?
-                      const SizedBox() :
+                  consult.status == 'packagePaymentRequested' ?
                   Align(
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return AssignWorkoutScreen(ticketNumber: consult.ticketNumber!, userId: consult.userId!["_id"]);
-                            },
-                          ),
-                        );
+                        bool result = await Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return PayNowScreen(paymentUrl: consult.paymentLink!);
+                        }));
+
+                        if (result == true) {
+                          getPackageConsultations();
+                        }
+                        //launchUrl(Uri.parse(consult.paymentLink!));
                       },
                       child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: orange,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          child: const Text(
-                            "Assign Workout Plan",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          )),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: orange),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        child: const Text(
+                          "Pay Now",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.white),
+                        ),
+                      ),
                     ),
-                  ),
-                  consult.status == 'packagePaymentRequested' && kSharedPreferences.getString("role") !=
-                      "ROLE_EXPERT"
-                      ? Align(
-                          alignment: Alignment.centerRight,
-                          child: GestureDetector(
-                            onTap: () async {
-                              bool result = await Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return PayNowScreen(
-                                    paymentUrl: consult.paymentLink!);
-                              }));
-
-                              if (result == true) {
-                                getPackageConsultations();
-                              }
-                              //launchUrl(Uri.parse(consult.paymentLink!));
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: orange),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              child: const Text(
-                                "Pay Now",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        )
-                      : const SizedBox(),
-                  const SizedBox(height: 10),
+                  ) : const SizedBox()
                 ],
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
             child: Text(
               "Service Details",
               style: Theme.of(context)
@@ -246,51 +208,42 @@ class _AppointmentViewPackageByEnquiryState
               padding: const EdgeInsets.only(top: 10),
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
-              itemCount: consult.serviceDetails!.length,
+              itemCount:  consult.serviceDetails!.length,
               itemBuilder: (context, index) {
                 return Card(
                   elevation: 0,
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         infoRow(
                             title: 'Service Name',
-                            value: consult.serviceDetails![index]
-                                ['serviceName']!),
+                            value: consult.serviceDetails![index]['serviceName']!),
                         infoRow(
                             title: 'Expert',
-                            value: consult.serviceDetails![index]['expertId'] !=
-                                    null
-                                ? "${consult.serviceDetails![index]['expertId']['firstName']!} ${consult.serviceDetails![index]['expertId']['lastName']!}"
-                                : "Expert yet to assign"),
+                            value: "${consult.serviceDetails![index]['expertId']['firstName']!} ${consult.serviceDetails![index]['expertId']['lastName']!}"),
+
                         const SizedBox(height: 20),
                         Align(
                           alignment: Alignment.centerRight,
                           child: GestureDetector(
                             onTap: () async {
-                              if (kSharedPreferences.getString("role") !=
-                                  "ROLE_EXPERT") {
-                                await Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return AppointmentViewSessionByEnquiry(
-                                    ticketNumber: widget.ticketNumber,
-                                    flow: consult.serviceDetails![index]
-                                        ['serviceName']!,
-                                  );
-                                }));
-                              } else {
-                                await Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return ExpertAppointmentViewSessionByEnquiry(
-                                    ticketNumber: widget.ticketNumber,
-                                    flow: consult.serviceDetails![index]
-                                        ['serviceName']!,
-                                  );
-                                }));
-                              }
+                             await Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return AppointmentViewSessionByEnquiry(
+                                      ticketNumber: widget.ticketNumber,
+                                      flow: consult.serviceDetails![index]['serviceName']!,
+                                    );
+                                  }));
+
+                              // if(result == true){
+                              //   if (widget.flow == '') {
+                              //     getConsultations();
+                              //   } else {
+                              //     getFlowConsultations();
+                              //   }
+                              // }
                             },
                             child: Container(
                                 decoration: BoxDecoration(
@@ -301,9 +254,8 @@ class _AppointmentViewPackageByEnquiryState
                                     horizontal: 10, vertical: 5),
                                 child: const Text(
                                   "View Session",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style:
+                                  TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
                                 )),
                           ),
                         )
@@ -312,6 +264,7 @@ class _AppointmentViewPackageByEnquiryState
                   ),
                 );
               }),
+
         ],
       ),
     );

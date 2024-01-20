@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:healthonify_mobile/func/string_date_format.dart';
 import 'package:healthonify_mobile/models/wm/diet_plan_model.dart';
 import 'package:healthonify_mobile/providers/weight_management/diet_plan_provider.dart';
 import 'package:healthonify_mobile/screens/expert_screens/home/diet/my_diet_plans/expert_diet_meal_plan/view_diet_meal_plan.dart';
@@ -17,7 +16,6 @@ class DietPlanCard extends StatefulWidget {
   final bool isFromClient;
   final String clientId;
   final bool isFromTopCard;
-  final bool? isFromMain;
 
   const DietPlanCard({
     Key? key,
@@ -26,7 +24,6 @@ class DietPlanCard extends StatefulWidget {
     required this.isFromClient,
     required this.isFromTopCard,
     this.clientId = "",
-    this.isFromMain,
   }) : super(key: key);
 
   @override
@@ -66,7 +63,6 @@ class _DietPlanCardState extends State<DietPlanCard> {
                 .push(MaterialPageRoute(
                     builder: (context) => ViewDietMealPlan(
                           dietPlan: widget.dietPlan,
-                          isFromMain: widget.isFromMain,
                           isEditEnabled: !widget.isFromTopCard,
                         )))
                 .then((value) => setState(() {}));
@@ -96,7 +92,6 @@ class _DietPlanCardState extends State<DietPlanCard> {
                                     builder: (context) => ViewDietMealPlan(
                                       dietPlan: widget.dietPlan,
                                       isEdit: true,
-                                      isFromMain: widget.isFromMain,
                                     ),
                                   ),
                                 )
@@ -143,8 +138,8 @@ class _DietPlanCardState extends State<DietPlanCard> {
                       ),
                   ],
                 ),
-                Text(
-                  "Created on ${StringDateTimeFormat().stringAssignFormat(widget.dietPlan.createdDate!)}",
+                const Text(
+                  "Created on 17/06/22 02:43 PM",
                 ),
                 const SizedBox(
                   height: 20,
@@ -194,31 +189,31 @@ class _DietPlanCardState extends State<DietPlanCard> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Expanded(
-                      //   child: Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Text(
-                      //         "636.5 kcal (should do calc)",
-                      //         style: Theme.of(context).textTheme.labelLarge,
-                      //       ),
-                      //       const Text("Total Calories"),
-                      //     ],
-                      //   ),
-                      // ),
-                      // const VerticalDivider(
-                      //   width: 20,
-                      //   thickness: 1,
-                      //   endIndent: 0,
-                      //   color: Colors.grey,
-                      // ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "636.5 kcal (should do calc)",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            const Text("Total Calories"),
+                          ],
+                        ),
+                      ),
+                      const VerticalDivider(
+                        width: 20,
+                        thickness: 1,
+                        endIndent: 0,
+                        color: Colors.grey,
+                      ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "${widget.dietPlan.validity ?? 0} days",
+                              "${widget.dietPlan.validity ?? 0}",
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                             const Text("Duration"),

@@ -75,17 +75,10 @@ class _AddHealthRecordState extends State<AddHealthRecord> {
 
       if (result != null) {
         PlatformFile file = result.files.first;
-        // print(file.name);
-        // print(file.bytes);
-        // print(file.size);
-        // print(file.extension);
-        // print(file.path);
         setState(() {
           pickedFile = file;
         });
-      } else {
-        //! User cancelled the picker
-      }
+      } else {}
     } on PlatformException catch (e) {
       log(e.toString());
       Fluttertoast.showToast(msg: 'Failed to choose file!');
@@ -128,8 +121,6 @@ class _AddHealthRecordState extends State<AddHealthRecord> {
 
   bool isSubmitting = true;
   Future<void> uploadFile(PlatformFile file, User userData) async {
-
-    print("File size : ${file.size}");
     if (file.size > 7000000) {
       Fluttertoast.showToast(msg: "File size shouldn't exceed 7 mb");
       return;
@@ -225,7 +216,6 @@ class _AddHealthRecordState extends State<AddHealthRecord> {
       return;
     }
 
-    print("Is image upload : $isImageUpload");
     isImageUpload
         ? uploadImage(croppedImage!, userData)
         : uploadFile(pickedFile!, userData);

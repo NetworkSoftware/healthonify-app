@@ -17,8 +17,6 @@ class SessionData with ChangeNotifier {
   Future<void> submitConsultNowForm(Map<String, dynamic> data) async {
     String url = "${ApiUrl.url}update/paidConsultationSession";
 
-    // print(requestData);
-
     log(data.toString());
     log(url.toString());
     try {
@@ -81,7 +79,7 @@ class SessionData with ChangeNotifier {
         headers: {"Content-Type": "application/json"},
       );
       final responseData = json.decode(response.body) as Map<String, dynamic>;
-       log(responseData.toString());
+      log(responseData.toString());
 
       if (response.statusCode >= 400) {
         log(responseData["error"].toString());
@@ -225,7 +223,6 @@ class SessionData with ChangeNotifier {
       url = "${ApiUrl.url}fetch/upcomingSessions?$data";
     }
     List<UpcomingSessions> loadedData = [];
-    // print(requestData);
 
     log(url.toString());
     try {

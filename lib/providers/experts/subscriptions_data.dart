@@ -11,6 +11,7 @@ class SubscriptionsData with ChangeNotifier {
   List<Subscriptions> get subsData {
     return [..._subsData];
   }
+
   List<Subscriptions> _subsFitnessData = [];
   List<Subscriptions> get subsFitnessData {
     return [..._subsFitnessData];
@@ -20,6 +21,7 @@ class SubscriptionsData with ChangeNotifier {
   List<Subscriptions> get hcSubsData {
     return [..._hcSubsData];
   }
+
   List<Subscriptions> _subsPhysioData = [];
   List<Subscriptions> get subsPhysioData {
     return [..._subsPhysioData];
@@ -34,7 +36,6 @@ class SubscriptionsData with ChangeNotifier {
   List<Subscriptions> get subsAyurvedaData {
     return [..._subsAyurvedaData];
   }
-
 
   Future<void> getSubsFitnessData(String params) async {
     String url = '${ApiUrl.url}get/subscription?$params';
@@ -59,7 +60,7 @@ class SubscriptionsData with ChangeNotifier {
 
       if (responseBody['status'] == 1) {
         final responseData =
-        json.decode(response.body)['data'] as List<dynamic>;
+            json.decode(response.body)['data'] as List<dynamic>;
 
         for (var element in responseData) {
           loadedData.add(
@@ -68,13 +69,12 @@ class SubscriptionsData with ChangeNotifier {
                 expertId: element['expertId'],
                 userId: element['userId'],
                 packageId: element['packageId'],
-                startDate: element['date'],
+                startDate: element['startDate'],
                 grossAmount: element['grossAmount'],
                 gstAmount: element['gstAmount'],
                 discount: element['discount'],
                 netAmount: element['netAmount'],
                 status: element['status'],
-                ticketNumber: element["ticketNumber"],
                 isActive: element["isActive"] ?? "false",
                 packageName: element['packageName']),
           );
@@ -117,7 +117,7 @@ class SubscriptionsData with ChangeNotifier {
 
       if (responseBody['status'] == 1) {
         final responseData =
-        json.decode(response.body)['data'] as List<dynamic>;
+            json.decode(response.body)['data'] as List<dynamic>;
 
         for (var element in responseData) {
           loadedData.add(
@@ -127,10 +127,10 @@ class SubscriptionsData with ChangeNotifier {
                 userId: element['userId'],
                 //packageId: element['packageId'],
                 startDate: element['date'],
-               // grossAmount: element['grossAmount'],
-              //  gstAmount: element['gstAmount'],
-               // discount: element['discount'],
-               // netAmount: element['netAmount'],
+                // grossAmount: element['grossAmount'],
+                //  gstAmount: element['gstAmount'],
+                // discount: element['discount'],
+                // netAmount: element['netAmount'],
                 status: element['status'],
                 ticketNumber: element["ticketNumber"],
                 isActive: element["isActive"] ?? "false",
@@ -204,7 +204,7 @@ class SubscriptionsData with ChangeNotifier {
       } else {
         throw HttpException(responseBody["message"]);
       }
-    } catch (e,trace) {
+    } catch (e, trace) {
       _subsPhysioData.clear();
       log(e.toString());
       log(trace.toString());
@@ -234,7 +234,7 @@ class SubscriptionsData with ChangeNotifier {
 
       if (responseBody['status'] == 1) {
         final responseData =
-        json.decode(response.body)['data'] as List<dynamic>;
+            json.decode(response.body)['data'] as List<dynamic>;
 
         for (var element in responseData) {
           loadedData.add(
@@ -262,7 +262,7 @@ class SubscriptionsData with ChangeNotifier {
       } else {
         throw HttpException(responseBody["message"]);
       }
-    } catch (e,trace) {
+    } catch (e, trace) {
       _subsLiveWellData.clear();
       log(e.toString());
       log(trace.toString());
@@ -292,7 +292,7 @@ class SubscriptionsData with ChangeNotifier {
 
       if (responseBody['status'] == 1) {
         final responseData =
-        json.decode(response.body)['data'] as List<dynamic>;
+            json.decode(response.body)['data'] as List<dynamic>;
 
         for (var element in responseData) {
           loadedData.add(
@@ -320,7 +320,7 @@ class SubscriptionsData with ChangeNotifier {
       } else {
         throw HttpException(responseBody["message"]);
       }
-    } catch (e,trace) {
+    } catch (e, trace) {
       _subsAyurvedaData.clear();
       log(e.toString());
       log(trace.toString());

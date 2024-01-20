@@ -26,20 +26,20 @@ class _CreateHepExCardState extends State<CreateHepExCard> {
     Exercise exercise = Exercise(
       id: widget.exData.exerciseId!["_id"],
       bodyPartGroupId: [
-        widget.exData.bodyPartGroupId
-      ],
-      // bodyPartGroupId: [
-      //   {
-      //     "name": widget.exData.bodyPartGroupId!["name"],
-      //     "id": widget.exData.bodyPartGroupId!["_id"],
-      //   }
-      // ],
-      bodyPartId: [
         {
           "name": widget.exData.bodyPartId!["name"],
           "id": widget.exData.bodyPartId!["_id"],
         }
       ],
+      bodyPartId: [
+        {
+          "name": widget.exData.bodyPartGroupId!["name"],
+          "id": widget.exData.bodyPartGroupId!["_id"],
+        }
+      ],
+      mediaLink: widget.exData.exerciseId!["mediaLink"],
+      name: widget.exData.exerciseId!["name"],
+      weightUnit: "",
     );
 
     return Padding(

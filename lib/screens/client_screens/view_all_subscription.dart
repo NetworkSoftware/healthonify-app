@@ -20,14 +20,13 @@ class ViewAllSubscriptions extends StatelessWidget {
   bool noContent = false;
 
   Future<void> getSub(BuildContext context, String id) async {
-    if(kSharedPreferences.getString("role") != "ROLE_EXPERT") {
+    if (preferences.getString("role") != "ROLE_EXPERT") {
       noContent = await GetSubscription()
           .getSubs(context, "userId=$id&isActive=true&flow=$flow");
-    }else{
+    } else {
       noContent = await GetSubscription()
           .getSubs(context, "expertId=$id&isActive=true&flow=$flow");
     }
-
   }
 
   @override
@@ -88,8 +87,7 @@ class ViewAllSubscriptions extends StatelessWidget {
                                 ),
                                 Row(
                                   children: [
-                                    Text(
-                                        value.subsFitnessData[index].status!),
+                                    Text(value.subsFitnessData[index].status!),
                                     // const SizedBox(
                                     //   width: 10,
                                     // ),
@@ -98,13 +96,16 @@ class ViewAllSubscriptions extends StatelessWidget {
                                   ],
                                 ),
                                 const SizedBox(height: 10),
-                                 Row(
+                                Row(
                                   children: [
                                     const Icon(Icons.date_range),
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    Text(StringDateTimeFormat().stringtDateFormatLogWeight(value.subsFitnessData[index].startDate!)),
+                                    Text(StringDateTimeFormat()
+                                        .stringtDateFormatLogWeight(value
+                                            .subsFitnessData[index]
+                                            .startDate!)),
                                   ],
                                 ),
                                 Row(
@@ -123,10 +124,15 @@ class ViewAllSubscriptions extends StatelessWidget {
                                         //       ),
                                         //     ),
                                         func: () => Navigator.push(context,
-                                            MaterialPageRoute(builder: (context) {
+                                                MaterialPageRoute(
+                                                    builder: (context) {
                                               return AppointmentViewPackageByEnquiry(
-                                                ticketNumber: value.subsFitnessData[index].ticketNumber!,
-                                                flow: value.subsFitnessData[index].flow!,
+                                                ticketNumber: value
+                                                    .subsFitnessData[index]
+                                                    .ticketNumber!,
+                                                flow: value
+                                                    .subsFitnessData[index]
+                                                    .flow!,
                                               );
                                             })),
                                         gradient: blueGradient),

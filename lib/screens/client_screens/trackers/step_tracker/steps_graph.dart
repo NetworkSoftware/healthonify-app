@@ -9,7 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class StepsGraphCard extends StatefulWidget {
-  const StepsGraphCard({Key? key, required this.goal, this.stepCount}) : super(key: key);
+  const StepsGraphCard({Key? key, required this.goal, this.stepCount})
+      : super(key: key);
   final int goal;
   final int? stepCount;
 
@@ -18,7 +19,6 @@ class StepsGraphCard extends StatefulWidget {
 }
 
 class _StepsGraphCardState extends State<StepsGraphCard> {
-
   List<int> intList = [];
 
   double? graphScrollWidth;
@@ -30,14 +30,13 @@ class _StepsGraphCardState extends State<StepsGraphCard> {
     int goalValue = (widget.goal / 1000).round();
     intList = List.generate(
       goalValue + 1,
-          (int index) {
+      (int index) {
         return index = index * 1000;
       },
       growable: false,
     );
     intList = intList.reversed.toList();
 
-    print("Goal : ${widget.goal}");
     setState(() {
       filterValue = filterOptions[0];
     });
@@ -106,17 +105,16 @@ class _StepsGraphCardState extends State<StepsGraphCard> {
                                   barTouchData: BarTouchData(enabled: true),
                                   barGroups: stepsData.stepsData.map(
                                     (d) {
-                                     //log(d.date!);
+                                      //log(d.date!);
                                       List<int> list = [];
                                       list.add(d.stepsCount!);
 
                                       int maxCount = list.reduce(max);
                                       int stepValue = (maxCount / 1000).round();
-                                      print("Max count : $stepValue");
-                                      if(stepValue > goalValue){
+                                      if (stepValue > goalValue) {
                                         intList = List.generate(
                                           stepValue + 1,
-                                              (int index) {
+                                          (int index) {
                                             return index = index * 1000;
                                           },
                                           growable: false,

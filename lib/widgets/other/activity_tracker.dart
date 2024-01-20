@@ -37,14 +37,10 @@ class _ActivityTrackerState extends State<ActivityTracker> {
     setState(() {
       loading = true;
     });
-    String? userId = Provider
-        .of<UserData>(context, listen: false)
-        .userData
-        .id;
+    String? userId = Provider.of<UserData>(context, listen: false).userData.id;
     try {
       date = await Provider.of<StepTrackerProvider>(context, listen: false)
           .getStepsCount(userId!);
-      print("Date : $date");
       setState(() {
         loading = false;
       });
@@ -62,46 +58,25 @@ class _ActivityTrackerState extends State<ActivityTracker> {
   @override
   void initState() {
     super.initState();
+
     //getAllTrackers(context);
     getSteps(context);
-    print(
-        "IS GOOGLE REQUEST :${kSharedPreferences.getBool("isGoogleRequest")}");
   }
 
-  Future<void> getAllTrackers(BuildContext context,
-      VoidCallback onSuccess) async {
-    String? userId = Provider
-        .of<UserData>(context, listen: false)
-        .userData
-        .id;
+  Future<void> getAllTrackers(
+      BuildContext context, VoidCallback onSuccess) async {
+    String? userId = Provider.of<UserData>(context, listen: false).userData.id;
     try {
       await Provider.of<AllTrackersData>(context, listen: false)
           .getAllTrackers(userId!);
 
-      SharedPrefManager prefManager = SharedPrefManager();
-     // bool test = await prefManager.getStepTrackerEnabled();
-
       DateTime startDate = DateTime(
-          DateTime
-              .now()
-              .year, DateTime
-          .now()
-          .month, DateTime
-          .now()
-          .day);
+          DateTime.now().year, DateTime.now().month, DateTime.now().day);
       stepsData = await StepTracker().initHealth(1, startDate);
 
-      print("StepDAta : ${stepsData.stepCount}");
       if (stepsData.stepCount != null && stepsData.stepCount != "null") {
         onSuccess.call();
       }
-
-      // print("Test1111 : $test");
-      // if (test == true) {
-      //
-      // }else{
-      //   print("Hey Deepak111111111112222");
-      // }
     } on HttpException catch (e) {
       log(e.toString());
       // Fluttertoast.showToast(msg: e.message);
@@ -134,263 +109,312 @@ class _ActivityTrackerState extends State<ActivityTracker> {
         future: flag
             ? empty()
             : getAllTrackers(context, () {
-          StepsTrackerFunc().updateSteps(
-              context,
-              stepsData.stepsData!,
-                  () =>
-                  Provider.of<AllTrackersData>(context, listen: false)
-                      .localUpdateSteps(
-                      int.parse(stepsData.stepCount!)));
-          Provider.of<AllTrackersData>(context, listen: false)
-              .localUpdateSteps(int.parse(stepsData.stepCount!));
-          getSteps(context);
-        }),
+                StepsTrackerFunc().updateSteps(
+                    context,
+                    stepsData.stepsData!,
+                    () => Provider.of<AllTrackersData>(context, listen: false)
+                        .localUpdateSteps(int.parse(stepsData.stepCount!)));
+                Provider.of<AllTrackersData>(context, listen: false)
+                    .localUpdateSteps(int.parse(stepsData.stepCount!));
+                getSteps(context);
+              }),
         builder: (context, snapshot) =>
             Consumer<StepTrackerProvider>(builder: (context, value, child) {
-              return
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Text(
-                                    'Track your activity',
-                                    style:
-                                    Theme
-                                        .of(context)
-                                        .textTheme
-                                        .headlineSmall,
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Track your activity',
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
+                                Platform.isIOS
+                                    ? Image.asset(
+                                        'assets/images/healthkit.png',
+                                        height: 40,
+                                        width: 40,
+                                      )
+                                    : const SizedBox()
+                                // Image.asset(
+                                //   'assets/images/google_fit.png',
+                                //   height: 40,
+                                //   width: 40,
+                                // ) :
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            preferences.getBool("isGoogleRequest") == true ||
+                                    preferences.getBool("isGoogleRequest") ==
+                                        null
+                                ? const SizedBox()
+                                : GestureDetector(
+                                    onTap: () async {
+                                      preferences.setBool(
+                                          "isGoogleRequest", true);
+                                      DateTime startDate = DateTime(
+                                          DateTime.now().year,
+                                          DateTime.now().month,
+                                          DateTime.now().day);
+                                      stepsData = await StepTracker()
+                                          .initHealth(1, startDate);
+
+                                      setState(() {});
+                                    },
+                                    child: const Text(
+                                      "To track steps select or add google account >>>",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: orange,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                  Platform.isIOS ?
-                                  Image.asset(
-                                    'assets/images/healthkit.png',
-                                    height: 40,
-                                    width: 40,
-                                  ) :
-                                      const SizedBox()
-                                  // Image.asset(
-                                  //   'assets/images/google_fit.png',
-                                  //   height: 40,
-                                  //   width: 40,
-                                  // ) :
+                          ],
+                        ),
+                      ),
+                      Consumer<AllTrackersData>(
+                          builder: (context, data, child) {
+                        // log(data.allTrackersData.waterProgress.toString());
 
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              kSharedPreferences.getBool("isGoogleRequest") ==
-                                  true ||
-                                  kSharedPreferences
-                                      .getBool("isGoogleRequest") ==
-                                      null
-                                  ? const SizedBox()
-                                  : GestureDetector(
-                                onTap: () async {
-                                  kSharedPreferences.setBool(
-                                      "isGoogleRequest", true);
-                                  DateTime startDate = DateTime(
-                                      DateTime
-                                          .now()
-                                          .year,
-                                      DateTime
-                                          .now()
-                                          .month,
-                                      DateTime
-                                          .now()
-                                          .day);
-                                  stepsData = await StepTracker()
-                                      .initHealth(1, startDate);
+                        Map<String, dynamic> trackerData =
+                            setData(snapshot, data);
+                        debugPrint("00000000000000");
+                        debugPrint(
+                            preferences.getInt("todayCountVal").toString());
+                        List<Map<String, dynamic>> listData = [
+                          {
+                            "title": "Steps",
+                            // "subtitle": trackerData["stepsCount"],
+                            // "goal": "${trackerData["totalStepsGoal"]} steps",
+                            "subtitle": loading == false
+                                ? (preferences
+                                            .getInt("todayCountVal")
+                                            .toString() ==
+                                        'null'
+                                    ? '0'
+                                    : preferences
+                                        .getInt("todayCountVal")
+                                        .toString())
+                                : '0',
+                            "goal": "0 steps",
+                            // "goal": "${trackerData["stepsCount"]} steps",
+                            "icon": const Icon(
+                              Icons.directions_walk_outlined,
+                              size: 22,
+                              color: Colors.white,
+                            ),
+                            "screen": const StepsScreen(),
+                            "color": Colors.red,
+                            "percent": trackerData["stepsPercentage"],
+                          },
+                          {
+                            "title": 'Sleep',
+                            "subtitle": trackerData["userSleepCount"],
+                            "goal": "${trackerData["sleepGoal"]}",
+                            "icon": const Icon(
+                              Icons.bedtime_outlined,
+                              size: 22,
+                              color: Colors.white,
+                            ),
+                            "screen": const SleepScreen(),
+                            "color": Colors.blueGrey.shade800,
+                            "percent": trackerData["sleepPercentage"],
+                          },
+                          {
+                            "title": 'Water',
+                            "subtitle": trackerData["glasses"],
+                            "goal": '${trackerData["watergoal"]} glasses',
+                            "icon": const Icon(
+                              Icons.water_drop_outlined,
+                              size: 22,
+                              color: Colors.white,
+                            ),
+                            "screen": const WaterTrackerScreen(
+                                // returnWaterGlass: waterGlassCount
+                                ),
+                            "color": Colors.blue,
+                            "percent": trackerData["waterPercentage"],
+                          },
+                        ];
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: Card(
+                                child: InkWell(
+                                  onTap: () async {
+                                    bool result = await Navigator.of(
+                                      context, /*rootnavigator: true*/
+                                    ).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return listData[0]["screen"];
+                                    }));
 
-                                  setState(() {});
-                                  print(
-                                      "IS GOOGLE REQUEST :${kSharedPreferences
-                                          .getBool("isGoogleRequest")}");
-                                },
-                                child: const Text(
-                                  "To track steps select or add google account >>>",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: orange,
-                                      fontWeight: FontWeight.bold),
+                                    if (result == true) {
+                                      getSteps(context);
+                                      String userId = Provider.of<UserData>(
+                                              context,
+                                              listen: false)
+                                          .userData
+                                          .id!;
+
+                                      await Provider.of<CalorieTrackerProvider>(
+                                              context,
+                                              listen: false)
+                                          .getCalories(
+                                              "?userId=$userId&date=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
+                                    }
+                                  },
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: Column(
+                                      //crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 22),
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15)),
+                                            color: Colors.red,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 7),
+                                                child: Row(
+                                                  children: [
+                                                    listData[0]["icon"],
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 2),
+                                                      child: Text(
+                                                        listData[0]["title"],
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .labelMedium,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 3),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 14),
+                                                child: Text(
+                                                  "Today Count",
+                                                  textAlign: TextAlign.center,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelSmall!
+                                                      .copyWith(
+                                                        fontSize: 12,
+                                                        color: Colors.grey[400],
+                                                      ),
+                                                ),
+                                              ),
+                                              circularWidget(
+                                                context,
+                                                listData[0]["subtitle"],
+                                                listData[0]['percent'],
+                                                listData[0]["color"],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        Consumer<AllTrackersData>(
-                            builder: (context, data, child) {
-                              // log(data.allTrackersData.waterProgress.toString());
+                            ),
+                            Expanded(
+                              child: Card(
+                                child: InkWell(
+                                  onTap: () async {
+                                    bool result = await Navigator.of(
+                                      context, /*rootnavigator: true*/
+                                    ).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return listData[1]["screen"];
+                                    }));
 
-                              Map<String, dynamic> trackerData =
-                              setData(snapshot, data);
+                                    if (result == true) {
+                                      getSteps(context);
+                                      String userId = Provider.of<UserData>(
+                                              context,
+                                              listen: false)
+                                          .userData
+                                          .id!;
 
-                              print(
-                                  "Tracker Data11111111111111111 : $trackerData");
-
-                              List<Map<String, dynamic>> listData = [
-                                {
-                                  "title": "Steps",
-                                  // "subtitle": trackerData["stepsCount"],
-                                  // "goal": "${trackerData["totalStepsGoal"]} steps",
-                                  "subtitle": loading == false ? value.stepsData
-                                      .last.stepsCount.toString() : '0',
-                                  "goal": loading == false ? "${value.stepsData
-                                      .last.goalCount!} steps" : "0 steps",
-                                  // "goal": "${trackerData["stepsCount"]} steps",
-                                  "icon": const Icon(
-                                    Icons.directions_walk_outlined,
-                                    size: 22,
-                                    color: Colors.white,
-                                  ),
-                                  "screen": const StepsScreen(),
-                                  "color": Colors.red,
-                                  "percent": trackerData["stepsPercentage"],
-                                },
-                                {
-                                  "title": 'Sleep',
-                                  "subtitle": trackerData["userSleepCount"],
-                                  "goal": "${trackerData["sleepGoal"]}",
-                                  "icon": const Icon(
-                                    Icons.bedtime_outlined,
-                                    size: 22,
-                                    color: Colors.white,
-                                  ),
-                                  "screen": const SleepScreen(),
-                                  "color": Colors.blueGrey.shade800,
-                                  "percent": trackerData["sleepPercentage"],
-                                },
-                                {
-                                  "title": 'Water',
-                                  "subtitle": trackerData["glasses"],
-                                  "goal": '${trackerData["watergoal"]} glasses',
-                                  "icon": const Icon(
-                                    Icons.water_drop_outlined,
-                                    size: 22,
-                                    color: Colors.white,
-                                  ),
-                                  "screen": const WaterTrackerScreen(
-                                    // returnWaterGlass: waterGlassCount
-                                  ),
-                                  "color": Colors.blue,
-                                  "percent": trackerData["waterPercentage"],
-                                },
-                              ];
-                              return Row(
-                                children: [
-                                  Expanded(
-                                    child: Card(
-                                      child: InkWell(
-                                        onTap: () async {
-                                          bool result = await Navigator.of(
-                                            context, /*rootnavigator: true*/
-                                          ).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return listData[0]["screen"];
-                                                  }));
-
-                                          if (result == true) {
-                                            getSteps(context);
-                                            String userId =
-                                            Provider
-                                                .of<UserData>(
-                                                context, listen: false)
-                                                .userData
-                                                .id!;
-
-                                            await Provider.of<
-                                                CalorieTrackerProvider>(
-                                                context, listen: false)
-                                                .getCalories(
-                                                "?userId=$userId&date=${DateFormat(
-                                                    "yyyy-MM-dd").format(
-                                                    DateTime.now())}");
-                                          }
-                                        },
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(bottom: 10),
-                                          child: Column(
-                                            //crossAxisAlignment: CrossAxisAlignment.start,
+                                      await Provider.of<CalorieTrackerProvider>(
+                                              context,
+                                              listen: false)
+                                          .getCalories(
+                                              "?userId=$userId&date=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
+                                    }
+                                  },
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: Column(
+                                      //crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 22),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(15),
+                                                      topLeft:
+                                                          Radius.circular(15)),
+                                              color: Colors.blue.shade200),
+                                          child: Row(
                                             children: [
-                                              Container(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    horizontal: 22),
-                                                decoration: const BoxDecoration(
-                                                  borderRadius: BorderRadius
-                                                      .only(
-                                                      topRight: Radius.circular(
-                                                          15),
-                                                      topLeft: Radius.circular(
-                                                          15)),
-                                                  color: Colors.red,
-                                                ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 7),
                                                 child: Row(
                                                   children: [
+                                                    listData[1]["icon"],
                                                     Padding(
                                                       padding:
-                                                      const EdgeInsets.symmetric(
-                                                          vertical: 7),
-                                                      child: Row(
-                                                        children: [
-                                                          listData[0]["icon"],
-                                                          Padding(
-                                                            padding:
-                                                            const EdgeInsets.only(
-                                                                left: 2),
-                                                            child: Text(
-                                                              listData[0]["title"],
-                                                              style: Theme
-                                                                  .of(context)
-                                                                  .textTheme
-                                                                  .labelMedium,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              const SizedBox(height: 3),
-                                              Padding(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    horizontal: 12),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                          .only(
-                                                          bottom: 14),
+                                                          const EdgeInsets.only(
+                                                              left: 2),
                                                       child: Text(
-                                                        listData[0]["goal"],
-                                                        style: Theme
-                                                            .of(context)
+                                                        listData[1]["title"],
+                                                        style: Theme.of(context)
                                                             .textTheme
-                                                            .labelSmall!
-                                                            .copyWith(
-                                                          color: Colors.grey[400],
-                                                        ),
+                                                            .labelMedium,
                                                       ),
-                                                    ),
-                                                    circularWidget(
-                                                      context,
-                                                      listData[0]["subtitle"],
-                                                      listData[0]['percent'],
-                                                      listData[0]["color"],
                                                     ),
                                                   ],
                                                 ),
@@ -398,114 +422,104 @@ class _ActivityTrackerState extends State<ActivityTracker> {
                                             ],
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Card(
-                                      child: InkWell(
-                                        onTap: () async {
-                                          bool result = await Navigator.of(
-                                            context, /*rootnavigator: true*/
-                                          ).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return listData[1]["screen"];
-                                                  }));
-
-                                          if (result == true) {
-                                            getSteps(context);
-                                            String userId =
-                                            Provider
-                                                .of<UserData>(
-                                                context, listen: false)
-                                                .userData
-                                                .id!;
-
-                                            await Provider.of<
-                                                CalorieTrackerProvider>(
-                                                context, listen: false)
-                                                .getCalories(
-                                                "?userId=$userId&date=${DateFormat(
-                                                    "yyyy-MM-dd").format(
-                                                    DateTime.now())}");
-                                          }
-                                        },
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(bottom: 10),
+                                        const SizedBox(height: 3),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12),
                                           child: Column(
-                                            //crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
                                             children: [
-                                              Container(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    horizontal: 22),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: const BorderRadius
-                                                      .only(
-                                                      topRight: Radius.circular(
-                                                          15),
-                                                      topLeft: Radius.circular(
-                                                          15)),
-                                                  color: Colors.blue.shade200
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                      const EdgeInsets.symmetric(
-                                                          vertical: 7),
-                                                      child: Row(
-                                                        children: [
-                                                          listData[1]["icon"],
-                                                          Padding(
-                                                            padding:
-                                                            const EdgeInsets.only(
-                                                                left: 2),
-                                                            child: Text(
-                                                              listData[1]["title"],
-                                                              style: Theme
-                                                                  .of(context)
-                                                                  .textTheme
-                                                                  .labelMedium,
-                                                            ),
-                                                          ),
-                                                        ],
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 14),
+                                                child: Text(
+                                                  listData[1]["goal"],
+                                                   textAlign: TextAlign.center,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelSmall!
+                                                      .copyWith(
+                                                        fontSize: 12,
+                                                        color: Colors.grey[400],
                                                       ),
-                                                    ),
-                                                  ],
                                                 ),
                                               ),
-                                              const SizedBox(height: 3),
+                                              circularWidget(
+                                                context,
+                                                listData[1]["subtitle"],
+                                                listData[1]['percent'],
+                                                listData[1]["color"],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Card(
+                                child: InkWell(
+                                  onTap: () async {
+                                    bool result = await Navigator.of(
+                                      context, /*rootnavigator: true*/
+                                    ).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return listData[2]["screen"];
+                                    }));
+
+                                    if (result == true) {
+                                      getSteps(context);
+                                      String userId = Provider.of<UserData>(
+                                              context,
+                                              listen: false)
+                                          .userData
+                                          .id!;
+
+                                      await Provider.of<CalorieTrackerProvider>(
+                                              context,
+                                              listen: false)
+                                          .getCalories(
+                                              "?userId=$userId&date=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
+                                    }
+                                  },
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: Column(
+                                      //crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 22),
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15)),
+                                            color: Colors.blue,
+                                          ),
+                                          child: Row(
+                                            children: [
                                               Padding(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    horizontal: 12),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 7),
+                                                child: Row(
                                                   children: [
+                                                    listData[2]["icon"],
                                                     Padding(
-                                                      padding: const EdgeInsets
-                                                          .only(
-                                                          bottom: 14),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 2),
                                                       child: Text(
-                                                        listData[1]["goal"],
-                                                        style: Theme
-                                                            .of(context)
+                                                        listData[2]["title"],
+                                                        style: Theme.of(context)
                                                             .textTheme
-                                                            .labelSmall!
-                                                            .copyWith(
-                                                          color: Colors.grey[400],
-                                                        ),
+                                                            .labelMedium,
                                                       ),
-                                                    ),
-                                                    circularWidget(
-                                                      context,
-                                                      listData[1]["subtitle"],
-                                                      listData[1]['percent'],
-                                                      listData[1]["color"],
                                                     ),
                                                   ],
                                                 ),
@@ -513,165 +527,74 @@ class _ActivityTrackerState extends State<ActivityTracker> {
                                             ],
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Card(
-                                      child: InkWell(
-                                        onTap: () async {
-                                          bool result = await Navigator.of(
-                                            context, /*rootnavigator: true*/
-                                          ).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return listData[2]["screen"];
-                                                  }));
-
-                                          if (result == true) {
-                                            getSteps(context);
-                                            String userId =
-                                            Provider
-                                                .of<UserData>(
-                                                context, listen: false)
-                                                .userData
-                                                .id!;
-
-                                            await Provider.of<
-                                                CalorieTrackerProvider>(
-                                                context, listen: false)
-                                                .getCalories(
-                                                "?userId=$userId&date=${DateFormat(
-                                                    "yyyy-MM-dd").format(
-                                                    DateTime.now())}");
-                                          }
-                                        },
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(bottom: 10),
+                                        const SizedBox(height: 3),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12),
                                           child: Column(
-                                            //crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
                                             children: [
-                                              Container(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    horizontal: 22),
-                                                decoration: const BoxDecoration(
-                                                  borderRadius: BorderRadius
-                                                      .only(
-                                                      topRight: Radius.circular(
-                                                          15),
-                                                      topLeft: Radius.circular(
-                                                          15)),
-                                                  color: Colors.blue,
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                      const EdgeInsets.symmetric(
-                                                          vertical: 7),
-                                                      child: Row(
-                                                        children: [
-                                                          listData[2]["icon"],
-                                                          Padding(
-                                                            padding:
-                                                            const EdgeInsets.only(
-                                                                left: 2),
-                                                            child: Text(
-                                                              listData[2]["title"],
-                                                              style: Theme
-                                                                  .of(context)
-                                                                  .textTheme
-                                                                  .labelMedium,
-                                                            ),
-                                                          ),
-                                                        ],
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 14),
+                                                child: Text(
+                                                  listData[2]["goal"],
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelSmall!
+                                                      .copyWith(
+                                                        color: Colors.grey[400],
                                                       ),
-                                                    ),
-                                                  ],
                                                 ),
                                               ),
-                                              const SizedBox(height: 3),
-                                              Padding(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    horizontal: 12),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                          .only(
-                                                          bottom: 14),
-                                                      child: Text(
-                                                        listData[2]["goal"],
-                                                        style: Theme
-                                                            .of(context)
-                                                            .textTheme
-                                                            .labelSmall!
-                                                            .copyWith(
-                                                          color: Colors.grey[400],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    circularWidget(
-                                                      context,
-                                                      listData[2]["subtitle"],
-                                                      listData[2]['percent'],
-                                                      listData[2]["color"],
-                                                    ),
-                                                  ],
-                                                ),
+                                              circularWidget(
+                                                context,
+                                                listData[2]["subtitle"],
+                                                listData[2]['percent'],
+                                                listData[2]["color"],
                                               ),
                                             ],
                                           ),
                                         ),
-                                      ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              );
-
-                            }),
-                      ],
-                    ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                    ],
                   ),
-                );
+                ),
+              );
             }));
   }
 
-  Widget circularWidget(BuildContext context,
-      String subTitle,
-      double percentage,
-      Color percentColor,) {
+  Widget circularWidget(
+    BuildContext context,
+    String subTitle,
+    double percentage,
+    Color percentColor,
+  ) {
     return CircularPercentIndicator(
-      radius: MediaQuery
-          .of(context)
-          .size
-          .width * 0.1,
+      radius: MediaQuery.of(context).size.width * 0.1,
       lineWidth: 8,
       animation: true,
       percent: percentage,
       progressColor: percentColor,
       circularStrokeCap: CircularStrokeCap.round,
-      center: Text(subTitle, style: Theme
-          .of(context)
-          .textTheme
-          .bodySmall),
+      center: Text(subTitle, style: Theme.of(context).textTheme.bodySmall),
     );
   }
 
   Map<String, dynamic> setData(AsyncSnapshot snapshot, AllTrackersData data) {
     int waterGoal, glasses;
-    String totalSleepGoal = "0h",
-        goalSleep = "0h";
-    double waterPercentage,
-        sleepPercentage,
-        stepsPercentage = 0;
-    String totalStepsGoal = "",
-        stepsCount = "";
+    String totalSleepGoal = "0h", goalSleep = "0h";
+    double waterPercentage, sleepPercentage, stepsPercentage = 0;
+    String totalStepsGoal = "", stepsCount = "";
 
     if (snapshot.connectionState == ConnectionState.waiting) {
       waterGoal = glasses = 0;
@@ -683,8 +606,8 @@ class _ActivityTrackerState extends State<ActivityTracker> {
       waterPercentage = glasses == 0
           ? 0
           : glasses > waterGoal
-          ? 1
-          : glasses / waterGoal;
+              ? 1
+              : glasses / waterGoal;
 
       totalStepsGoal = data.allTrackersData.totalStepsGoal!.toString();
       stepsCount = data.allTrackersData.userStepsCount!.toString();
@@ -692,10 +615,10 @@ class _ActivityTrackerState extends State<ActivityTracker> {
       stepsPercentage = data.allTrackersData.userStepsCount == 0
           ? 0
           : data.allTrackersData.userStepsCount! >
-          data.allTrackersData.totalStepsGoal!
-          ? 1
-          : data.allTrackersData.userStepsCount! /
-          data.allTrackersData.totalStepsGoal!;
+                  data.allTrackersData.totalStepsGoal!
+              ? 1
+              : data.allTrackersData.userStepsCount! /
+                  data.allTrackersData.totalStepsGoal!;
 
       // log("steps percentage " + stepsPercentage.toString());
 
@@ -703,7 +626,7 @@ class _ActivityTrackerState extends State<ActivityTracker> {
 
       int totalSleepHrs = (data.allTrackersData.totalSleepGoal! ~/ 3600);
       int totalSleepMins =
-      (data.allTrackersData.totalSleepGoal!.remainder(3600) ~/ 60);
+          (data.allTrackersData.totalSleepGoal!.remainder(3600) ~/ 60);
       if (totalSleepMins != 0 && totalSleepHrs != 0) {
         totalSleepGoal = "${totalSleepHrs}h ${totalSleepMins}m";
       } else if (totalSleepMins != 0 && totalSleepHrs == 0) {
@@ -729,10 +652,10 @@ class _ActivityTrackerState extends State<ActivityTracker> {
       sleepPercentage = data.allTrackersData.userSleepCount == 0
           ? 0
           : data.allTrackersData.userSleepCount! >
-          data.allTrackersData.totalSleepGoal!
-          ? 1
-          : data.allTrackersData.userSleepCount! /
-          data.allTrackersData.totalSleepGoal!;
+                  data.allTrackersData.totalSleepGoal!
+              ? 1
+              : data.allTrackersData.userSleepCount! /
+                  data.allTrackersData.totalSleepGoal!;
       // log("sleep " + sleepPercentage.toString());
       // setState(() {});
     }

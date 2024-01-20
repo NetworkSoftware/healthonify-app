@@ -5,7 +5,6 @@ class HealthCarePrescriptionModel {
   String? reportName;
   String? reportType;
   DateTime? date;
-  String? stringTime;
   DateTime? time;
 
   HealthCarePrescriptionModel({
@@ -15,6 +14,6 @@ class HealthCarePrescriptionModel {
     this.reportName,
     this.reportType,
     this.date,
-    this.time,this.stringTime
+    this.time,
   });
 }

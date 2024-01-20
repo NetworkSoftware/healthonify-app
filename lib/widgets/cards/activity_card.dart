@@ -46,7 +46,6 @@ class _ActivityCardState extends State<ActivityCard> {
     }
     for (var element in weeklyWorkoutsModel.weeklyData!) {
       DateTime date = DateFormat("yyyy-MM-dd").parse(element.date!);
-      // print(DateFormat("EEE").format(date));
       data.add({
         "day": DateFormat("EEE").format(date),
         "checkedIn": element.checkedIn ?? false,

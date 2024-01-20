@@ -22,8 +22,7 @@ class Rzp {
     Razorpay razorpay,
     cId,
     BuildContext ctx,
-    String exId,
-      {
+    String exId, {
     String f = "",
     required String uid,
   }) async {
@@ -56,7 +55,7 @@ class Rzp {
       try {
         razorpay.open(options);
       } catch (e) {
-        print("Payment Exception : $e");
+        //
       }
     } catch (e) {
       log("payment gateway$e");
@@ -66,15 +65,10 @@ class Rzp {
 
   static void handlePaymentSuccess(PaymentSuccessResponse response) async {
     Map<String, dynamic> storeLabBookingPayment = {};
-    print("Signature : ${response.signature}");
-    print("Order ID : ${response.signature}");
-    print("Payment Id : ${response.paymentId}");
-    print("From : $from");
     log(" Success ");
     Fluttertoast.showToast(msg: "Payment Succesful");
     // _checkPaymentStatus(response);
     if (from == "workout") {
-      print("3");
       await saveWorkoutPayment(response.paymentId!, response.signature!,
           response.orderId!, subscriptionId!);
       Navigator.of(context!).pop();
@@ -113,7 +107,7 @@ class Rzp {
       }
     } else {
       savePaymentDetails(response.paymentId!, response.signature!,
-          response.orderId!, subscriptionId!,from!);
+          response.orderId!, subscriptionId!, from!);
     }
 
     if (from != "packages") {
@@ -158,38 +152,7 @@ class Rzp {
     );
   }
 
-  static void handlePaymentPlanSuccess(PaymentSuccessResponse response) async {
-    Map<String, dynamic> storeLabBookingPayment = {};
-    print("Signature : ${response.signature}");
-    print("Order ID : ${response.signature}");
-    print("Payment Id : ${response.paymentId}");
-    print("From : $from");
-    log(" Success ");
-    Fluttertoast.showToast(msg: "Payment Succesful");
-    if (from == "workout") {
-      print("3");
-      await saveWorkoutPayment(response.paymentId!, response.signature!,
-          response.orderId!, subscriptionId!);
-      Navigator.of(context!).pop();
-      Navigator.push(
-        context!,
-        MaterialPageRoute(
-          builder: (context) {
-            return PaymentSuccessScreen(
-              title: "Done",
-              onSubmit: () {
-                Navigator.of(context).pop();
-              },
-            );
-          },
-        ),
-      );
-      return;
-    }
-  }
-
   static void handlePaymentError(PaymentFailureResponse response) {
-    print("PAYYYYMENT : $response");
     Fluttertoast.showToast(
         msg: "ERROR: ${response.code} - ${response.message}",
         timeInSecForIosWeb: 4);
@@ -207,7 +170,7 @@ class Rzp {
   }
 
   static void savePaymentDetails(String payId, String paySign, String orderId,
-      String subscriptionId,String note) async {
+      String subscriptionId, String note) async {
     Map<String, String> data = {
       "razorpay_payment_id": payId,
       "razorpay_order_id": orderId,
@@ -241,8 +204,7 @@ class Rzp {
     log(data.toString());
 
     try {
-      //await StorePayment.storePayment(data, "diet");
-      await StorePayment.storePlanPayment(data, "diet");
+      await StorePayment.storePayment(data, "diet");
       Fluttertoast.showToast(msg: "Payment Succesful");
     } on HttpException catch (e) {
       log("  $e");

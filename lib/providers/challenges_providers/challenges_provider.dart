@@ -59,8 +59,6 @@ class ChallengesProvider with ChangeNotifier {
 
   Future<void> joinChallenges(Map<String, dynamic> data) async {
     String url = '${ApiUrl.hc}post/userChallenge';
-    print("Url : $url");
-    print(json.encode(data));
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -86,7 +84,6 @@ class ChallengesProvider with ChangeNotifier {
   Future<List<JoinedChallenges>> getJoinedChallenges(String id) async {
     String url = '${ApiUrl.hc}get/userChallenge?userId=$id';
 
-    print("url : $url");
     List<JoinedChallenges> tempChallenges = [];
 
     try {
@@ -158,7 +155,7 @@ class ChallengesProvider with ChangeNotifier {
       } else {
         throw HttpException(responseBody["message"]);
       }
-    } catch (e,trace) {
+    } catch (e, trace) {
       log("Trace : $trace");
       throw HttpException('$e');
     }

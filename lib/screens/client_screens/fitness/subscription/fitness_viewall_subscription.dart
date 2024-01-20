@@ -28,101 +28,88 @@ class FitnessViewAllSubscriptions extends StatelessWidget {
       body: FutureBuilder(
         future: getFitness(context, id),
         builder: (context, snapshot) => snapshot.connectionState ==
-                ConnectionState.waiting
+            ConnectionState.waiting
             ? const Center(
-                child: CircularProgressIndicator(),
-              )
+          child: CircularProgressIndicator(),
+        )
             : Consumer<SubscriptionsData>(
-                builder: (context, value, child) => value
-                        .subsFitnessData.isEmpty
-                    ? const Center(
-                        child: Text("No Subscriptions available"),
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
-                        shrinkWrap: true,
-                        itemCount: value.subsFitnessData.length,
-                        itemBuilder: (context, index) => Card(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 20, left: 10, right: 10, bottom: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  value.subsFitnessData[index].packageName ??
-                                      "",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium,
-                                ),
-                                const SizedBox(height: 10),
-                                RichText(
-                                  text: TextSpan(
-                                      text: 'Ticket Number: ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium!
-                                          .copyWith(fontSize: 16),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: value.subsFitnessData[index]
-                                              .ticketNumber,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelSmall!
-                                              .copyWith(fontSize: 14),
-                                        )
-                                      ]),
-                                ),
-                                Row(
-                                  children: [
-                                    value.subsFitnessData[index].status! ==
-                                            "paymentReceived"
-                                        ? const Text("Paid")
-                                        : const Text("Payment Pending"),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    // Text(
-                                    //     "\u{20B9}${value.subsFitnessData[index].netAmount!}"),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                const Row(
-                                  children: [
-                                    Icon(Icons.date_range),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    // Text(value.subsFitnessData[index].startDate!),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    GradientButton(
-                                        title: "View",
-                                        func: () => Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    PhysioViewSessions(
-                                                        subId: value
-                                                            .subsFitnessData[
-                                                                index]
-                                                            .id!),
-                                              ),
-                                            ),
-                                        gradient: blueGradient),
-                                  ],
-                                ),
-                              ],
-                            ),
+          builder: (context, value, child) => value.subsFitnessData.isEmpty
+              ? const Center(
+            child: Text("No Subscriptions available"),
+          )
+              : ListView.builder(
+            padding: const EdgeInsets.all(20),
+            shrinkWrap: true,
+            itemCount: value.subsFitnessData.length,
+            itemBuilder: (context, index) => Card(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 20, left: 20, right: 20, bottom: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      value.subsFitnessData[index].packageName ?? "",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding:
+                      const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        children: [
+                          value.subsFitnessData[index].status! ==
+                              "paymentReceived"
+                              ? const Text("Paid")
+                              : const Text("Payment Pending"),
+                          const SizedBox(
+                            width: 10,
                           ),
-                        ),
+                          Text(
+                              "\u{20B9}${value.subsFitnessData[index].netAmount!}"),
+                        ],
                       ),
+                    ),
+                    Padding(
+                      padding:
+                      const EdgeInsets.symmetric(vertical: 0),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.date_range),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(value.subsFitnessData[index].startDate!),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GradientButton(
+                            title: "View",
+                            func: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PhysioViewSessions(
+                                        subId: value
+                                            .subsFitnessData[index]
+                                            .id!),
+                              ),
+                            ),
+                            gradient: blueGradient),
+                      ],
+                    ),
+                  ],
+                ),
               ),
+            ),
+          ),
+        ),
       ),
     );
   }

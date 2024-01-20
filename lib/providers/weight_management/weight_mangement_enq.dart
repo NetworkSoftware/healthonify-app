@@ -17,8 +17,6 @@ class WMEnqProvider with ChangeNotifier {
   Future<void> postWMdata(Map data) async {
     String url = '${ApiUrl.wm}wmEnquiry/saveWmEnquiry';
 
-    print("Url : $url Data : ${json.encode(data)}");
-
     try {
       final response = await http.post(
         Uri.parse(url),

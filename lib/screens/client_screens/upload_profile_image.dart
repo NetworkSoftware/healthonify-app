@@ -38,8 +38,6 @@ class _UploadProfileImageState extends State<UploadProfileImage> {
         imageQuality: 20,
       );
 
-      print("image : ${galleryimage!.name}");
-      print("image length: ${galleryimage.length()}");
       if (galleryimage == null) {
         return;
       }

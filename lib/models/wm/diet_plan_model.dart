@@ -1,16 +1,16 @@
 class DietPlan {
-  DietPlan(
-      {this.id,
-      this.expertId,
-      this.name,
-      this.type,
-      this.level,
-      this.goal,
-      this.planType,
-      this.validity,
-      this.note,
-      this.weeklyDetails,
-      this.createdDate});
+  DietPlan({
+    this.id,
+    this.expertId,
+    this.name,
+    this.type,
+    this.level,
+    this.goal,
+    this.planType,
+    this.validity,
+    this.note,
+    this.weeklyDetails,
+  });
 
   String? id;
   String? expertId;
@@ -21,7 +21,6 @@ class DietPlan {
   String? planType;
   int? validity;
   String? note;
-  String? createdDate;
   List<RegularDetail>? weeklyDetails;
 
   factory DietPlan.fromJson(Map<String, dynamic> json) => DietPlan(
@@ -34,7 +33,6 @@ class DietPlan {
         planType: json["planType"],
         validity: json["validity"],
         note: json["note"],
-        createdDate: json["created_at"],
         weeklyDetails: List<RegularDetail>.from(
             json["weeklyDetails"].map((x) => RegularDetail.fromJson(x))),
       );
@@ -49,7 +47,6 @@ class DietPlan {
         "planType": planType,
         "validity": validity,
         "note": note,
-        "created_at": createdDate,
         "weeklyDetails":
             List<dynamic>.from(weeklyDetails!.map((x) => x.regularJson())),
       };
@@ -173,8 +170,7 @@ class DishId {
   int? unit;
   String? vegNonVeg;
   List<GetNutrition>? nutrition;
-
-  // NutritionInGm? nutritionInGm;
+ // NutritionInGm? nutritionInGm;
   String? mediaLink;
   Map<String, dynamic>? foodTypeId;
   GetPerUnit? perUnit;
@@ -192,7 +188,7 @@ class DishId {
         mediaLink: json["mediaLink"],
         foodTypeId: json["foodTypeId"],
         perUnit: GetPerUnit.fromJson(json["perUnit"]),
-        // nutritionInGm: NutritionInGm.fromJson(json["nutritionInGm"]),
+   // nutritionInGm: NutritionInGm.fromJson(json["nutritionInGm"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         foodCategoryId: json["foodCategoryId"],
         foodSubCategoryId: json["foodSubCategoryId"],

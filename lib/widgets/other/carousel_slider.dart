@@ -93,7 +93,6 @@ class _ChallengesScrollerState extends State<ChallengesScroller> {
           allActiveChallenges.add(allChallenges[i]);
         }
       }
-      print(allChallenges);
       log('fetched all challenges');
     } on HttpException catch (e) {
       log(e.toString());
@@ -117,7 +116,6 @@ class _ChallengesScrollerState extends State<ChallengesScroller> {
   Future<bool> fetchJoinedChallenges(String challengeId) async {
     var userId = Provider.of<UserData>(context, listen: false).userData.id!;
 
-    print("challengeId : $challengeId");
     try {
       List<JoinedChallenges> joinedChallenges =
           await Provider.of<ChallengesProvider>(context, listen: false)
@@ -182,7 +180,6 @@ class _ChallengesScrollerState extends State<ChallengesScroller> {
                             bool result = await fetchJoinedChallenges(
                                 allActiveChallenges[index].id!);
 
-                            print("Result : $result");
                             log(allActiveChallenges[index].name.toString());
                             if (result) {
                               Navigator.of(
@@ -211,7 +208,8 @@ class _ChallengesScrollerState extends State<ChallengesScroller> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 5),
                                     decoration: const BoxDecoration(
                                         color: orange,
                                         borderRadius: BorderRadius.only(
@@ -250,7 +248,8 @@ class _ChallengesScrollerState extends State<ChallengesScroller> {
                                   ),
                                   const SizedBox(height: 10),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
                                     child: Text(
                                       allActiveChallenges[index]
                                           .shortDescription!,

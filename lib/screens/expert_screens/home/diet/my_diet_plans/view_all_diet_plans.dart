@@ -84,19 +84,18 @@ class _ViewAllDietPlansState extends State<ViewAllDietPlans> {
               child: CircularProgressIndicator(),
             )
           : ListView.builder(
-        shrinkWrap: true,
-        itemCount: dietPlans.length,
-        physics: const ScrollPhysics(),
-        itemBuilder: (_, index) => DietPlanCard(
-            dietPlan: dietPlans[index],
-            isFromClient: widget.isFromClient,
-            isFromTopCard: widget.isFromTopCard,
-            clientId: widget.clientId,
-            isFromMain: false,
-            deleteDietPlan: () {
-              deleteDietPlan(index);
-            }),
-      ),
+              shrinkWrap: true,
+              itemCount: dietPlans.length,
+              physics: const ScrollPhysics(),
+              itemBuilder: (_, index) => DietPlanCard(
+                  dietPlan: dietPlans[index],
+                  isFromClient: widget.isFromClient,
+                  isFromTopCard: widget.isFromTopCard,
+                  clientId: widget.clientId,
+                  deleteDietPlan: () {
+                    deleteDietPlan(index);
+                  }),
+            ),
     );
   }
 }

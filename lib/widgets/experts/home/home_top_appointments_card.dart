@@ -107,7 +107,6 @@ class _HomeTopAppointmentsCardState extends State<HomeTopAppointmentsCard> {
     startLiveSessionMap['consultationId'] = meetingAndConsultationId;
     startLiveSessionMap['sessionName'] = sessionName;
 
-    print(startLiveSessionMap.toString());
     startLive();
   }
 
